@@ -1,15 +1,15 @@
 package org.example;
 
-public class Employee extends User {
+public class Employee /*extends User*/ {
 
     private String jobTitle;
     private String role; // "Curator" or "Guide"
 
 
 
-    public Employee(String userId, String password, String name, String emailAddress, String section) {
+   /* public Employee(int userId, String password, String name, String emailAddress, String section) {
         super(userId, password, name, emailAddress, section);
-    }
+    }*/
 
     public String getJobTitle() {
         return jobTitle;

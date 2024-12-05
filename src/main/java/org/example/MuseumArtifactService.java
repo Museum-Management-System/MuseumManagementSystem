@@ -12,6 +12,18 @@ public class MuseumArtifactService {
     }
 
     public void addArtifact(MuseumArtifact artifact) {
+        if (artifact.getName() == null || artifact.getName().isEmpty()
+                || artifact.getCategory() == null || artifact.getCategory().isEmpty()
+                || artifact.getDescription() == null || artifact.getDescription().isEmpty()
+                || artifact.getAcquisitionDate() == null
+                || artifact.getLocationInMuseum() == null || artifact.getLocationInMuseum().isEmpty()) {
+            throw new IllegalArgumentException("All fields are required.");
+        }
+
+        if (artifactDAO.getArtifact(artifact.getName()) != null) {
+            throw new IllegalArgumentException("An artifact with this name already exists.");
+        }
+
         artifactDAO.addArtifact(artifact);
     }
 
@@ -24,6 +36,10 @@ public class MuseumArtifactService {
     }
 
     public boolean updateArtifact(MuseumArtifact artifact) {
+        MuseumArtifact existingArtifact = artifactDAO.getArtifact(artifact.getName());
+        if (existingArtifact != null && existingArtifact.getArtifactId() != artifact.getArtifactId()) {
+            throw new IllegalArgumentException("An artifact with this name already exists.");
+        }
         return artifactDAO.updateArtifact(artifact);
     }
 
