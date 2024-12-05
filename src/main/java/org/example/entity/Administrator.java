@@ -6,7 +6,6 @@ public class Administrator {
     private String email;
     private String password;
 
-    // Constructor
     public Administrator(int admin_id, String name, String email, String password) {
         this.admin_id = admin_id;
         this.name = name;
@@ -14,7 +13,6 @@ public class Administrator {
         this.password = password;
     }
 
-    // Getters and setters
     public int getAdminId() {
         return admin_id;
     }
