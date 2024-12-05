@@ -16,24 +16,25 @@ public class MuseumArtifactDAO {
 
     public void addArtifact(MuseumArtifact artifact) {
         String sql = "INSERT INTO museum_artifacts (name, category, description, acquisition_date, location) " +
-                "VALUES (?, ?, ?, ?, ?) RETURNING artifact_id"; // Use RETURNING to fetch the generated artifact_id
+                "VALUES (?, ?, ?, ?, ?) RETURNING artifact_id";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, artifact.getName());
             pstmt.setString(2, artifact.getCategory());
             pstmt.setString(3, artifact.getDescription());
-            pstmt.setDate(4, (Date) artifact.getAcquisitionDate());
+            pstmt.setDate(4, new java.sql.Date(artifact.getAcquisitionDate().getTime()));  // Use correct SQL date type
             pstmt.setString(5, artifact.getLocationInMuseum());
 
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                // Get the auto-generated artifact_id
                 int generatedId = rs.getInt("artifact_id");
                 artifact.setArtifactId(generatedId); // Set the generated artifact_id
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Error adding artifact: " + e.getMessage());
         }
     }
+
 
     public MuseumArtifact getArtifact(String artifactName) {
         String sql = "SELECT * FROM museum_artifacts WHERE name = ?";

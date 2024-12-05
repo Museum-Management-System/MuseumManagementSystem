@@ -3,9 +3,13 @@ package org.example.controller;
 import org.example.dao.UserDAO;
 import org.example.view.LoginView;
 import org.example.view.MuseumArtifactView;
+import org.example.service.MuseumArtifactService;
+import org.example.dao.MuseumArtifactDAO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class LoginController {
     private LoginView loginView;
@@ -45,10 +49,19 @@ public class LoginController {
 
             // Open the MuseumArtifactView for authorized users (Admin/Employee)
             if ("Admin".equals(role) || "Employee".equals(role)) {
-                new MuseumArtifactView().setVisible(true); // Show the Artifact View
+                MuseumArtifactView artifactView = new MuseumArtifactView();
+                artifactView.setVisible(true);
+
+                // Initialize the artifact service and controller
+                Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/school", "postgres", "");
+                MuseumArtifactDAO artifactDAO = new MuseumArtifactDAO(connection);
+                MuseumArtifactService artifactService = new MuseumArtifactService(artifactDAO);
+                MuseumArtifactController artifactController = new MuseumArtifactController(artifactView, artifactService);
             }
         } catch (NumberFormatException ex) {
             loginView.setMessage("Invalid User ID format.");
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }

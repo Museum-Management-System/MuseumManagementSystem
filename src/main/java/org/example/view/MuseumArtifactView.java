@@ -20,6 +20,9 @@ public class MuseumArtifactView extends JFrame {
     private JLabel idLabel, categoryLabel, descriptionLabel, locationLabel, acquisitionDateLabel;
     private JTextField idField, categoryFieldResult, descriptionFieldResult, locationFieldResult, acquisitionDateFieldResult;
 
+    // Label for success/failure message
+    private JLabel messageLabel;
+
     public MuseumArtifactView() {
         setTitle("Museum Management System - Employee");
         setSize(600, 500); // Increased size for additional input fields
@@ -41,7 +44,7 @@ public class MuseumArtifactView extends JFrame {
         add(tabbedPane, BorderLayout.CENTER);
 
         // Set up Create Artifact panel
-        JPanel createInputPanel = new JPanel(new GridLayout(6, 2));
+        JPanel createInputPanel = new JPanel(new GridLayout(7, 2)); // Added one more row for the message label
         createInputPanel.add(new JLabel("Name:"));
         nameField = new JTextField();
         createInputPanel.add(nameField);
@@ -64,6 +67,11 @@ public class MuseumArtifactView extends JFrame {
 
         addButton = new JButton("Add Artifact");
         createInputPanel.add(addButton);
+
+        // Add the success message label (hidden initially)
+        messageLabel = new JLabel("");
+        messageLabel.setForeground(Color.GREEN);
+        createInputPanel.add(messageLabel);
 
         createArtifactPanel.add(createInputPanel, BorderLayout.CENTER);
 
@@ -184,5 +192,9 @@ public class MuseumArtifactView extends JFrame {
         acquisitionDateField.setText(""); // Clear the date field
         locationField.setText("");
         searchField.setText(""); // Clear the search field
+    }
+
+    public void setMessage(String message) {
+        messageLabel.setText(message);
     }
 }
