@@ -7,7 +7,9 @@ import org.example.view.MuseumArtifactView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class MuseumArtifactController {
     private MuseumArtifactView artifactView;
@@ -30,7 +32,51 @@ public class MuseumArtifactController {
                 handleSearchArtifact();
             }
         });
+
+        artifactView.getSearchByCategoryButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleSearchByCategory();
+            }
+        });
+
     }
+    private void handleSearchByCategory() {
+        try {
+            String category = artifactView.getSearchCategoryFieldInput();
+            if (category.isEmpty()) {
+                artifactView.setMessage("Please enter a category.");
+                return;
+            }
+
+            // Retrieve artifacts from the service
+            List<MuseumArtifact> artifacts = artifactService.searchArtifacts(category);
+
+            if (!artifacts.isEmpty()) {
+                // Transform the list of MuseumArtifact into table-compatible data
+                List<String[]> tableData = new ArrayList<>();
+                for (MuseumArtifact artifact : artifacts) {
+                    tableData.add(new String[]{
+                            artifact.getName(),
+                            artifact.getCategory(),
+                            artifact.getDescription(),
+                            artifact.getAcquisitionDate().toString(),
+                            artifact.getLocationInMuseum()
+                    });
+                }
+
+                // Update the table in the view
+                artifactView.updateCategoryTable(tableData);
+                artifactView.setMessage("Artifacts retrieved successfully.");
+            } else {
+                artifactView.setMessage("No artifacts found in this category.");
+            }
+        } catch (Exception ex) {
+            artifactView.setMessage("Error: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
 
     private void handleSearchArtifact() {
         // Get the name of the artifact from the search field
