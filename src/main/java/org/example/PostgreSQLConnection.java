@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class PostgreSQLConnection {
+
    /* private static final String URL = "jdbc:postgresql://localhost:5433/school";
     private static final String USER = "postgres"; // Replace with your PostgreSQL username
     private static final String PASSWORD = "museum"; // Replace with your PostgreSQL password*/
