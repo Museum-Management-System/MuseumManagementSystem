@@ -1,4 +1,4 @@
-package org.example;
+package org.example.entity;
 
 public  class User {
     private int userId;        // user_id is now an integer as it's a serial type in the table

@@ -1,5 +1,5 @@
-import org.example.MuseumArtifact;
-import org.example.MuseumArtifactDAO;
+import org.example.entity.MuseumArtifact;
+import org.example.dao.MuseumArtifactDAO;
 import org.junit.jupiter.api.*;
 import java.sql.*;
 import java.util.List;

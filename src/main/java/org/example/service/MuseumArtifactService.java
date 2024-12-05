@@ -1,4 +1,7 @@
-package org.example;
+package org.example.service;
+
+import org.example.dao.MuseumArtifactDAO;
+import org.example.entity.MuseumArtifact;
 
 import java.util.List;
 

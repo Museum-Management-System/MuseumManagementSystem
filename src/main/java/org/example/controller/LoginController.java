@@ -1,10 +1,9 @@
 package org.example.controller;
 
-import org.example.UserDAO;
+import org.example.dao.UserDAO;
 import org.example.view.LoginView;
 import org.example.view.MuseumArtifactView;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

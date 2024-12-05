@@ -1,13 +1,11 @@
 package org.example;
 
 import org.example.controller.LoginController;
-import org.example.controller.MuseumArtifactController;
+import org.example.dao.UserDAO;
 import org.example.view.LoginView;
-import org.example.view.MuseumArtifactView;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class PostgreSQLConnection {
    /* private static final String URL = "jdbc:postgresql://localhost:5433/school";

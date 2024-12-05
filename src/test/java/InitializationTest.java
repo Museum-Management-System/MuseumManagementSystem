@@ -1,11 +1,9 @@
-import org.example.MuseumArtifact;
-import org.example.MuseumArtifactDAO;
-import org.example.User;
-import org.example.UserDAO;
+import org.example.entity.MuseumArtifact;
+import org.example.dao.MuseumArtifactDAO;
+import org.example.entity.User;
+import org.example.dao.UserDAO;
 import org.junit.jupiter.api.*;
 import java.sql.*;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class InitializationTest {
 
