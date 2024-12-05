@@ -6,6 +6,7 @@ import org.example.view.MuseumArtifactView;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MuseumArtifactController {
@@ -22,7 +23,40 @@ public class MuseumArtifactController {
                 handleAddArtifact();
             }
         });
+
+        this.artifactView.getSearchButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleSearchArtifact();
+            }
+        });
     }
+
+    private void handleSearchArtifact() {
+        // Get the name of the artifact from the search field
+        String artifactName = artifactView.getSearchFieldInput();
+
+        // Search for the artifact using the service
+        MuseumArtifact artifact = artifactService.getArtifact(artifactName);
+
+        // If the artifact is found, display its details in the view
+        if (artifact != null) {
+            // Set all the fields in the view with the artifact details
+
+            artifactView.setArtifactDetails(
+                    String.valueOf(artifact.getArtifactId()),
+                    artifact.getCategory(),
+                    artifact.getDescription(),
+                    artifact.getLocationInMuseum(),
+                    new SimpleDateFormat("yyyy-MM-dd").format(artifact.getAcquisitionDate())
+            );
+
+            artifactView.setMessage(""); // Clear any previous messages
+        } else {
+            artifactView.setMessage("Artifact not found.");
+        }
+    }
+
 
     private void handleAddArtifact() {
         // Get inputs from the view
