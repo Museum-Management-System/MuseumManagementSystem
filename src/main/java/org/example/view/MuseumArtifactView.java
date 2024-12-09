@@ -175,6 +175,7 @@ public class MuseumArtifactView extends JFrame {
         JScrollPane tableScrollPane = new JScrollPane(updateArtifactTable);
         updateArtifactPanel.add(tableScrollPane);
 
+
         updateNameField = new JTextField(20);
         updateCategoryField = new JTextField(20);
         updateDescriptionArea = new JTextArea(5, 20);
