@@ -105,4 +105,25 @@ public class MuseumArtifactDAO {
         return artifacts;
     }
 
+    public List<MuseumArtifact> getAllArtifacts() {
+        List<MuseumArtifact> artifacts = new ArrayList<>();
+        String sql = "SELECT * FROM museum_artifacts";  // No WHERE clause, to fetch all artifacts
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                artifacts.add(new MuseumArtifact(
+                        rs.getString("name"),
+                        rs.getString("category"),
+                        rs.getString("description"),
+                        rs.getDate("acquisition_date"),
+                        rs.getString("location")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return artifacts;
+    }
+
+
 }

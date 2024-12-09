@@ -1,7 +1,12 @@
 package org.example.view;
 
+import org.example.controller.MuseumArtifactController;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,13 +14,19 @@ import java.util.List;
 
 public class MuseumArtifactView extends JFrame {
     private JTable artifactTable;
+    private JTable updateArtifactTable;
+    private JTextField updateNameField;
+    private JTextField updateCategoryField;
+    private JTextArea updateDescriptionArea;
+    private JTextField updateAcquisitionDateField;
+    private JTextField updateLocationField;
     private JButton addButton, updateButton, deleteButton, searchButton, searchByCategoryButton;
     private JTextField nameField, categoryField, descriptionField, locationField, acquisitionDateField;
     private JTextField searchField, searchCategoryField;
     private JTabbedPane tabbedPane;  // For switching between operations
 
     // Panels for each operation
-    private JPanel createArtifactPanel, getArtifactPanel, searchByCategoryPanel;
+    private JPanel createArtifactPanel, getArtifactPanel, searchByCategoryPanel, updateArtifactPanel;
 
     // Labels for displaying artifact details after search (NEW)
     private JLabel idLabel, categoryLabel, descriptionLabel, locationLabel, acquisitionDateLabel;
@@ -37,11 +48,16 @@ public class MuseumArtifactView extends JFrame {
         createArtifactPanel = new JPanel(new BorderLayout());
         getArtifactPanel = new JPanel(new BorderLayout());
         searchByCategoryPanel = new JPanel(new BorderLayout());
+        updateArtifactPanel = new JPanel();
+        updateArtifactPanel.setLayout(new GridLayout(7, 2));
 
         // Add tabs for Create and Get Artifact operations
         tabbedPane.addTab("Create Artifact", createArtifactPanel);
         tabbedPane.addTab("Get Artifact", getArtifactPanel);
         tabbedPane.addTab("Search by Category", searchByCategoryPanel);
+        tabbedPane.addTab("Update Artifact", updateArtifactPanel);
+
+
 
 
         // Add the tabbed pane to the main frame
@@ -150,6 +166,56 @@ public class MuseumArtifactView extends JFrame {
 
         artifactTable = new JTable();
         searchByCategoryPanel.add(new JScrollPane(artifactTable), BorderLayout.CENTER);
+
+
+        String[] columnNames = {"Name", "Category", "Description", "Acquisition Date", "Location"};
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        updateArtifactTable = new JTable(tableModel);
+        updateArtifactTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JScrollPane tableScrollPane = new JScrollPane(updateArtifactTable);
+        updateArtifactPanel.add(tableScrollPane);
+
+
+
+        updateNameField = new JTextField(20);
+        updateCategoryField = new JTextField(20);
+        updateDescriptionArea = new JTextArea(5, 20);
+        updateAcquisitionDateField = new JTextField(20);
+        updateLocationField = new JTextField(20);
+
+        updateArtifactPanel.add(new JLabel("Name:"));
+        updateArtifactPanel.add(updateNameField);
+        updateArtifactPanel.add(new JLabel("Category:"));
+        updateArtifactPanel.add(updateCategoryField);
+        updateArtifactPanel.add(new JLabel("Description:"));
+        updateArtifactPanel.add(new JScrollPane(updateDescriptionArea));
+        updateArtifactPanel.add(new JLabel("Acquisition Date:"));
+        updateArtifactPanel.add(updateAcquisitionDateField);
+        updateArtifactPanel.add(new JLabel("Location:"));
+        updateArtifactPanel.add(updateLocationField);
+
+        // Update button
+        updateButton = new JButton("Update");
+        updateArtifactPanel.add(updateButton);
+
+        //add(tabbedPane);
+    }
+
+    public void setUpdateTableData(Object[][] data) {
+        DefaultTableModel model = (DefaultTableModel) updateArtifactTable.getModel();
+        model.setRowCount(0); // Clear existing data
+        for (Object[] row : data) {
+            model.addRow(row);
+        }
+    }
+
+
+    private void clearUpdateFields() {
+        updateNameField.setText("");
+        updateCategoryField.setText("");
+        updateDescriptionArea.setText("");
+        updateAcquisitionDateField.setText("");
+        updateLocationField.setText("");
     }
 
 
@@ -165,6 +231,9 @@ public class MuseumArtifactView extends JFrame {
     public JTable getArtifactTable() {
         return artifactTable;
     }
+    public JTable getUpdateArtifactTable() {
+        return updateArtifactTable;
+    }
 
     public void setArtifactTableData(Object[][] data, String[] columnNames) {
         artifactTable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
@@ -173,6 +242,92 @@ public class MuseumArtifactView extends JFrame {
     public JButton getAddButton() {
         return addButton;
     }
+    public JButton getUpdateButton(){
+        return updateButton;
+    }
+
+
+
+    /*public Date getUpdateArtifactAcquisitionDateInput() {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return dateFormat.parse(updateAcquisitionDateField.getText()); // Parse the date from text
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null; // Return null if parsing fails
+        }
+    }*/
+
+    public JTextField getUpdateArtifactNameInput() {
+        return updateNameField;
+    }
+
+    public JTextField getUpdateArtifactCategoryInput() {
+        return updateCategoryField;
+    }
+
+    public JTextArea getUpdateArtifactDescriptionInput() {
+        return updateDescriptionArea;
+    }
+
+    public JTextField getUpdateArtifactAcquisitionDateInput() {
+        return updateAcquisitionDateField;
+    }
+
+    public JTextField getUpdateArtifactLocationInput() {
+        return updateLocationField;
+    }
+
+
+    public String getUpdateArtifactNameText() {
+        return updateNameField.getText();
+    }
+
+    public String getUpdateArtifactCategoryText() {
+        return updateCategoryField.getText();
+    }
+
+    public String getUpdateArtifactDescriptionText() {
+        return updateDescriptionArea.getText();
+    }
+
+
+
+    public String getUpdateArtifactLocationText() {
+        return updateLocationField.getText();
+    }
+
+    public String getUpdateArtifactAcquisitionDateText() {
+        // Get the selected row from the table
+        int selectedRow = updateArtifactTable.getSelectedRow();
+
+        // Check if a row is selected
+        if (selectedRow == -1) {
+            return ""; // No row selected, return empty string or error message
+        }
+
+        // Get the acquisition date from the table (column 3 for the date)
+        String acquisitionDate = (String) updateArtifactTable.getValueAt(selectedRow, 3);
+
+        // Check if the acquisition date is empty or null
+        if (acquisitionDate != null && !acquisitionDate.trim().isEmpty()) {
+            try {
+                // Parse the date if it is not empty
+                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(acquisitionDate);
+                // Return formatted date
+                return new SimpleDateFormat("yyyy-MM-dd").format(date);
+            } catch (ParseException ex) {
+                ex.printStackTrace(); // Log the exception or handle it as needed
+                // Optionally, you can return a default value or an empty string
+                return ""; // or you could return a specific error message if desired
+            }
+        } else {
+            // Handle the case where the acquisition date is empty (e.g., return an empty string or a default message)
+            return ""; // or you could return a default date like "0000-00-00" or some other placeholder
+        }
+    }
+
+
 
     public JButton getSearchButton() {
         return searchButton;
@@ -217,6 +372,8 @@ public class MuseumArtifactView extends JFrame {
         acquisitionDateFieldResult.setText(acquisitionDate);
     }
 
+
+
     public void clearInputFields() {
         nameField.setText("");
         categoryField.setText("");
@@ -226,9 +383,16 @@ public class MuseumArtifactView extends JFrame {
         searchField.setText(""); // Clear the search field
     }
 
+    /*public void setMessage(String message) {
+        messageLabel.setText(message);
+    }*/
     public void setMessage(String message) {
         messageLabel.setText(message);
+        messageLabel.setForeground(Color.RED); // Optional: change color for errors
+        messageLabel.revalidate();
+        messageLabel.repaint();
     }
+
 
     public void updateCategoryTable(List<String[]> tableData) {
         // Define column names for the table
@@ -240,5 +404,46 @@ public class MuseumArtifactView extends JFrame {
         // Update the table model with new data
         artifactTable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
     }
+
+    public void clearCategoryTable() {
+        // Set an empty table model to clear the table
+        String[] columnNames = {"ID", "Name", "Category", "Description", "Acquisition Date", "Location"};
+        artifactTable.setModel(new DefaultTableModel(new Object[0][0], columnNames));
+    }
+
+    public void clearSearchCategoryField() {
+        searchCategoryField.setText("");
+    }
+
+    public void setArtifactTableDataNew(Object[][] data, String[] columnNames) {
+        DefaultTableModel model = new DefaultTableModel(data, columnNames);
+        artifactTable.setModel(model);
+
+        // Enable row selection
+        artifactTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Add a listener to handle row selection
+        artifactTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = artifactTable.getSelectedRow();
+                if (selectedRow != -1) {
+                    // Retrieve data from selected row
+                    String id = (String) artifactTable.getValueAt(selectedRow, 0); // Assuming the ID is in the first column
+                    String name = (String) artifactTable.getValueAt(selectedRow, 1); // Assuming Name is in the second column
+                    String category = (String) artifactTable.getValueAt(selectedRow, 2);
+                    String description = (String) artifactTable.getValueAt(selectedRow, 3);
+                    String acquisitionDate = (String) artifactTable.getValueAt(selectedRow, 4);
+                    String location = (String) artifactTable.getValueAt(selectedRow, 5);
+
+                    // Populate the fields for update
+                    setArtifactDetails(id, category, description, location, acquisitionDate);
+                }
+            }
+        });
+    }
+
+
+
+
 
 }

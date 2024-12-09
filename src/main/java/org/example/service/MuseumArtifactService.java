@@ -49,5 +49,8 @@ public class MuseumArtifactService {
     public List<MuseumArtifact> searchArtifacts(String category) {
         return artifactDAO.searchArtifacts(category);
     }
+    public List<MuseumArtifact> getAllArtifacts(){
+        return artifactDAO.getAllArtifacts();
+    }
 
 }
