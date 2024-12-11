@@ -1,5 +1,6 @@
 package com.example.gui;
-
+import org.example.service.DatabaseConnection;
+import java.sql.*;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,7 +14,8 @@ import javafx.stage.Stage;
 
 public class EmployeeCard extends Application {
 
-    private boolean isEditing = false; // Flag to toggle between Update and Save
+    private boolean isEditing = false;
+    private DatabaseConnection databaseConnection;
 
     @Override
     public void start(Stage primaryStage) {
@@ -93,12 +95,12 @@ public class EmployeeCard extends Application {
         buttonBox.setSpacing(10);
         buttonBox.setAlignment(Pos.BOTTOM_RIGHT);
 
-        Button updateSaveButton = new Button("Update Object");
-        updateSaveButton.setStyle("-fx-background-color: #c47979; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;");
+        Button updateSaveButton = new Button("Update Employee");
+        updateSaveButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;");
         updateSaveButton.setOnMouseEntered(e -> updateSaveButton.setStyle("-fx-background-color: #8b0000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
-        updateSaveButton.setOnMouseExited(e -> updateSaveButton.setStyle("-fx-background-color: #c47979; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
+        updateSaveButton.setOnMouseExited(e -> updateSaveButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
 
-        Button deleteButton = new Button("Delete Object");
+        Button deleteButton = new Button("Delete Employee");
         deleteButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;");
         deleteButton.setOnMouseEntered(e -> deleteButton.setStyle("-fx-background-color: #8b0000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
         deleteButton.setOnMouseExited(e -> deleteButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
