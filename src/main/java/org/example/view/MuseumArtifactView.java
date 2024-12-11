@@ -5,16 +5,17 @@ import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class MuseumArtifactView extends JFrame {
     private JTable artifactTable;
-    private JButton addButton, updateButton, deleteButton, searchButton;
+    private JButton addButton, updateButton, deleteButton, searchButton, searchByCategoryButton;
     private JTextField nameField, categoryField, descriptionField, locationField, acquisitionDateField;
-    private JTextField searchField;
+    private JTextField searchField, searchCategoryField;
     private JTabbedPane tabbedPane;  // For switching between operations
 
     // Panels for each operation
-    private JPanel createArtifactPanel, getArtifactPanel;
+    private JPanel createArtifactPanel, getArtifactPanel, searchByCategoryPanel;
 
     // Labels for displaying artifact details after search (NEW)
     private JLabel idLabel, categoryLabel, descriptionLabel, locationLabel, acquisitionDateLabel;
@@ -35,10 +36,13 @@ public class MuseumArtifactView extends JFrame {
         // Initialize Panels for different operations
         createArtifactPanel = new JPanel(new BorderLayout());
         getArtifactPanel = new JPanel(new BorderLayout());
+        searchByCategoryPanel = new JPanel(new BorderLayout());
 
         // Add tabs for Create and Get Artifact operations
         tabbedPane.addTab("Create Artifact", createArtifactPanel);
         tabbedPane.addTab("Get Artifact", getArtifactPanel);
+        tabbedPane.addTab("Search by Category", searchByCategoryPanel);
+
 
         // Add the tabbed pane to the main frame
         add(tabbedPane, BorderLayout.CENTER);
@@ -132,10 +136,38 @@ public class MuseumArtifactView extends JFrame {
         // Table to display artifact details if needed
         artifactTable = new JTable();
         getArtifactPanel.add(new JScrollPane(artifactTable), BorderLayout.SOUTH);
+
+        // Set up Search by Category panel (NEW)
+        JPanel categorySearchPanel = new JPanel(new FlowLayout());
+        categorySearchPanel.add(new JLabel("Enter Category:"));
+        searchCategoryField = new JTextField(20);
+        categorySearchPanel.add(searchCategoryField);
+
+        searchByCategoryButton = new JButton("Search by Category");
+        categorySearchPanel.add(searchByCategoryButton);
+
+        searchByCategoryPanel.add(categorySearchPanel, BorderLayout.NORTH);
+
+        artifactTable = new JTable();
+        searchByCategoryPanel.add(new JScrollPane(artifactTable), BorderLayout.CENTER);
+    }
+
+
+
+    public JButton getSearchByCategoryButton() {
+        return searchByCategoryButton; // NEW
+    }
+
+    public String getSearchCategoryFieldInput() {
+        return searchCategoryField.getText(); // NEW
     }
 
     public JTable getArtifactTable() {
         return artifactTable;
+    }
+
+    public void setArtifactTableData(Object[][] data, String[] columnNames) {
+        artifactTable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
     }
 
     public JButton getAddButton() {
@@ -197,4 +229,16 @@ public class MuseumArtifactView extends JFrame {
     public void setMessage(String message) {
         messageLabel.setText(message);
     }
+
+    public void updateCategoryTable(List<String[]> tableData) {
+        // Define column names for the table
+        String[] columnNames = {"ID", "Name", "Category", "Description", "Acquisition Date", "Location"};
+
+        // Convert List<String[]> to Object[][]
+        Object[][] data = tableData.toArray(new Object[0][0]);
+
+        // Update the table model with new data
+        artifactTable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+    }
+
 }
