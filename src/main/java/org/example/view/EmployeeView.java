@@ -5,13 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
+//There might be some small problems will be checked.
 public class EmployeeView extends JFrame {
     private JTable employeeTable;
     private JButton addButton, updateButton, deleteButton, searchButton;
     private JTextField nameField, surNameField, passwordField, entranceDateField;
     private JTextField searchField;
-    private JTabbedPane tabbedPane; // For switching between operations
+    private JTabbedPane tabbedPane;
 
     // Panels for each operation
     private JPanel createEmployeePanel, getEmployeePanel, searchByIDPanel;
