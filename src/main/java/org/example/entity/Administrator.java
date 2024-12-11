@@ -8,7 +8,7 @@ public class Administrator {
     private String email;
     private String sectionName;
 
-    public Admin(int adminId, String name, String email, String sectionName) {
+    public void Administrator(int adminId, String name, String email, String sectionName) {
         this.adminId = adminId;
         this.name = name;
         this.email = email;
