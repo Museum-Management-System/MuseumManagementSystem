@@ -9,6 +9,7 @@ module com.example.gui {
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
     requires java.sql;
+    requires java.desktop;
 
     opens com.example.gui to javafx.fxml;
     exports com.example.gui;
