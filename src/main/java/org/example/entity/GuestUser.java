@@ -3,6 +3,7 @@ import java.sql.*;
 // GUI elements will be added later.
 public class GuestUser {
     public GuestUser() throws SQLException {
+
         String url = "jdbc:postgresql:dam"; //Arbitrary
         String user = "guest_user"; //Arbitrary
         String password = "password"; //Arbitrary
@@ -18,7 +19,7 @@ public class GuestUser {
             }
 
         } catch (SQLException e) {
-           System.out.println("Failed to connect to a database."); //Will be looked later.
+            System.out.println("Failed to connect to a database."); //Will be looked later.
         }
 
     }
