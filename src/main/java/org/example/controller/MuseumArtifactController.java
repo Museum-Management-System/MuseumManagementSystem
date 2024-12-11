@@ -4,6 +4,7 @@ import org.example.entity.MuseumArtifact;
 import org.example.service.MuseumArtifactService;
 import org.example.view.MuseumArtifactView;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
@@ -34,6 +35,14 @@ public class MuseumArtifactController {
             }
         });
 
+        this.artifactView.getRefreshButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadArtifactData(); // Call the method to refresh data
+            }
+        });
+
+
         this.artifactView.getSearchButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -42,21 +51,23 @@ public class MuseumArtifactController {
         });
 
         this.artifactView.getUpdateArtifactTable().getSelectionModel().addListSelectionListener(e -> {
-            int selectedRow = artifactView.getUpdateArtifactTable().getSelectedRow();
-            if (selectedRow != -1) {
-                // Populate the fields with the data from the selected row
-                String name = (String) artifactView.getUpdateArtifactTable().getValueAt(selectedRow, 0);
-                String category = (String) artifactView.getUpdateArtifactTable().getValueAt(selectedRow, 1);
-                String description = (String) artifactView.getUpdateArtifactTable().getValueAt(selectedRow, 2);
-                String acquisitionDate = (String) artifactView.getUpdateArtifactTable().getValueAt(selectedRow, 3);
-                String location = (String) artifactView.getUpdateArtifactTable().getValueAt(selectedRow, 4);
+            if (!e.getValueIsAdjusting()) { // Avoid duplicate events during row updates
+                int selectedRow = artifactView.getUpdateArtifactTable().getSelectedRow();
+                if (selectedRow != -1) {
+                    // Read data from the selected row
+                    String name = (String) artifactView.getUpdateArtifactTable().getValueAt(selectedRow, 0);
+                    String category = (String) artifactView.getUpdateArtifactTable().getValueAt(selectedRow, 1);
+                    String description = (String) artifactView.getUpdateArtifactTable().getValueAt(selectedRow, 2);
+                    String acquisitionDate = (String) artifactView.getUpdateArtifactTable().getValueAt(selectedRow, 3);
+                    String location = (String) artifactView.getUpdateArtifactTable().getValueAt(selectedRow, 4);
 
-                // Set the selected artifact data into the update fields
-                artifactView.getUpdateArtifactNameInput().setText(name);
-                artifactView.getUpdateArtifactCategoryInput().setText(category);
-                artifactView.getUpdateArtifactDescriptionInput().setText(description);
-                artifactView.getUpdateArtifactAcquisitionDateInput().setText(acquisitionDate);
-                artifactView.getUpdateArtifactLocationInput().setText(location);
+                    // Populate the text fields with the selected row's data
+                    artifactView.getUpdateArtifactNameInput().setText(name);
+                    artifactView.getUpdateArtifactCategoryInput().setText(category);
+                    artifactView.getUpdateArtifactDescriptionInput().setText(description);
+                    artifactView.getUpdateArtifactAcquisitionDateInput().setText(acquisitionDate);
+                    artifactView.getUpdateArtifactLocationInput().setText(location);
+                }
             }
         });
 
@@ -96,6 +107,7 @@ public class MuseumArtifactController {
                 List<String[]> tableData = new ArrayList<>();
                 for (MuseumArtifact artifact : artifacts) {
                     tableData.add(new String[]{
+                            String.valueOf(artifact.getArtifactId()),
                             artifact.getName(),
                             artifact.getCategory(),
                             artifact.getDescription(),
@@ -199,18 +211,49 @@ public class MuseumArtifactController {
             artifactView.setMessage("Invalid acquisition date format. Please use yyyy-MM-dd."); // Handle invalid date format
             return;
         }
+        java.sql.Date sqlAcquisitionDate = new java.sql.Date(acquisitionDate.getTime());
+
+// Create the MuseumArtifact object
+        MuseumArtifact updatedArtifact = new MuseumArtifact(name, category, description, sqlAcquisitionDate, location);
 
         // Create a MuseumArtifact object with the provided inputs
-        MuseumArtifact updatedArtifact = new MuseumArtifact(name, category, description, acquisitionDate, location);
+        //MuseumArtifact updatedArtifact = new MuseumArtifact(name, category, description, acquisitionDate, location);
 
         try {
             // Update the artifact using the service
+
             artifactService.updateArtifact(updatedArtifact); // Assume updateArtifact method exists in artifactService
             artifactView.setMessage("Artifact updated successfully!"); // Notify success
-            artifactView.clearInputFields(); // Clear the input fields after updating the artifact
+            artifactView.clearUpdatePanelInputFields(); // Clear the input fields after updating the artifact
         } catch (IllegalArgumentException e) {
             artifactView.setMessage(e.getMessage()); // Show error message if any validation fails
         }
     }
+    private void loadArtifactData() {
+        try {
+            // Retrieve artifacts from the service
+            List<MuseumArtifact> artifacts = artifactService.getAllArtifacts();
+
+            // Clear existing rows
+            artifactView.getTableModel().setRowCount(0);
+
+            // Add each artifact as a row in the table
+            for (MuseumArtifact artifact : artifacts) {
+                Object[] rowData = {
+                        //artifact.getArtifactId(),
+                        artifact.getName(),
+                        artifact.getCategory(),
+                        artifact.getDescription(),
+                        new SimpleDateFormat("yyyy-MM-dd").format(artifact.getAcquisitionDate()),
+                        artifact.getLocationInMuseum()
+                };
+                artifactView.getTableModel().addRow(rowData);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(artifactView, "Error loading artifact data: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 
 }

@@ -24,6 +24,9 @@ public class MuseumArtifactView extends JFrame {
     private JTextField nameField, categoryField, descriptionField, locationField, acquisitionDateField;
     private JTextField searchField, searchCategoryField;
     private JTabbedPane tabbedPane;  // For switching between operations
+    private DefaultTableModel tableModel;
+
+    private JButton refreshUpdatePanelButton;
 
     // Panels for each operation
     private JPanel createArtifactPanel, getArtifactPanel, searchByCategoryPanel, updateArtifactPanel;
@@ -169,9 +172,10 @@ public class MuseumArtifactView extends JFrame {
 
 
         String[] columnNames = {"Name", "Category", "Description", "Acquisition Date", "Location"};
-        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0);
+        tableModel = new DefaultTableModel(columnNames, 0);
         updateArtifactTable = new JTable(tableModel);
         updateArtifactTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        updateArtifactTable.setCellSelectionEnabled(false);
         JScrollPane tableScrollPane = new JScrollPane(updateArtifactTable);
         updateArtifactPanel.add(tableScrollPane);
 
@@ -196,6 +200,8 @@ public class MuseumArtifactView extends JFrame {
         // Update button
         updateButton = new JButton("Update");
         updateArtifactPanel.add(updateButton);
+        refreshUpdatePanelButton = new JButton("Refresh");
+        updateArtifactPanel.add(refreshUpdatePanelButton);
 
         //add(tabbedPane);
     }
@@ -216,6 +222,11 @@ public class MuseumArtifactView extends JFrame {
         updateAcquisitionDateField.setText("");
         updateLocationField.setText("");
     }
+
+    public JButton getRefreshButton() {
+        return refreshUpdatePanelButton;
+    }
+
 
 
 
@@ -382,6 +393,15 @@ public class MuseumArtifactView extends JFrame {
         searchField.setText(""); // Clear the search field
     }
 
+    public void clearUpdatePanelInputFields() {
+        updateNameField.setText("");
+        updateCategoryField.setText("");
+        updateDescriptionArea.setText("");
+        updateAcquisitionDateField.setText(""); // Clear the date field
+        updateLocationField.setText("");
+        //searchField.setText(""); // Clear the search field
+    }
+
     /*public void setMessage(String message) {
         messageLabel.setText(message);
     }*/
@@ -441,6 +461,9 @@ public class MuseumArtifactView extends JFrame {
         });
     }
 
+    public DefaultTableModel getTableModel(){
+        return tableModel;
+    }
 
 
 
