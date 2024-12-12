@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 public class EmployeeCard extends Application {
 
     private boolean isEditing = false;
-    private DatabaseConnection databaseConnection;
+    private DatabaseConnection connection;
 
     @Override
     public void start(Stage primaryStage) {
