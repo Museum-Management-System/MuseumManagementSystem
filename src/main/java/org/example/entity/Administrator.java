@@ -16,9 +16,9 @@ public class Administrator {
     }
 
     private Connection connect() throws SQLException {
-        String url = "jdbc:postgresql://localhost:5432/museum_db"; // Update DB URL
-        String user = "your_username";
-        String password = "your_password";
+        String url = "jdbc:postgresql://10.200.10.163:5444/museum"; // Update DB URL
+        String user = "postgres";
+        String password = "museum";
         return DriverManager.getConnection(url, user, password);
     }
 

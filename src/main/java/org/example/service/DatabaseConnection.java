@@ -7,10 +7,6 @@ public class DatabaseConnection {
     private static final String user = "postgres";
     private static final String password = "museum";
 
-    public Connection autoConnect() throws SQLException {
-        return DriverManager.getConnection(url,user,password);
-    }
-
     public static void main(String[] args) {
         try (Connection connection = DriverManager.getConnection(url,user,password)) {
             System.out.println("Connection successful!");

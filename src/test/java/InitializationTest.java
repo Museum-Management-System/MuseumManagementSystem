@@ -14,7 +14,7 @@ public class InitializationTest {
     @BeforeAll
     static void setupDatabaseConnection() throws SQLException {
         // Set up a database connection
-        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/school", "postgres", "");
+        connection = DriverManager.getConnection("jdbc:postgresql://10.200.10.163:5444/museum", "postgres", "museum");
         userDAO = new UserDAO(connection);
         artifactDAO = new MuseumArtifactDAO(connection);
     }

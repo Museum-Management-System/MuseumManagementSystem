@@ -53,7 +53,7 @@ public class LoginController {
                 artifactView.setVisible(true);
 
                 // Initialize the artifact service and controller
-                Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/school", "postgres", "");
+                Connection connection = DriverManager.getConnection("jdbc:postgresql://10.200.10.163:5444/museum", "postgres", "museum");
                 MuseumArtifactDAO artifactDAO = new MuseumArtifactDAO(connection);
                 MuseumArtifactService artifactService = new MuseumArtifactService(artifactDAO);
                 MuseumArtifactController artifactController = new MuseumArtifactController(artifactView, artifactService);

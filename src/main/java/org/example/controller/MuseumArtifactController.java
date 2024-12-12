@@ -77,12 +77,7 @@ public class MuseumArtifactController {
                 handleSearchByCategory();
             }
         });
-
-
-
         // Action listeners
-
-
     }
 
 

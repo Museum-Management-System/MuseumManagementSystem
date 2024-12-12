@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/dao/EmployeeDAO.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/dao/MuseumArtifactDAO.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/dao/UserDAO.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/entity/Administrator.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/example/entity/Employee.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/test/java/InitializationTest.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/test/java/MuseumDAOTest.java" dialect="GenericSQL" />
+  </component>
+</project>

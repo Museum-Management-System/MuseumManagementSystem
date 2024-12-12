@@ -13,8 +13,8 @@ public class MuseumDAOTest {
     @BeforeAll
     public static void setupDatabase() throws SQLException {
         // Initialize a connection to the PostgreSQL database
-        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/school", "postgres", "");
-        //connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/school", "postgres", "");
+        connection = DriverManager.getConnection("jdbc:postgresql://10.200.10.163:5444/museum", "postgres", "museum");
+        //connection = DriverManager.getConnection("jdbc:postgresql://10.200.10.163:5444/museum", "postgres", "museum");
         artifactDAO = new MuseumArtifactDAO(connection);
 
         // Create the MuseumArtifact table if it doesn't exist
