@@ -48,8 +48,8 @@ public class UserDAO {
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 String userType = rs.getString("user_type");
-                if ("Admin".equals(userType)) {
-                    // Set role to admin_role (Admin privileges)
+                if ("Administrator".equals(userType)) {
+                    // Set role to admin_role (Administrator privileges)
                     try (PreparedStatement stmt = connection.prepareStatement("SET ROLE admin_role")) {
                         stmt.executeUpdate();
                     }

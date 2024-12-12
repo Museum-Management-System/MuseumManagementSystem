@@ -47,8 +47,8 @@ public class LoginController {
             loginView.setMessage("Login successful! Redirecting...");
             loginView.dispose(); // Close the login view
 
-            // Open the MuseumArtifactView for authorized users (Admin/Employee)
-            if ("Admin".equals(role) || "Employee".equals(role)) {
+            // Open the MuseumArtifactView for authorized users (Administrator/Employee)
+            if ("Administrator".equals(role) || "Employee".equals(role)) {
                 MuseumArtifactView artifactView = new MuseumArtifactView();
                 artifactView.setVisible(true);
 
