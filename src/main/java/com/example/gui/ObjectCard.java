@@ -11,7 +11,9 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-//Editable ObjectCard for Administrator and Employee users
+/*Editable ObjectCard for Administrator and Employee users
+Buttons will be invisible for guest users
+ */
 
 public class ObjectCard extends Application {
 
@@ -192,7 +194,7 @@ public class ObjectCard extends Application {
 
         // Set Scene and Stage
         Scene scene = new Scene(root, 600, 500);
-        primaryStage.setTitle("Object Card");
+        primaryStage.setTitle("Object Details");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);  // Prevent resizing
         primaryStage.show();

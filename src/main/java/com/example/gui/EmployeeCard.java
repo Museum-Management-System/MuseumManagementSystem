@@ -178,7 +178,7 @@ public class EmployeeCard extends Application {
 
         // Set Scene and Stage
         Scene scene = new Scene(root, 600, 300);  // Fixed size
-        primaryStage.setTitle("Employee Card");
+        primaryStage.setTitle("Employee Details");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);  // Prevent resizing
         primaryStage.show();
