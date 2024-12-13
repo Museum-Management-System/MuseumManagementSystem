@@ -11,6 +11,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+//Editable ObjectCard for Administrator and Employee users
+
 public class ObjectCard extends Application {
 
     private boolean isEditing = false; // Flag to toggle between Update and Save
