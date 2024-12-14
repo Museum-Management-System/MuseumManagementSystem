@@ -1,5 +1,5 @@
 package org.example.view;
-//If a problem exists let me know!
+//If a problem exists let me know.
 import javax.swing.*;
 import java.awt.*;
 import java.text.ParseException;
