@@ -12,6 +12,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+//That's the interface when Admin clicks on an employee from Employee List (included in ListForAdmin)
+
 public class EmployeeCard extends Application {
 
     private boolean isEditing = false;
@@ -176,7 +178,7 @@ public class EmployeeCard extends Application {
 
         // Set Scene and Stage
         Scene scene = new Scene(root, 600, 300);  // Fixed size
-        primaryStage.setTitle("Employee Card");
+        primaryStage.setTitle("Employee Details");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);  // Prevent resizing
         primaryStage.show();

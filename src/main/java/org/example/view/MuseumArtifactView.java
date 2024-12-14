@@ -39,7 +39,7 @@ public class MuseumArtifactView extends JFrame {
     private JLabel messageLabel;
 
     public MuseumArtifactView() {
-        setTitle("Museum Management System - Employee");
+        setTitle("Museum Management System - Artifact");
         setSize(600, 500); // Increased size for additional input fields
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -59,8 +59,6 @@ public class MuseumArtifactView extends JFrame {
         tabbedPane.addTab("Get Artifact", getArtifactPanel);
         tabbedPane.addTab("Search by Category", searchByCategoryPanel);
         tabbedPane.addTab("Update Artifact", updateArtifactPanel);
-
-
 
 
         // Add the tabbed pane to the main frame
