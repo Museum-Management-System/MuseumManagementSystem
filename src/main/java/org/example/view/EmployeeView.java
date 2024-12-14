@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 //There might be some small problems will be checked.
 public class EmployeeView extends JFrame {
     private JTable employeeTable;
@@ -13,14 +14,11 @@ public class EmployeeView extends JFrame {
     private JTextField searchField;
     private JTabbedPane tabbedPane;
 
-    // Panels for each operation
     private JPanel createEmployeePanel, getEmployeePanel, searchByIDPanel;
 
-    // Labels for displaying employee details after search
     private JLabel idLabel, nameLabel, surnameLabel, entranceDateLabel;
     private JTextField idField, nameFieldResult, surnameFieldResult, entranceDateFieldResult;
 
-    // Label for success/failure message
     private JLabel messageLabel;
 
     public EmployeeView() {
@@ -29,24 +27,19 @@ public class EmployeeView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Create the tabbed pane
         tabbedPane = new JTabbedPane();
 
-        // Initialize Panels for different operations
         createEmployeePanel = new JPanel(new BorderLayout());
         getEmployeePanel = new JPanel(new BorderLayout());
         searchByIDPanel = new JPanel(new BorderLayout());
 
-        // Add tabs for Create and Search Employee operations
         tabbedPane.addTab("Add Employee", createEmployeePanel);
         tabbedPane.addTab("Get Employee", getEmployeePanel);
         tabbedPane.addTab("Search by Employee ID", searchByIDPanel);
 
-        // Add the tabbed pane to the main frame
         add(tabbedPane, BorderLayout.CENTER);
 
-        // Set up Add Employee panel
-        JPanel createInputPanel = new JPanel(new GridLayout(5, 2)); // Layout for input fields and message
+        JPanel createInputPanel = new JPanel(new GridLayout(5, 2));
         createInputPanel.add(new JLabel("Name:"));
         nameField = new JTextField();
         createInputPanel.add(nameField);
@@ -66,14 +59,12 @@ public class EmployeeView extends JFrame {
         addButton = new JButton("Add Employee");
         createInputPanel.add(addButton);
 
-        // Add the success message label (hidden initially)
         messageLabel = new JLabel("");
         messageLabel.setForeground(Color.GREEN);
         createInputPanel.add(messageLabel);
 
         createEmployeePanel.add(createInputPanel, BorderLayout.CENTER);
 
-        // Set up Get Employee panel
         JPanel getInputPanel = new JPanel(new BorderLayout());
         JPanel searchPanel = new JPanel(new FlowLayout());
         searchPanel.add(new JLabel("Enter Employee Name:"));
@@ -87,31 +78,26 @@ public class EmployeeView extends JFrame {
 
         getEmployeePanel.add(getInputPanel, BorderLayout.NORTH);
 
-        // Panel for displaying employee details after search
-        JPanel detailsPanel = new JPanel(new GridLayout(4, 2)); // Grid for displaying details
+        JPanel detailsPanel = new JPanel(new GridLayout(4, 2));
 
-        // ID field
         idLabel = new JLabel("ID: ");
         detailsPanel.add(idLabel);
         idField = new JTextField();
-        idField.setEditable(false); // Make the ID field non-editable
+        idField.setEditable(false);
         detailsPanel.add(idField);
 
-        // Name field
         nameLabel = new JLabel("Name: ");
         detailsPanel.add(nameLabel);
         nameFieldResult = new JTextField();
         nameFieldResult.setEditable(false);
         detailsPanel.add(nameFieldResult);
 
-        // Surname field
         surnameLabel = new JLabel("Surname: ");
         detailsPanel.add(surnameLabel);
         surnameFieldResult = new JTextField();
         surnameFieldResult.setEditable(false);
         detailsPanel.add(surnameFieldResult);
 
-        // Entrance Date field
         entranceDateLabel = new JLabel("Entrance Date: ");
         detailsPanel.add(entranceDateLabel);
         entranceDateFieldResult = new JTextField();
@@ -120,11 +106,9 @@ public class EmployeeView extends JFrame {
 
         getEmployeePanel.add(detailsPanel, BorderLayout.CENTER);
 
-        // Table to display employee details if needed
         employeeTable = new JTable();
         getEmployeePanel.add(new JScrollPane(employeeTable), BorderLayout.SOUTH);
 
-        // Set up Search by Employee ID panel
         JPanel idSearchPanel = new JPanel(new FlowLayout());
         idSearchPanel.add(new JLabel("Enter Employee ID:"));
         entranceDateField = new JTextField(20);
