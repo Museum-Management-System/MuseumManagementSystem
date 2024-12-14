@@ -8,7 +8,7 @@ public class Administrator {
     private String email;
     private String sectionName;
 
-    public void Administrator(int adminId, String name, String email, String sectionName) {
+    public Admin(int adminId, String name, String email, String sectionName) {
         this.adminId = adminId;
         this.name = name;
         this.email = email;
@@ -16,9 +16,9 @@ public class Administrator {
     }
 
     private Connection connect() throws SQLException {
-        String url = "jdbc:postgresql://10.200.10.163:5444/museum"; // Update DB URL
-        String user = "postgres";
-        String password = "museum";
+        String url = "jdbc:postgresql://localhost:5432/museum_db"; // Update DB URL
+        String user = "your_username";
+        String password = "your_password";
         return DriverManager.getConnection(url, user, password);
     }
 
