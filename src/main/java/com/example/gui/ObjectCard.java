@@ -11,8 +11,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-/*Editable ObjectCard for Administrator and Employee users
-Buttons will be invisible for guest users
+/*Detailed information of selected object.
+Update and delete buttons will be visible and interactable for Employee and Administrator users.
  */
 
 public class ObjectCard extends Application {
