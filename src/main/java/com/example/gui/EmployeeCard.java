@@ -12,7 +12,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-//That's the interface when Admin clicks on an employee from Employee List (included in ListForAdmin)
+//That's the interface when Admin clicks on an employee from List
 
 public class EmployeeCard extends Application {
 
