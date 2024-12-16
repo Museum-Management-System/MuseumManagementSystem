@@ -42,7 +42,7 @@ public class HelloApplication extends Application {
             LoginView loginView = new LoginView(userDAO);
 
             // Get the scene from LoginView and set it to the stage
-            Scene scene = loginView.getScene();
+            Scene scene = loginView.getScene(primaryStage);
 
             // Set up the stage
             primaryStage.setTitle("Museum Management System - Login");

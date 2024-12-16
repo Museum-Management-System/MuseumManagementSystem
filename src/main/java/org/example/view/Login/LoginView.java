@@ -4,7 +4,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
+import javafx.stage.Stage;
 import org.example.dao.UserDAO;
+import org.example.controller.LoginController;
+import org.example.view.GUIs.AdminGUI;
+import org.example.view.GUIs.EmployeeGUI;
+import org.example.view.GUIs.GuestUserGUI;
 
 public class LoginView {
     private final UserDAO userDAO;
@@ -13,7 +18,7 @@ public class LoginView {
         this.userDAO = userDAO;
     }
 
-    public Scene getScene() {
+    public Scene getScene(Stage primaryStage) {
         // Create UI components
         Label userIDLabel = new Label("User ID:");
         TextField userIDField = new TextField();
@@ -43,13 +48,7 @@ public class LoginView {
                 String password = passwordField.getText();
 
                 // Authenticate user
-                String role = userDAO.authenticateUser(userID, password);
-                if (role != null) {
-                    // Handle role-specific logic or navigation
-                    System.out.println("Login successful! User role: " + role);
-                } else {
-                    showAlert("Login Failed", "Invalid user ID or password.");
-                }
+                handleLogin(userID, password, primaryStage);
             } catch (NumberFormatException e) {
                 showAlert("Input Error", "User ID must be a number.");
             } catch (Exception e) {
@@ -60,6 +59,35 @@ public class LoginView {
 
         // Return the scene
         return new Scene(gridPane, 300, 200);
+    }
+
+    private void handleLogin(int userID, String password, Stage primaryStage) {
+        try {
+            String role = userDAO.authenticateUser(userID, password);
+            if (role != null) {
+                openInterface(role, primaryStage);
+            } else {
+                showAlert("Login Failed", "Invalid user ID or password.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("Error", "An unexpected error occurred.");
+        }
+    }
+
+    private void openInterface(String role, Stage primaryStage) {
+        primaryStage.close(); // Close login window
+        switch (role) {
+            case "Employee":
+                new EmployeeGUI().start(new Stage());
+                break;
+            case "Admin":
+                new AdminGUI().start(new Stage());
+                break;
+            default:
+                new GuestUserGUI().start(new Stage());
+                break;
+        }
     }
 
     private void showAlert(String title, String message) {

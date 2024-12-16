@@ -9,11 +9,11 @@ import javafx.stage.Stage;
 public class EmployeeGUI extends Application {
     @Override
     public void start(Stage primaryStage) {
-        Label label = new Label("Welcome, Guest User!");
+        Label label = new Label("Welcome, EMPLOYEEE!");
         StackPane root = new StackPane(label);
 
         Scene scene = new Scene(root, 400, 300);
-        primaryStage.setTitle("Guest User Interface");
+        primaryStage.setTitle("Employee Interface");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
