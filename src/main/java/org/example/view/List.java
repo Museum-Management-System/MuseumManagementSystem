@@ -1,4 +1,4 @@
-package com.example.gui;
+package org.example.view;
 
 /* Opens up after authentication.
 Includes Objects and Employees button at left.

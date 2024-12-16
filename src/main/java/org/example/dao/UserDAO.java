@@ -2,19 +2,24 @@ package org.example.dao;
 
 import org.example.entity.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class UserDAO {
-    private Connection connection;
+    private static Connection connection;
+
+    static {
+        try {
+            connection = DriverManager.getConnection("jdbc:postgresql://10.200.10.163:5444/museum", "postgres", "museum");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public UserDAO(Connection connection) {
         this.connection = connection;
     }
 
-    public String authenticateUser(int userId, String password) {
+    public static String authenticateUser(int userId, String password) {
         String sql = "SELECT user_type FROM users WHERE user_id = ? AND password = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, userId);

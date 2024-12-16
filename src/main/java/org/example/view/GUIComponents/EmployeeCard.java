@@ -1,4 +1,4 @@
-package com.example.gui;
+package org.example.view.GUIComponents;
 import org.example.service.DatabaseConnection;
 import java.sql.*;
 import javafx.application.Application;

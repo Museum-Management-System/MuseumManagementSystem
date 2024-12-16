@@ -12,5 +12,12 @@ module com.example.gui {
     requires java.desktop;
 
     opens com.example.gui to javafx.fxml;
-    exports com.example.gui;
+    exports org.example.view;
+    opens org.example.view to javafx.fxml;
+    exports org.example.view.GUIs;
+    opens org.example.view.GUIs to javafx.fxml;
+    exports org.example.view.Login;
+    opens org.example.view.Login to javafx.fxml;
+    exports org.example.view.GUIComponents;
+    opens org.example.view.GUIComponents to javafx.fxml;
 }
