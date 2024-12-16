@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class EmployeeGUI extends Application {
     @Override
     public void start(Stage primaryStage) {
-        Label label = new Label("Welcome, EMPLOYEEE!");
+        Label label = new Label("Welcome, Employee!");
         StackPane root = new StackPane(label);
 
         Scene scene = new Scene(root, 400, 300);

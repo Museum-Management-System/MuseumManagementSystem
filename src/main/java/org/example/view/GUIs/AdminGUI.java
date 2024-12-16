@@ -9,11 +9,11 @@ import javafx.stage.Stage;
 public class AdminGUI extends Application {
     @Override
     public void start(Stage primaryStage) {
-        Label label = new Label("Welcome, ADMIN User!");
+        Label label = new Label("Welcome, Admin User!");
         StackPane root = new StackPane(label);
 
         Scene scene = new Scene(root, 400, 300);
-        primaryStage.setTitle("ADMIN Interface");
+        primaryStage.setTitle("Admin Interface");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
