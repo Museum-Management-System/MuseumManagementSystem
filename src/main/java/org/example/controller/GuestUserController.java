@@ -1,12 +1,11 @@
 package org.example.controller;
 
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.example.dao.MuseumArtifactDAO;
 import org.example.entity.MuseumArtifact;
 import org.example.service.DatabaseConnection;
 
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,13 +13,13 @@ import java.util.ArrayList;
 public class GuestUserController {
 
     private TextField searchField;
-    private ListView<String> objectListView;
+    private TableView<MuseumArtifact> objectTableView;
     private MuseumArtifactDAO museumArtifactDAO;
     private Connection connection;
 
-    public GuestUserController(TextField searchField, ListView<String> objectListView) throws SQLException {
+    public GuestUserController(TextField searchField, TableView<MuseumArtifact> objectTableView) throws SQLException {
         this.searchField = searchField;
-        this.objectListView = objectListView;
+        this.objectTableView = objectTableView;
         this.connection = DatabaseConnection.getConnection();
         museumArtifactDAO = new MuseumArtifactDAO(connection);
     }
@@ -45,14 +44,14 @@ public class GuestUserController {
         // Implement add object logic here
     }
 
-    public void handleObjectSelection(String selectedObject) {
+    public void handleObjectSelection(MuseumArtifact selectedObject) {
         System.out.println("Selected object: " + selectedObject);
         // Implement object selection logic here
     }
-    public void populateObjectList(ListView<String> listView) {
+    public void populateObjectList(TableView<MuseumArtifact> tableViewView) {
         // Fetch data from DAO
         ArrayList<MuseumArtifact> objects = museumArtifactDAO.getAllArtifacts();
-        listView.getItems().clear();
-        listView.getItems().addAll(String.valueOf(objects));
+        tableViewView.getItems().clear();
+        tableViewView.getItems().addAll(objects);
     }
 }
