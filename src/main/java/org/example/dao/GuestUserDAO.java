@@ -1,22 +1,63 @@
 package org.example.dao;
-import org.example.entity.*;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-/*Burası 15.12.24 ve 16.12.24 Akşamlarında iyice oturtulacaktır.
-  Barış'a sormadan burayı düzenlemeniz halinde kendimde olan eski haline alıcam. */
 public class GuestUserDAO {
-    public static int artifactSearch(String desired_Result, Connection connection) {
-        //Burası Museum Obje returnlayacak ve yarın/pzt eklenecek.
-
-        return 0;
+    private Connection connection;
+    public GuestUserDAO(Connection connection) {
+        this.connection = connection;
     }
-    public static void artifactFilter(){}
 
-    public  static void artifactFilter1(){}
+    //this is the parameterless search
+    public ArrayList<String> searchObjects() {
+        ArrayList<String> artifacts = new ArrayList<>();
+        String query = "SELECT * FROM museum_artifacts";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    artifacts.add(rs.getInt("artifact_id") + "," +rs.getString("name") + ", " +
+                            rs.getString("category") + "," + rs.getString("location") + ", " +
+                            rs.getDate("acquisition_date"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
+        return artifacts;
+    }
 
-    //These are separete filter types. location, getting date etc.
+    //and here is the parametered one
+    public ArrayList<String> searchObjects(String name, String category, String location, Date acquisitionDate) {
+        ArrayList<String> artifacts = new ArrayList<>();
 
-    public static void artifactListing(){}
+        StringBuilder query = new StringBuilder("SELECT * FROM museum_artifacts WHERE 'mms'='mms' ");
+        //a statement which is always true, will be concatenated with and statements.
+        if (name != null && !name.isEmpty()) {query.append(" AND name ILIKE ?");}
+        if (category != null && !category.isEmpty()) {query.append(" AND category ILIKE ?");}
+        if (location != null && !location.isEmpty()) {query.append(" AND location ILIKE ?");}
+        if (acquisitionDate != null) {query.append(" AND acquisition_date = ?");}
 
+        try (PreparedStatement stmt = connection.prepareStatement(query.toString())) {
+            int index = 1;
+            //i allowed partial matching, "alike"ness.
+            if (name != null && !name.isEmpty()) {stmt.setString(index++, "%" + name + "%");}
+            if (category != null && !category.isEmpty()) {stmt.setString(index++, "%" + category + "%");}
+            if (location != null && !location.isEmpty()) {stmt.setString(index++, "%" + location + "%");}
+            if (acquisitionDate != null) {stmt.setDate(index++, acquisitionDate);}
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    artifacts.add(rs.getInt("artifact_id") + "," + rs.getString("name") + ", " +
+                            rs.getString("category") + "," + rs.getString("location") + ", " +
+                            rs.getDate("acquisition_date"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return artifacts;
+    }
 }
