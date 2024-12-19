@@ -45,29 +45,5 @@ public class UserDAO {
         }
     }
 
-    public void assignRole(int userId, String password) {
-        String sql = "SELECT user_type FROM users WHERE user_id = ? AND password = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, userId);
-            pstmt.setString(2, password);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                String userType = rs.getString("user_type");
-                if ("Administrator".equals(userType)) {
-                    // Set role to admin_role (Administrator privileges)
-                    try (PreparedStatement stmt = connection.prepareStatement("SET ROLE admin_role")) {
-                        stmt.executeUpdate();
-                    }
-                } else if ("Employee".equals(userType)) {
-                    // Set role to employee_role (Employee privileges)
-                    try (PreparedStatement stmt = connection.prepareStatement("SET ROLE employee_role")) {
-                        stmt.executeUpdate();
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }
 

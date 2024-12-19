@@ -11,6 +11,7 @@ public class EmployeeDAO {
     public EmployeeDAO(Connection connection) {
         this.connection = connection;
     }
+
     public boolean addArtifact(String name, String category, String description, String acquisitionDate, String location) {
         String query = "INSERT INTO museum_artifacts (name, category, description, acquisition_date, location) " +
                 "VALUES (?, ?, ?, ?, ?)";

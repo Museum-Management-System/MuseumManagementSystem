@@ -4,6 +4,9 @@ import org.example.dao.EmployeeDAO;
 import org.example.entity.Employee;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class EmployeeService {
@@ -13,6 +16,37 @@ public class EmployeeService {
     public EmployeeService(EmployeeDAO employeeDAO) {
         this.employeeDAO = employeeDAO;
     }
+
+    private Connection connection;
+    public EmployeeService(Connection connection) {
+        this.connection = connection;
+    }
+
+    public static Employee findEmployee(int id, Connection connection) {
+        String query = "SELECT * FROM employees WHERE employee_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, id);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return new Employee(
+                            resultSet.getInt("employee_id"),
+                            resultSet.getString("name"),
+                            resultSet.getString("email"),
+                            resultSet.getString("phone_num"),
+                            resultSet.getString("job_title"),
+                            resultSet.getString("section_name"),
+                            resultSet.getString("role")
+                    );
+                } else {return null;}
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
 
     // Method to add a new employee
     public void addEmployee(Employee employee, Connection connection) {
@@ -27,7 +61,7 @@ public class EmployeeService {
         }
 
         // Check if the employee already exists
-        if (employeeDAO.findEmployee(employee.getEmployeeId(), connection) != null) {
+        if (findEmployee(employee.getEmployeeId(), connection) != null) {
             throw new IllegalArgumentException("An employee with this ID already exists.");
         }
 
@@ -38,7 +72,7 @@ public class EmployeeService {
 
     // Method to get an employee by ID
     public Employee getEmployeeById(int employeeId, Connection connection) {
-        Employee employee = employeeDAO.findEmployee(employeeId, connection);
+        Employee employee = findEmployee(employeeId, connection);
         if (employee == null) {
             throw new IllegalArgumentException("No employee found with the given ID.");
         }
@@ -47,7 +81,7 @@ public class EmployeeService {
 
     // Method to update an employee
     public void updateEmployee(Employee employee, Connection connection) {
-        Employee existingEmployee = employeeDAO.findEmployee(employee.getEmployeeId(), connection);
+        Employee existingEmployee = findEmployee(employee.getEmployeeId(), connection);
         if (existingEmployee == null) {
             throw new IllegalArgumentException("No employee found with the given ID.");
         }
@@ -58,7 +92,7 @@ public class EmployeeService {
 
     // Method to delete an employee
     public void deleteEmployee(int employeeId, Connection connection) {
-        Employee existingEmployee = employeeDAO.findEmployee(employeeId, connection);
+        Employee existingEmployee = findEmployee(employeeId, connection);
         if (existingEmployee == null) {
             throw new IllegalArgumentException("No employee found with the given ID.");
         }
