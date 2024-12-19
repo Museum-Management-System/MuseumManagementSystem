@@ -2,6 +2,7 @@ import org.example.entity.MuseumArtifact;
 import org.example.dao.MuseumArtifactDAO;
 import org.junit.jupiter.api.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -196,5 +197,65 @@ public class MuseumDAOTest {
         // Verify that no artifacts are returned
         assertTrue(nonExistingCategory.isEmpty(), "Search should return no results for a non-existent category.");
     }
+
+    @Test
+    public void testOrderByAscending() throws SQLException {
+        MuseumArtifact artifact1 = new MuseumArtifact(
+                "Mona Lisa",
+                "Painting",
+                "A portrait by Leonardo da Vinci",
+                Date.valueOf("1503-01-01"),
+                "Renaissance Section"
+        );
+        MuseumArtifact artifact2 = new MuseumArtifact(
+                "The Starry Night",
+                "Painting",
+                "A famous painting by Vincent van Gogh",
+                Date.valueOf("1889-06-01"),
+                "Museum of Modern Art"
+        );
+        MuseumArtifact artifact3 = new MuseumArtifact(
+                "The Thinker",
+                "Sculpture",
+                "A famous sculpture by Auguste Rodin",
+                Date.valueOf("1904-01-01"),
+                "Rodin Museum"
+        );
+        //we temporarily add these to our database
+        artifactDAO.addArtifact(artifact1);
+        artifactDAO.addArtifact(artifact2);
+        artifactDAO.addArtifact(artifact3);
+
+        ArrayList<MuseumArtifact> orderedByName = artifactDAO.orderArtifactsByAscending("name");
+        assertEquals(5, orderedByName.size(), "There should be 5 artifacts.");
+        assertEquals("Mona Lisa", orderedByName.get(0).getName(), "First artifact should be 'Mona Lisa' (alphabetical order).");
+        assertEquals("The Starry Night", orderedByName.get(1).getName(), "Second artifact should be 'The Starry Night'.");
+        assertEquals("The Thinker", orderedByName.get(2).getName(), "Third artifact should be 'The Thinker'.");
+    }
+    @Test
+    public void testOrderByDescending() throws SQLException {
+            artifactDAO.addArtifact(new MuseumArtifact("Mona Lisa", "Painting", "A portrait by Leonardo da Vinci", Date.valueOf("1503-01-01"), "Renaissance Section"));
+            artifactDAO.addArtifact(new MuseumArtifact("The Starry Night", "Painting", "A famous painting by Vincent van Gogh", Date.valueOf("1889-06-01"), "Museum of Modern Art"));
+            artifactDAO.addArtifact(new MuseumArtifact("The Thinker", "Sculpture", "A famous sculpture by Auguste Rodin", Date.valueOf("1904-01-01"), "Rodin Museum"));
+
+            ArrayList<MuseumArtifact> orderedByDate = artifactDAO.orderArtifactsByDescending("acquisition_date");
+
+            assertEquals(3, orderedByDate.size(), "There should be 3 artifacts.");
+            assertEquals("The Thinker", orderedByDate.get(0).getName(), "First artifact should be 'The Thinker' (latest acquisition date).");
+            assertEquals("The Starry Night", orderedByDate.get(1).getName(), "Second artifact should be 'The Starry Night'.");
+            assertEquals("Mona Lisa", orderedByDate.get(2).getName(), "Third artifact should be 'Mona Lisa' (oldest acquisition date).");
+        }
+
+    @Test
+    public void testAcquisitionDateFiltering() throws SQLException {
+    artifactDAO.addArtifact(new MuseumArtifact("Mona Lisa", "Painting", "A portrait by Leonardo da Vinci", Date.valueOf("1503-01-01"), "Renaissance Section"));
+    artifactDAO.addArtifact(new MuseumArtifact("The Starry Night", "Painting", "A famous painting by Vincent van Gogh", Date.valueOf("1889-06-01"), "Museum of Modern Art"));
+    artifactDAO.addArtifact(new MuseumArtifact("The Thinker", "Sculpture", "A famous sculpture by Auguste Rodin", Date.valueOf("1904-01-01"), "Rodin Museum"));
+     ArrayList<MuseumArtifact> filteredArtifacts = artifactDAO.acquisitionDateFiltering("1800-01-01");
+     assertEquals(2, filteredArtifacts.size(), "There should be 2 artifacts acquired after 1800.");
+     assertTrue(filteredArtifacts.stream().anyMatch(a -> a.getName().equals("The Starry Night")), "The list should include 'The Starry Night'.");
+     assertTrue(filteredArtifacts.stream().anyMatch(a -> a.getName().equals("The Thinker")), "The list should include 'The Thinker'.");
+    }
+
 
 }
