@@ -4,7 +4,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class AdminGUI extends UserGUI {
+public class AdminGUI extends EmployeeGUI {
 
     @Override
     public void start(Stage primaryStage) {
@@ -16,7 +16,6 @@ public class AdminGUI extends UserGUI {
     private void initAdminInterface() {
         Label label = new Label("Welcome, Guest User!");
         StackPane stackPane = new StackPane(label);
-        rootLayout.getChildren().add(stackPane);
     }
 
     public static void main(String[] args) {

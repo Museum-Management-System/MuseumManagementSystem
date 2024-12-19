@@ -4,6 +4,7 @@ import org.example.entity.User;
 
 import java.sql.*;
 
+
 public class UserDAO {
     private static Connection connection;
 
