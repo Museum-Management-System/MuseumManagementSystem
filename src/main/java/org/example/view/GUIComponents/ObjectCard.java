@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import org.example.dao.AdministratorDAO;
 
 /*Detailed information of selected object.
 Update and delete buttons will be visible and interactable for Employee and Administrator users.
@@ -18,7 +19,6 @@ Update and delete buttons will be visible and interactable for Employee and Admi
 public class ObjectCard extends Application {
 
     private boolean isEditing = false; // Flag to toggle between Update and Save
-
     @Override
     public void start(Stage primaryStage) {
         // Root Pane
