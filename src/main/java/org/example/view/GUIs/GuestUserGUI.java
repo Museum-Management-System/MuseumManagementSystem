@@ -16,12 +16,14 @@ public class GuestUserGUI extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("User Interface");
 
-        // Create the sidebar with buttons
         VBox sidebar = new VBox();
         Button objectsButton = new Button("  OBJECTS   ");
         objectsButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+
         Button employeesButton = new Button("EMPLOYEES");
         employeesButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+        employeesButton.setVisible(false); // Make the employees button invisible
+
         sidebar.getChildren().addAll(objectsButton, employeesButton);
         sidebar.setSpacing(15);
         sidebar.setStyle("-fx-background-color: #909090; -fx-padding: 50px 15px 50px 15px;");
@@ -49,12 +51,11 @@ public class GuestUserGUI extends Application {
         primaryStage.show();
     }
 
-    private void openObjectsPage(Stage primaryStage) {
+    protected void openObjectsPage(Stage primaryStage) {
         VBox objectsPage = new VBox();
         objectsPage.setSpacing(15);
         objectsPage.setStyle("-fx-padding: 15px;");
 
-        // Create UI components for the objects page
         Label titleLabel = new Label("Search Objects:");
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
@@ -74,18 +75,15 @@ public class GuestUserGUI extends Application {
         addObjectButton.setVisible(false); // Invisible by default
         addObjectButton.setOnAction(e -> System.out.println("Add New Object button clicked"));
 
-        // Layout for the buttons
         HBox buttonsBox = new HBox(searchButton, filterButton);
         buttonsBox.setSpacing(10);
 
-        // Layout for the top section
         HBox topBox = new HBox(titleLabel, addObjectButton);
         topBox.setSpacing(15);
         topBox.setStyle("-fx-alignment: center-left;");
 
         objectsPage.getChildren().addAll(topBox, searchField, buttonsBox);
 
-        // Update the center of the root with the objects page
         BorderPane root = (BorderPane) primaryStage.getScene().getRoot();
         root.setCenter(objectsPage);
     }
