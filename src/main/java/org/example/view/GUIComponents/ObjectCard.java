@@ -10,13 +10,26 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.example.dao.AdministratorDAO;
+
+import org.example.entity.MuseumArtifact;
+import org.example.service.MuseumArtifactService;
 
 /*Detailed information of selected object.
 Update and delete buttons will be visible and interactable for Employee and Administrator users.
  */
 
 public class ObjectCard extends Application {
+
+    //Bu kısmı GPT yardımı ile bağlamak için yaptım
+    private final MuseumArtifactService artifactService; // Service to interact with the database
+    private MuseumArtifact currentArtifact;
+
+    //Bu kısmı GPT yardımı ile bağlamak için yaptım. Yarın akşam bakabildiğim kadar bakarım.
+    public ObjectCard(MuseumArtifactService artifactService,MuseumArtifact currentArtifact) {
+        this.artifactService = artifactService;
+        this.currentArtifact = currentArtifact;
+    }
+
 
     private boolean isEditing = false; // Flag to toggle between Update and Save
     @Override
