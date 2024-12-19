@@ -1,20 +1,25 @@
 package org.example.view.GUIs;
 
-import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class AdminGUI extends Application {
+public class AdminGUI extends UserGUI {
+
     @Override
     public void start(Stage primaryStage) {
-        Label label = new Label("Welcome, Admin User!");
-        StackPane root = new StackPane(label);
+        super.start(primaryStage);
+        primaryStage.setTitle("Guest User Interface");
+        initAdminInterface();
+    }
 
-        Scene scene = new Scene(root, 400, 300);
-        primaryStage.setTitle("Admin Interface");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+    private void initAdminInterface() {
+        Label label = new Label("Welcome, Guest User!");
+        StackPane stackPane = new StackPane(label);
+        rootLayout.getChildren().add(stackPane);
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }
