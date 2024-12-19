@@ -1,25 +1,26 @@
 package org.example.view.GUIs;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import org.example.controller.GuestUserController;
+import org.example.entity.MuseumArtifact;
 
 import java.sql.SQLException;
 
 public class GuestUserGUI extends Application {
-
+    private Stage primaryStage;
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("User Interface");
-
+        this.primaryStage = primaryStage;
         VBox sidebar = new VBox();
         Button objectsButton = new Button("  OBJECTS   ");
         objectsButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
@@ -91,43 +92,68 @@ public class GuestUserGUI extends Application {
 
         BorderPane root = (BorderPane) primaryStage.getScene().getRoot();
 
-        ListView<String> objectListView = new ListView<>();
+        TableView<MuseumArtifact> objectTableView = new TableView<>();
 
+        // Define columns
+        TableColumn<MuseumArtifact, String> nameColumn = new TableColumn<>("Name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<MuseumArtifact, String> categoryColumn = new TableColumn<>("Category");
+        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+
+        TableColumn<MuseumArtifact, String> yearColumn = new TableColumn<>("Acquisition Date");
+        yearColumn.setCellValueFactory(new PropertyValueFactory<>("acquisitionDate"));
+
+        TableColumn<MuseumArtifact, String> locationColumn = new TableColumn<>("Location in Museum");
+        locationColumn.setCellValueFactory(new PropertyValueFactory<>("locationInMuseum"));
+
+        objectTableView.getColumns().addAll(nameColumn, categoryColumn, yearColumn, locationColumn);
+        objectTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Populate with sample data
+        ObservableList<MuseumArtifact> objectList = FXCollections.observableArrayList();
+        objectTableView.setItems(objectList);
         // Create and link the controller
-        GuestUserController controller = new GuestUserController(searchField, objectListView);
+        GuestUserController controller = new GuestUserController(searchField, objectTableView);
 
         // Attach event handlers
         searchButton.setOnAction(e -> controller.handleSearch());
         filterButton.setOnAction(e -> controller.handleFilter());
         addObjectButton.setOnAction(e -> controller.handleAddObject());
-        objectListView.setOnMouseClicked(event -> {
-            String selectedObject = objectListView.getSelectionModel().getSelectedItem();
+        objectTableView.setOnMouseClicked(event -> {
+            MuseumArtifact selectedObject = objectTableView.getSelectionModel().getSelectedItem();
             if (selectedObject != null) {
                 controller.handleObjectSelection(selectedObject);
                 displayObjectCard(selectedObject, root);
             }
         });
 
-        objectsPage.getChildren().addAll(titleLabel, searchField, buttonsBox, topBox, objectListView);
+        objectsPage.getChildren().addAll(titleLabel, searchField, buttonsBox, topBox, objectTableView);
         root.setCenter(objectsPage);
 
-        controller.populateObjectList(objectListView);
+        controller.populateObjectList(objectTableView);
     }
 
-    private void displayObjectCard(String objectName, BorderPane root) {
+    private void displayObjectCard(MuseumArtifact object, BorderPane root) {
         VBox objectCard = new VBox();
         objectCard.setSpacing(15);
         objectCard.setStyle("-fx-padding: 15px; -fx-background-color: #f0f0f0;");
 
-        Label objectTitle = new Label("Details for " + objectName);
+        Label objectTitle = new Label("Details for " + object);
         objectTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-        Label descriptionLabel = new Label("Description: This is a detailed view of " + objectName);
+        Label descriptionLabel = new Label("Description: This is a detailed view of " + object);
         descriptionLabel.setWrapText(true);
 
         Button backButton = new Button("BACK");
         backButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white;");
-        backButton.setOnAction(e -> root.setCenter(null)); // Go back to the previous page
+        backButton.setOnAction(e -> {
+            try {
+                openObjectsPage(primaryStage);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        }); // Go back to the previous page
 
         objectCard.getChildren().addAll(objectTitle, descriptionLabel, backButton);
 
