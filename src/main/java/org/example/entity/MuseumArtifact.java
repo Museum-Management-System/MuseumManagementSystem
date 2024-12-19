@@ -68,4 +68,7 @@ public class MuseumArtifact {
     public void setLocationInMuseum(String locationInMuseum) {
         this.locationInMuseum = locationInMuseum;
     }
+    public String toString(){
+        return this.name;
+    }
 }

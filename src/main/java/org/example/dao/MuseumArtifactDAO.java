@@ -88,8 +88,8 @@ public class MuseumArtifactDAO {
         return false; // Returns false if update failed
     }
 
-    public List<MuseumArtifact> searchArtifacts(String category) {
-        List<MuseumArtifact> artifacts = new ArrayList<>();
+    public ArrayList<MuseumArtifact> searchArtifacts(String category) {
+        ArrayList<MuseumArtifact> artifacts = new ArrayList<>();
         String sql = "SELECT * FROM museum_artifacts WHERE category = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, category);
@@ -109,8 +109,8 @@ public class MuseumArtifactDAO {
         return artifacts;
     }
 
-    public List<MuseumArtifact> getAllArtifacts() {
-        List<MuseumArtifact> artifacts = new ArrayList<>();
+    public ArrayList<MuseumArtifact> getAllArtifacts() {
+        ArrayList<MuseumArtifact> artifacts = new ArrayList<>();
         String sql = "SELECT * FROM museum_artifacts";  // No WHERE clause, to fetch all artifacts
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             ResultSet rs = pstmt.executeQuery();
