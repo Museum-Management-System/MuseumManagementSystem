@@ -62,7 +62,7 @@ public class UserDAOTest {
         User adminUser = new User(4, "Administrator", "adminPassword");
         userDAO.insertUser(adminUser);
 
-        userDAO.assignRole(adminUser.getUserId(), adminUser.getPassword());
+        userDAO.authenticateUser(adminUser.getUserId(), adminUser.getPassword());
 
         String sql = "SELECT current_user";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -78,7 +78,7 @@ public class UserDAOTest {
         User employeeUser = new User(5, "Employee", "employeePassword");
         userDAO.insertUser(employeeUser);
 
-        userDAO.assignRole(employeeUser.getUserId(), employeeUser.getPassword());
+        userDAO.authenticateUser(employeeUser.getUserId(), employeeUser.getPassword());
 
         String sql = "SELECT current_user";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
