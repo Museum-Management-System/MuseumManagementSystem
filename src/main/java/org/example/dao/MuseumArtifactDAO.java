@@ -4,12 +4,9 @@ import org.example.entity.MuseumArtifact;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MuseumArtifactDAO {
     private Connection connection;
-
-
     public MuseumArtifactDAO(Connection connection) {
         this.connection = connection;
     }
@@ -34,8 +31,6 @@ public class MuseumArtifactDAO {
             throw new RuntimeException("Error adding artifact: " + e.getMessage());
         }
     }
-
-
     public MuseumArtifact getArtifact(String artifactName) {
         String sql = "SELECT * FROM museum_artifacts WHERE name = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -87,7 +82,6 @@ public class MuseumArtifactDAO {
         }
         return false; // Returns false if update failed
     }
-
     public ArrayList<MuseumArtifact> searchArtifacts(String category) {
         ArrayList<MuseumArtifact> artifacts = new ArrayList<>();
         String sql = "SELECT * FROM museum_artifacts WHERE category = ?";
@@ -130,4 +124,68 @@ public class MuseumArtifactDAO {
     }
 
 
+    //Object name,acquisition date, object type ve acquisition date göre filtreleme
+    public ArrayList<MuseumArtifact> orderArtifactsByAscending(String attributeName) {
+        ArrayList<MuseumArtifact> artifacts = new ArrayList<>();
+        String query="SELECT * FROM museum_artifacts order by ? asc;";
+        try(PreparedStatement preparedStatement= connection.prepareStatement(query)){
+            preparedStatement.setString(1, attributeName);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                artifacts.add(new MuseumArtifact(
+                        rs.getString("name"),
+                        rs.getString("category"),
+                        rs.getString("description"),
+                        rs.getDate("acquisition_date"),
+                        rs.getString("location")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return artifacts;
+    }
+    //This is used for Z->A, newest date -> oldest and a->z
+    public ArrayList<MuseumArtifact> orderArtifactsByDescending(String attributeName) {
+        ArrayList<MuseumArtifact> artifacts = new ArrayList<>();
+        String query=" SELECT * FROM museum_artifacts order by ? desc ;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)){
+            preparedStatement.setString(1, attributeName);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                artifacts.add(new MuseumArtifact(
+                        rs.getString("name"),
+                        rs.getString("category"),
+                        rs.getString("description"),
+                        rs.getDate("acquisition_date"),
+                        rs.getString("location")
+                ));
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return artifacts;
+    }
+    //Filter from an old date to current date.
+    public ArrayList<MuseumArtifact> acquisitionDateFiltering(String acquisitionDate) {
+        ArrayList<MuseumArtifact> artifacts = new ArrayList<>();
+        String sql = "SELECT * FROM museum_artifacts WHERE acquisition_date > ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, acquisitionDate);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                artifacts.add(new MuseumArtifact(
+                        rs.getString("name"),
+                        rs.getString("category"),
+                        rs.getString("description"),
+                        rs.getDate("acquisition_date"),
+                        rs.getString("location")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return artifacts;
+    }
 }
