@@ -142,6 +142,7 @@ public class EmployeeCard extends BorderPane {
                 setEditable(phoneField, false);
 
                 // Save the updated details (Print to console for now)
+                System.out.println("ID: " + employee.getEmployeeId());
                 System.out.println("Updated Name: " + nameField.getText());
                 System.out.println("Updated Role: " + roleField.getText());
                 System.out.println("Updated Department: " + sectionField.getText());

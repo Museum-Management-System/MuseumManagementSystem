@@ -15,6 +15,9 @@ import org.example.entity.MuseumArtifact;
 import org.example.view.GUIs.EmployeeGUI;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ObjectCard extends BorderPane {
     private Label objectNameLabel;
@@ -116,11 +119,28 @@ public class ObjectCard extends BorderPane {
                     infoDump.setStyle("-fx-control-inner-background: #ffeaea;");
 
                     // Save the updated details (Print to console for now)
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date acquisitionDate = null;
+                    try { // Parse the date text from the TextField to a Date object
+                        acquisitionDate = dateFormat.parse(dateField.getText());
+                        System.out.println("Acquisition Date set: " + museumArtifact.getAcquisitionDate());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                        System.out.println("Invalid date format. Please use yyyy-MM-dd.");
+                    }
+
+                    museumArtifact.setName(nameField.getText());
+                    museumArtifact.setAcquisitionDate(acquisitionDate);
+                    museumArtifact.setCategory(categoryField.getText());
+                    museumArtifact.setLocationInMuseum(locationInMuseumField.getText());
+                    museumArtifact.setDescription(infoDump.getText());
+                    System.out.println(museumArtifact.getArtifactId());
                     System.out.println("Updated Name: " + nameField.getText());
                     System.out.println("Updated Date: " + dateField.getText());
                     System.out.println("Updated Category: " + categoryField.getText());
                     System.out.println("Updated Location in the Museum: " + locationInMuseumField.getText());
                     System.out.println("Updated Info: " + infoDump.getText());
+                    controller.handleUpdateObject(museumArtifact);
                 }
             });
 

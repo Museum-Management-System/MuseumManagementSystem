@@ -39,13 +39,14 @@ public class MuseumArtifactDAO {
             pstmt.setString(1, artifactName);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new MuseumArtifact(
+                MuseumArtifact artifact = new MuseumArtifact(
                         rs.getString("name"),
                         rs.getString("category"),
                         rs.getString("description"),
                         rs.getDate("acquisition_date"),
-                        rs.getString("location")
-                );
+                        rs.getString("location"));
+                artifact.setArtifactId(rs.getInt("artifact_id"));
+                return artifact;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,17 +67,18 @@ public class MuseumArtifactDAO {
     }
 
     public boolean updateArtifact(MuseumArtifact artifact) {
-        String sql = "UPDATE museum_artifacts SET category = ?, description = ?, acquisition_date = ?, location = ? WHERE name = ?";
+        String sql = "UPDATE museum_artifacts SET name = ?, category = ?, description = ?, acquisition_date = ?, location = ? WHERE artifact_id = ?";
         // Assuming ps is your PreparedStatement and you need to set the acquisitionDate
 
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, artifact.getCategory());
-            pstmt.setString(2, artifact.getDescription());
+            pstmt.setString(1, artifact.getName());
+            pstmt.setString(2, artifact.getCategory());
+            pstmt.setString(3, artifact.getDescription());
             //pstmt.setDate(3, (Date) artifact.getAcquisitionDate());
-            pstmt.setDate(3, new java.sql.Date(artifact.getAcquisitionDate().getTime()));
-            pstmt.setString(4, artifact.getLocationInMuseum());
-            pstmt.setString(5, artifact.getName());
+            pstmt.setDate(4, new java.sql.Date(artifact.getAcquisitionDate().getTime()));
+            pstmt.setString(5, artifact.getLocationInMuseum());
+            pstmt.setInt(6, artifact.getArtifactId());
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0; // Returns true if the artifact was updated
         } catch (SQLException e) {
@@ -91,13 +93,14 @@ public class MuseumArtifactDAO {
             pstmt.setString(1,"%" + name + "%");
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                artifacts.add(new MuseumArtifact(
+                MuseumArtifact artifact = new MuseumArtifact(
                         rs.getString("name"),
                         rs.getString("category"),
                         rs.getString("description"),
                         rs.getDate("acquisition_date"),
-                        rs.getString("location")
-                ));
+                        rs.getString("location"));
+                artifact.setArtifactId(rs.getInt("artifact_id"));
+                artifacts.add(artifact);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,13 +114,14 @@ public class MuseumArtifactDAO {
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                artifacts.add(new MuseumArtifact(
+                MuseumArtifact artifact = new MuseumArtifact(
                         rs.getString("name"),
                         rs.getString("category"),
                         rs.getString("description"),
                         rs.getDate("acquisition_date"),
-                        rs.getString("location")
-                ));
+                        rs.getString("location"));
+                artifact.setArtifactId(rs.getInt("artifact_id"));
+                artifacts.add(artifact);
             }
         } catch (SQLException e) {
             e.printStackTrace();
