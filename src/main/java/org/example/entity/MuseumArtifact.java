@@ -71,4 +71,8 @@ public class MuseumArtifact {
     public String toString(){
         return this.name;
     }
+
+    public String getImageUrl() {
+        return  null;
+    }
 }

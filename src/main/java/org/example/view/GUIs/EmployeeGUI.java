@@ -28,7 +28,6 @@ public class EmployeeGUI extends GuestUserGUI {
         topBox.getChildren().add(addObjectButton); // Add the button to the HBox
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    @Override
+    protected String getUserType() { return "Employee";}
 }
