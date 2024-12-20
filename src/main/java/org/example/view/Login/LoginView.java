@@ -100,7 +100,39 @@ public class LoginView {
             }
         });
 
-        Scene scene=new Scene(gridPane, 380, 250);
+        // Add Enter key functionality for User ID field
+        userIDField.setOnKeyPressed(event -> {
+            if (event.getCode().toString().equals("ENTER")) {
+                try {
+                    int userID = Integer.parseInt(userIDField.getText());
+                    String password = passwordField.getText();
+                    handleLogin(userID, password, primaryStage);
+                } catch (NumberFormatException e) {
+                    showAlert("Input Error", "User ID must be a number.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert("Error", "An unexpected error occurred.");
+                }
+            }
+        });
+
+        // Add Enter key functionality for Password field
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode().toString().equals("ENTER")) {
+                try {
+                    int userID = Integer.parseInt(userIDField.getText());
+                    String password = passwordField.getText();
+                    handleLogin(userID, password, primaryStage);
+                } catch (NumberFormatException e) {
+                    showAlert("Input Error", "User ID must be a number.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    showAlert("Error", "An unexpected error occurred.");
+                }
+            }
+        });
+
+        Scene scene = new Scene(gridPane, 380, 250);
         primaryStage.setResizable(false);
         return scene;
     }
