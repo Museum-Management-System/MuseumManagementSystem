@@ -12,17 +12,22 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.controller.GuestUserController;
 import org.example.entity.MuseumArtifact;
+import org.example.view.GUIComponents.ObjectCard;
 
 import java.sql.SQLException;
 
 public class GuestUserGUI extends Application {
     private Stage primaryStage;
+    private ObjectCard objectCard;
+
+    protected String getUserType() {return "Guest";}
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("User Interface");
         this.primaryStage = primaryStage;
         VBox sidebar = new VBox();
-        Button objectsButton = new Button("  OBJECTS   ");
+        Button objectsButton = new Button("OBJECTS");
         objectsButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
 
         Button employeesButton = new Button("EMPLOYEES");
@@ -64,6 +69,7 @@ public class GuestUserGUI extends Application {
 
     protected void openObjectsPage(Stage primaryStage) throws SQLException {
         VBox objectsPage = new VBox();
+        objectCard = new ObjectCard(objectsPage, getUserType());
         objectsPage.setSpacing(15);
         objectsPage.setStyle("-fx-padding: 15px;");
 
@@ -135,29 +141,7 @@ public class GuestUserGUI extends Application {
     }
 
     private void displayObjectCard(MuseumArtifact object, BorderPane root) {
-        VBox objectCard = new VBox();
-        objectCard.setSpacing(15);
-        objectCard.setStyle("-fx-padding: 15px; -fx-background-color: #f0f0f0;");
-
-        Label objectTitle = new Label("Details for " + object);
-        objectTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-
-        Label descriptionLabel = new Label("Description: This is a detailed view of " + object);
-        descriptionLabel.setWrapText(true);
-
-        Button backButton = new Button("BACK");
-        backButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white;");
-        backButton.setOnAction(e -> {
-            try {
-                openObjectsPage(primaryStage);
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-        }); // Go back to the previous page
-
-        objectCard.getChildren().addAll(objectTitle, descriptionLabel, backButton);
-
-        // Set the object card in the center
+        objectCard.updateCard(object);
         root.setCenter(objectCard);
     }
     public static void main(String[] args) {
