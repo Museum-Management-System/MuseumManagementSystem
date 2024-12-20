@@ -3,6 +3,8 @@ package org.example.dao;
 import org.example.entity.MuseumArtifact;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MuseumArtifactDAO {
@@ -82,11 +84,11 @@ public class MuseumArtifactDAO {
         }
         return false; // Returns false if update failed
     }
-    public ArrayList<MuseumArtifact> searchArtifacts(String category) {
+    public ArrayList<MuseumArtifact> searchArtifacts(String name) {
         ArrayList<MuseumArtifact> artifacts = new ArrayList<>();
-        String sql = "SELECT * FROM museum_artifacts WHERE category = ?";
+        String sql = "SELECT * FROM museum_artifacts WHERE LOWER(name) LIKE LOWER(?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, category);
+            pstmt.setString(1,"%" + name + "%");
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 artifacts.add(new MuseumArtifact(
@@ -184,6 +186,71 @@ public class MuseumArtifactDAO {
                 ));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return artifacts;
+    }
+    public ArrayList<String> getAllCategories() {
+        ArrayList<String> categories = new ArrayList<>();
+        String sql = "SELECT DISTINCT category FROM museum_artifacts";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                categories.add(rs.getString("category"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return categories;
+    }
+
+    public ArrayList<String> getAllLocations() {
+        ArrayList<String> locations = new ArrayList<>();
+        String sql = "SELECT DISTINCT location FROM museum_artifacts";
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                locations.add(rs.getString("location"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return locations;
+    }
+
+    public ArrayList<MuseumArtifact> filterArtifacts(ArrayList<String> categories, String minDate, String maxDate, ArrayList<String> locations) {
+        ArrayList<MuseumArtifact> artifacts = new ArrayList<>();
+        String sql = "SELECT * FROM museum_artifacts WHERE "
+                + "(category IN (?) OR ? IS NULL) AND "
+                + "(acquisition_date BETWEEN ? AND ? OR (? IS NULL AND ? IS NULL)) AND "
+                + "(location IN (?) OR ? IS NULL)";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            Date minSqlDate = null;
+            Date maxSqlDate = null;
+            if (minDate != null && !minDate.isEmpty()) {minSqlDate = new Date(new SimpleDateFormat("yyyy-MM-dd").parse(minDate).getTime());}
+            if (maxDate != null && !maxDate.isEmpty()) {maxSqlDate = new Date(new SimpleDateFormat("yyyy-MM-dd").parse(maxDate).getTime());}
+            pstmt.setString(1, String.join(",", categories));
+            pstmt.setString(2, categories.isEmpty() ? null : "dummy");
+            pstmt.setDate(3, minSqlDate);
+            pstmt.setDate(4, maxSqlDate);
+            pstmt.setDate(5, minSqlDate);
+            pstmt.setDate(6, maxSqlDate);
+            pstmt.setString(7, String.join(",", locations));
+            pstmt.setString(8, locations.isEmpty() ? null : "dummy");
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                artifacts.add(new MuseumArtifact(
+                        rs.getString("name"),
+                        rs.getString("category"),
+                        rs.getString("description"),
+                        rs.getDate("acquisition_date"),
+                        rs.getString("location")
+                ));
+            }
+        } catch (SQLException  | ParseException e) {
             e.printStackTrace();
         }
         return artifacts;

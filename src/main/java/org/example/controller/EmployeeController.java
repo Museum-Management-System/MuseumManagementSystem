@@ -2,8 +2,6 @@ package org.example.controller;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
 import org.example.dao.MuseumArtifactDAO;
 import org.example.entity.MuseumArtifact;
 import org.example.service.DatabaseConnection;
@@ -93,7 +91,7 @@ public class EmployeeController {
      */
     public void populateObjectList() {
         ArrayList<MuseumArtifact> allArtifacts = museumArtifactDAO.getAllArtifacts();
-        empGUI.getTableView().getItems().clear();
-        empGUI.getTableView().getItems().addAll(allArtifacts);
+        empGUI.getobjectTableView().getItems().clear();
+        empGUI.getobjectTableView().getItems().addAll(allArtifacts);
     }
 }

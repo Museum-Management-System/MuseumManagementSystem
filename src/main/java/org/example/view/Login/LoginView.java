@@ -16,6 +16,8 @@ import org.example.view.GUIs.AdminGUI;
 import org.example.view.GUIs.EmployeeGUI;
 import org.example.view.GUIs.GuestUserGUI;
 
+import java.sql.SQLException;
+
 public class LoginView {
     private final UserDAO userDAO;
 
@@ -84,7 +86,11 @@ public class LoginView {
 
         guestUserButton.setOnAction(event -> {
             primaryStage.close(); // Close the current window
-            new GuestUserGUI().start(new Stage()); // Open GuestUser GUI
+            try {
+                new GuestUserGUI().start(new Stage()); // Open GuestUser GUI
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         });
 
         authenticatedUserButton.setOnAction(event -> {
@@ -163,7 +169,7 @@ public class LoginView {
         }
     }
 
-    private void openInterface(String role, Stage primaryStage) {
+    private void openInterface(String role, Stage primaryStage) throws SQLException {
         primaryStage.close();
         switch (role) {
             case "Employee":

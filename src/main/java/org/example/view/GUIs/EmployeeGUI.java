@@ -18,7 +18,6 @@ public class EmployeeGUI extends GuestUserGUI {
         BorderPane root = (BorderPane) primaryStage.getScene().getRoot();
         VBox objectsPage = (VBox) root.getCenter();
 
-        // Add a new "Add New Object" button for EmployeeGUI
         Button addObjectButton = new Button("Add New Object");
         addObjectButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white;");
         addObjectButton.setOnAction(e -> System.out.println("Add New Object button clicked!"));

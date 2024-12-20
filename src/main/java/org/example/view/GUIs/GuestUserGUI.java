@@ -20,14 +20,18 @@ public class GuestUserGUI extends Application {
     protected Stage primaryStage;
     private ObjectCard objectCard;
     private TableView<MuseumArtifact> objectTableView;
+    private GuestUserController controller;
+    private TextField searchField;
 
     protected String getUserType() {return "Guest";}
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws SQLException {
         primaryStage.setTitle("User Interface");
         this.primaryStage = primaryStage;
         VBox sidebar = new VBox();
+        controller = new GuestUserController(searchField, objectTableView);
+        controller.setPrimaryStage(primaryStage);
         Button objectsButton = new Button("OBJECTS");
         objectsButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
 
@@ -82,7 +86,7 @@ public class GuestUserGUI extends Application {
         Label titleLabel = new Label("Search Objects:");
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-        TextField searchField = new TextField();
+        searchField = new TextField();
         searchField.setPromptText("Search...");
 
         Button searchButton = new Button("SEARCH");
@@ -130,7 +134,9 @@ public class GuestUserGUI extends Application {
 
         // Attach event handlers
         searchButton.setOnAction(e -> controller.handleSearch());
+        searchField.setOnKeyPressed(e -> controller.handleSearch());
         filterButton.setOnAction(e -> controller.handleFilter());
+
         addObjectButton.setOnAction(e -> controller.handleAddObject());
         objectTableView.setOnMouseClicked(event -> {
             MuseumArtifact selectedObject = objectTableView.getSelectionModel().getSelectedItem();
@@ -150,7 +156,7 @@ public class GuestUserGUI extends Application {
         objectCard.updateCard(object);
         root.setCenter(objectCard);
     }
-    public TableView getTableView(){
+    public TableView getobjectTableView(){
         return objectTableView;
     }
 }
