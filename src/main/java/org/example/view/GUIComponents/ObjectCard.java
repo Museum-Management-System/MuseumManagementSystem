@@ -146,7 +146,7 @@ public class ObjectCard extends BorderPane {
             deleteButton = new Button(); deleteButton.setVisible(false);
         }
 
-        backButton = new Button("GO BACK");
+        backButton = new Button("Back");
         backButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;");
         backButton.setOnMouseEntered(e -> backButton.setStyle("-fx-background-color: #8b0000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
         backButton.setOnMouseExited(e -> backButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
