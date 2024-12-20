@@ -17,8 +17,9 @@ import org.example.view.GUIComponents.ObjectCard;
 import java.sql.SQLException;
 
 public class GuestUserGUI extends Application {
-    private Stage primaryStage;
+    protected Stage primaryStage;
     private ObjectCard objectCard;
+    private TableView<MuseumArtifact> objectTableView;
 
     protected String getUserType() {return "Guest";}
 
@@ -69,7 +70,7 @@ public class GuestUserGUI extends Application {
 
     protected void openObjectsPage(Stage primaryStage) throws SQLException {
         VBox objectsPage = new VBox();
-        objectCard = new ObjectCard(objectsPage, getUserType());
+        objectCard = new ObjectCard(objectsPage, getUserType(), (EmployeeGUI) this);
         objectsPage.setSpacing(15);
         objectsPage.setStyle("-fx-padding: 15px;");
 
@@ -98,7 +99,7 @@ public class GuestUserGUI extends Application {
 
         BorderPane root = (BorderPane) primaryStage.getScene().getRoot();
 
-        TableView<MuseumArtifact> objectTableView = new TableView<>();
+        objectTableView = new TableView<>();
 
         // Define columns
         TableColumn<MuseumArtifact, String> nameColumn = new TableColumn<>("Name");
@@ -140,11 +141,11 @@ public class GuestUserGUI extends Application {
         controller.populateObjectList(objectTableView);
     }
 
-    private void displayObjectCard(MuseumArtifact object, BorderPane root) {
+    protected void displayObjectCard(MuseumArtifact object, BorderPane root) {
         objectCard.updateCard(object);
         root.setCenter(objectCard);
     }
-    public static void main(String[] args) {
-        launch(args);
+    public TableView getTableView(){
+        return objectTableView;
     }
 }

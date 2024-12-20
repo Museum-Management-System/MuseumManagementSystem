@@ -1,70 +1,30 @@
 package org.example.controller;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.example.dao.MuseumArtifactDAO;
 import org.example.entity.MuseumArtifact;
 import org.example.service.DatabaseConnection;
 import org.example.service.MuseumArtifactService;
+import org.example.view.GUIs.EmployeeGUI;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class EmployeeController {
-
-    private TextField searchField;
-    private TableView<MuseumArtifact> objectTableView;
     private MuseumArtifactService artifactService;
     private MuseumArtifactDAO museumArtifactDAO;
     private Connection connection;
+    private EmployeeGUI empGUI;
 
-    public EmployeeController(TextField searchField, TableView<MuseumArtifact> objectTableView) throws SQLException {
-        this.searchField = searchField;
-        this.objectTableView = objectTableView;
+    public EmployeeController(EmployeeGUI empGUI) throws SQLException {
         this.connection = DatabaseConnection.getConnection();
         this.museumArtifactDAO = new MuseumArtifactDAO(connection);
         this.artifactService = new MuseumArtifactService(museumArtifactDAO);
-    }
-
-    /*
-     * Handle searching for objects by name or category.
-     */
-    public void handleSearch() {
-        String searchText = searchField.getText().trim();
-        if (!searchText.isEmpty()) {
-            System.out.println("Search for: " + searchText);
-            ArrayList<MuseumArtifact> filteredArtifacts = museumArtifactDAO.searchArtifacts(searchText);
-            objectTableView.getItems().clear();
-            objectTableView.getItems().addAll(filteredArtifacts);
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning");
-            alert.setHeaderText(null);
-            alert.setContentText("Search field cannot be empty.");
-            alert.showAndWait();
-        }
-    }
-
-    /*
-     * Handle filtering artifacts (e.g., by acquisition date or category).
-     */
-    public void handleFilter(String filterType, String filterValue) {
-        System.out.println("Filtering by: " + filterType + " with value: " + filterValue);
-        ArrayList<MuseumArtifact> filteredArtifacts;
-
-        if (filterType.equalsIgnoreCase("acquisition_date")) {
-            filteredArtifacts = museumArtifactDAO.acquisitionDateFiltering(filterValue);
-        } else if (filterType.equalsIgnoreCase("category")) {
-            filteredArtifacts = museumArtifactDAO.searchArtifacts(filterValue);
-        } else {
-            filteredArtifacts = new ArrayList<>();
-        }
-
-        objectTableView.getItems().clear();
-        objectTableView.getItems().addAll(filteredArtifacts);
+        this.empGUI = empGUI;
     }
 
     /*
@@ -108,46 +68,24 @@ public class EmployeeController {
             confirmationAlert.setTitle("Delete Confirmation");
             confirmationAlert.setHeaderText(null);
             confirmationAlert.setContentText("Are you sure you want to delete the selected artifact?");
-
             confirmationAlert.showAndWait().ifPresent(response -> {
-                /*if (response == Alert.AlertType) {
-                    if (artifactService.deleteArtifact(selectedObject.getName())) {
+                if (response == ButtonType.OK) {
+                    boolean success = artifactService.deleteArtifact(selectedObject.getName());
+                    if (success) {
                         System.out.println("Artifact deleted successfully: " + selectedObject.getName());
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.setTitle("Deletion Successful");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Artifact deleted successfully!");
-                        alert.showAndWait();
-
-                        // Refresh the object table
+                        showAlert(Alert.AlertType.INFORMATION, "Deletion Successful", "Artifact deleted successfully!");
                         populateObjectList();
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Deletion Failed");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Failed to delete artifact. Please try again.");
-                        alert.showAndWait();
                     }
-                } */
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Deletion Failed", "Failed to delete artifact. Please try again.");
+                }
             });
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("No Selection");
-            alert.setHeaderText(null);
-            alert.setContentText("No artifact selected for deletion.");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.WARNING, "No Selection", "No artifact selected for deletion.");
         }
     }
-
-    /*
-     * Handle selecting an object in the table.
-     */
-    public void handleObjectSelection(MouseEvent event) {
-        MuseumArtifact selectedArtifact = objectTableView.getSelectionModel().getSelectedItem();
-        if (selectedArtifact != null) {
-            System.out.println("Selected object: " + selectedArtifact);
-            // Implement further actions for selection if needed
-        }
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType); alert.setTitle(title); alert.setHeaderText(null); alert.setContentText(message); alert.showAndWait();
     }
 
     /*
@@ -155,7 +93,7 @@ public class EmployeeController {
      */
     public void populateObjectList() {
         ArrayList<MuseumArtifact> allArtifacts = museumArtifactDAO.getAllArtifacts();
-        objectTableView.getItems().clear();
-        objectTableView.getItems().addAll(allArtifacts);
+        empGUI.getTableView().getItems().clear();
+        empGUI.getTableView().getItems().addAll(allArtifacts);
     }
 }

@@ -10,20 +10,25 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.geometry.Pos;
+import org.example.controller.EmployeeController;
 import org.example.entity.MuseumArtifact;
+import org.example.view.GUIs.EmployeeGUI;
+
+import java.sql.SQLException;
 
 public class ObjectCard extends BorderPane {
     private Label objectNameLabel;
     private ImageView objectImageView;
     private TextField nameField, dateField, categoryField, locationInMuseumField;
     private TextArea infoDump;
-    private Button updateSaveButton, deleteButton;
+    private Button updateSaveButton, deleteButton, backButton;
     private boolean isEditing;
-    private VBox previousPage;
+    private EmployeeController controller;
+    private MuseumArtifact museumArtifact;
 
-    public ObjectCard(VBox previousPage, String userType) {
+    public ObjectCard(VBox previousPage, String userType, EmployeeGUI EmpGUI) throws SQLException {
         // Set padding and background
-        this.previousPage = previousPage;
+        controller = new EmployeeController(EmpGUI);
         this.setPadding(new Insets(20));
         this.setStyle("-fx-background-color: #d3d3d3;");
 
@@ -73,12 +78,12 @@ public class ObjectCard extends BorderPane {
         buttonBox.setAlignment(Pos.BOTTOM_RIGHT);
 
         if(userType!="Guest"){
-            Button updateSaveButton = new Button("Update Object");
+            updateSaveButton = new Button("Update Object");
             updateSaveButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;");
             updateSaveButton.setOnMouseEntered(e -> updateSaveButton.setStyle("-fx-background-color: #8b0000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
             updateSaveButton.setOnMouseExited(e -> updateSaveButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
 
-            Button deleteButton = new Button("Delete Object");
+            deleteButton = new Button("Delete Object");
             deleteButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;");
             deleteButton.setOnMouseEntered(e -> deleteButton.setStyle("-fx-background-color: #8b0000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
             deleteButton.setOnMouseExited(e -> deleteButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
@@ -132,11 +137,7 @@ public class ObjectCard extends BorderPane {
                         // If user confirms, delete the card and show success message
                         ((BorderPane)this.getParent()).setCenter(previousPage);
 
-                        Alert successDialog = new Alert(Alert.AlertType.INFORMATION);
-                        successDialog.setTitle("Success");
-                        successDialog.setHeaderText(null);
-                        successDialog.setContentText("Deletion was successful!");
-                        successDialog.showAndWait();
+                        controller.handleDeleteObject(museumArtifact);
                     }
                 });
             });
@@ -145,7 +146,7 @@ public class ObjectCard extends BorderPane {
             deleteButton = new Button(); deleteButton.setVisible(false);
         }
 
-        Button backButton = new Button("GO BACK");
+        backButton = new Button("GO BACK");
         backButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;");
         backButton.setOnMouseEntered(e -> backButton.setStyle("-fx-background-color: #8b0000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
         backButton.setOnMouseExited(e -> backButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
@@ -191,6 +192,7 @@ public class ObjectCard extends BorderPane {
     }
 
     public void updateCard(MuseumArtifact artifact) {
+        this.museumArtifact = artifact;
         objectNameLabel.setText(artifact.getName());
         //objectImageView.setImage(new Image(artifact.getImageUrl(), 150, 150, true, true)); // Adjust as needed
         nameField.setText(artifact.getName());
