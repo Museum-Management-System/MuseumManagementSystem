@@ -29,8 +29,18 @@ public class LoginView {
 
         String buttonStyle = "-fx-background-color: #ff4d4d; -fx-text-fill: white; "
                 + "-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 2;";
+        String hoverStyle = "-fx-background-color: #ff0000; -fx-text-fill: white; "
+                + "-fx-font-size: 14px; -fx-font-weight: bold; -fx-background-radius: 2;";
+
         authenticatedUserButton.setStyle(buttonStyle);
         guestUserButton.setStyle(buttonStyle);
+
+        authenticatedUserButton.setOnMouseEntered(event -> authenticatedUserButton.setStyle(hoverStyle));
+        authenticatedUserButton.setOnMouseExited(event -> authenticatedUserButton.setStyle(buttonStyle));
+
+        guestUserButton.setOnMouseEntered(event -> guestUserButton.setStyle(hoverStyle));
+        guestUserButton.setOnMouseExited(event -> guestUserButton.setStyle(buttonStyle));
+
 
         Label userIDLabel = new Label("User ID:");
         TextField userIDField = new TextField();
@@ -40,6 +50,8 @@ public class LoginView {
 
         Button loginButton = new Button("Login");
         loginButton.setStyle(buttonStyle);
+        loginButton.setOnMouseEntered(event -> loginButton.setStyle(hoverStyle));
+        loginButton.setOnMouseExited(event -> loginButton.setStyle(buttonStyle));
 
         userIDLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));
         passwordLabel.setFont(Font.font("Arial", FontWeight.BOLD, 12));

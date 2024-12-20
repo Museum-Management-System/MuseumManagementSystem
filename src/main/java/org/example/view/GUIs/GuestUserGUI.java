@@ -16,7 +16,7 @@ import org.example.entity.MuseumArtifact;
 import java.sql.SQLException;
 
 public class GuestUserGUI extends Application {
-    private Stage primaryStage;
+    protected Stage primaryStage;
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("User Interface");
@@ -134,7 +134,7 @@ public class GuestUserGUI extends Application {
         controller.populateObjectList(objectTableView);
     }
 
-    private void displayObjectCard(MuseumArtifact object, BorderPane root) {
+    protected void displayObjectCard(MuseumArtifact object, BorderPane root) {
         VBox objectCard = new VBox();
         objectCard.setSpacing(15);
         objectCard.setStyle("-fx-padding: 15px; -fx-background-color: #f0f0f0;");
