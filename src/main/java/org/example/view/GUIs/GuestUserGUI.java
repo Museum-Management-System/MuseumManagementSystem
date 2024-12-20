@@ -70,7 +70,12 @@ public class GuestUserGUI extends Application {
 
     protected void openObjectsPage(Stage primaryStage) throws SQLException {
         VBox objectsPage = new VBox();
-        objectCard = new ObjectCard(objectsPage, getUserType(), (EmployeeGUI) this);
+        // Check the type of the current instance and pass the appropriate parameter
+        if (this instanceof EmployeeGUI) {
+            objectCard = new ObjectCard(objectsPage, getUserType(), (EmployeeGUI) this);
+        } else {
+            objectCard = new ObjectCard(objectsPage, getUserType(), null);
+        }
         objectsPage.setSpacing(15);
         objectsPage.setStyle("-fx-padding: 15px;");
 
