@@ -1,7 +1,5 @@
 package org.example.view.GUIs;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -9,16 +7,29 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.example.controller.AdminController;
 import org.example.entity.Employee;
+import org.example.entity.MuseumArtifact;
+import org.example.view.GUIComponents.EmployeeCard;
+
+import java.sql.SQLException;
 
 public class AdminGUI extends EmployeeGUI {
+    private AdminController controller;
+    private TableView<Employee> employeeTableView;
+    private EmployeeCard employeeCard;
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Admin Interface");
         this.primaryStage = primaryStage;
+        try {
+            controller = new AdminController(this);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         VBox sidebar = new VBox();
-        Button objectsButton = new Button("  OBJECTS   ");
+        Button objectsButton = new Button("OBJECTS");
         objectsButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
 
         Button employeesButton = new Button("EMPLOYEES");
@@ -63,10 +74,11 @@ public class AdminGUI extends EmployeeGUI {
         primaryStage.show();
     }
 
-    protected void openEmployeesPage(Stage primaryStage) {
+    protected void openEmployeesPage(Stage primaryStage) throws SQLException {
         VBox employeesPage = new VBox();
         employeesPage.setSpacing(15);
         employeesPage.setStyle("-fx-padding: 15px;");
+        employeeCard = new EmployeeCard(employeesPage, this);
 
         Label titleLabel = new Label("Search Employees:");
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
@@ -89,7 +101,7 @@ public class AdminGUI extends EmployeeGUI {
         HBox buttonsBox = new HBox(searchButton, filterButton, addObjectButton); // Add the button to the HBox
         buttonsBox.setSpacing(10);
 
-        TableView<Employee> employeeTableView = new TableView<>();
+        employeeTableView = new TableView<>();
 
         // Define columns
         TableColumn<Employee, String> nameColumn = new TableColumn<>("Name");
@@ -115,6 +127,7 @@ public class AdminGUI extends EmployeeGUI {
             Employee selectedEmployee = employeeTableView.getSelectionModel().getSelectedItem();
             if (selectedEmployee != null) {
                 System.out.println("Employee " + selectedEmployee.getName() + " clicked!");
+                displayObjectCard(selectedEmployee, (BorderPane) primaryStage.getScene().getRoot());
             }
         });
 
@@ -122,9 +135,16 @@ public class AdminGUI extends EmployeeGUI {
 
         BorderPane root = (BorderPane) primaryStage.getScene().getRoot();
         root.setCenter(employeesPage);
-    }
 
-    public static void main(String[] args) {
-        launch(args);
+        controller.populateEmployeeList();
+    }
+    protected void displayObjectCard(Employee employee, BorderPane root) {
+        employeeCard.updateCard(employee);
+        root.setCenter(employeeCard);
+    }
+    @Override
+    protected String getUserType() { return "Admin";}
+    public TableView getEmployeeTableView(){
+        return employeeTableView;
     }
 }

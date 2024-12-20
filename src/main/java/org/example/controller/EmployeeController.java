@@ -12,13 +12,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class EmployeeController {
+public class EmployeeController extends GuestUserController{
     private MuseumArtifactService artifactService;
     private MuseumArtifactDAO museumArtifactDAO;
     private Connection connection;
     private EmployeeGUI empGUI;
-
     public EmployeeController(EmployeeGUI empGUI) throws SQLException {
+        super(null, null);
         this.connection = DatabaseConnection.getConnection();
         this.museumArtifactDAO = new MuseumArtifactDAO(connection);
         this.artifactService = new MuseumArtifactService(museumArtifactDAO);
@@ -91,7 +91,7 @@ public class EmployeeController {
      */
     public void populateObjectList() {
         ArrayList<MuseumArtifact> allArtifacts = museumArtifactDAO.getAllArtifacts();
-        empGUI.getobjectTableView().getItems().clear();
-        empGUI.getobjectTableView().getItems().addAll(allArtifacts);
+        empGUI.getObjectTableView().getItems().clear();
+        empGUI.getObjectTableView().getItems().addAll(allArtifacts);
     }
 }

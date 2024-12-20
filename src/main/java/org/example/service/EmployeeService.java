@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.dao.AdministratorDAO;
 import org.example.dao.EmployeeDAO;
 import org.example.entity.Employee;
 
@@ -11,18 +12,19 @@ import java.util.List;
 
 public class EmployeeService {
 
-    private EmployeeDAO employeeDAO;
-
-    public EmployeeService(EmployeeDAO employeeDAO) {
-        this.employeeDAO = employeeDAO;
-    }
-
+    private AdministratorDAO adminDAO;
     private Connection connection;
-    public EmployeeService(Connection connection) {
-        this.connection = connection;
+
+    public EmployeeService(AdministratorDAO adminDAO) {
+        this.adminDAO = adminDAO;
+        try {
+            this.connection = DatabaseConnection.getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static Employee findEmployee(int id, Connection connection) {
+    public Employee findEmployee(int id) {
         String query = "SELECT * FROM employees WHERE employee_id = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, id);
@@ -49,7 +51,7 @@ public class EmployeeService {
 
 
     // Method to add a new employee
-    public void addEmployee(Employee employee, Connection connection) {
+    public void addEmployee(Employee employee) {
         // Validate employee fields
         if (employee.getName() == null || employee.getName().isEmpty()
                 || employee.getEmail() == null || employee.getEmail().isEmpty()
@@ -61,7 +63,7 @@ public class EmployeeService {
         }
 
         // Check if the employee already exists
-        if (findEmployee(employee.getEmployeeId(), connection) != null) {
+        if (findEmployee(employee.getEmployeeId()) != null) {
             throw new IllegalArgumentException("An employee with this ID already exists.");
         }
 
@@ -71,8 +73,8 @@ public class EmployeeService {
     }
 
     // Method to get an employee by ID
-    public Employee getEmployeeById(int employeeId, Connection connection) {
-        Employee employee = findEmployee(employeeId, connection);
+    public Employee getEmployeeById(int employeeId) {
+        Employee employee = findEmployee(employeeId);
         if (employee == null) {
             throw new IllegalArgumentException("No employee found with the given ID.");
         }
@@ -80,8 +82,8 @@ public class EmployeeService {
     }
 
     // Method to update an employee
-    public void updateEmployee(Employee employee, Connection connection) {
-        Employee existingEmployee = findEmployee(employee.getEmployeeId(), connection);
+    public void updateEmployee(Employee employee) {
+        Employee existingEmployee = findEmployee(employee.getEmployeeId());
         if (existingEmployee == null) {
             throw new IllegalArgumentException("No employee found with the given ID.");
         }
@@ -91,25 +93,25 @@ public class EmployeeService {
     }
 
     // Method to delete an employee
-    public void deleteEmployee(int employeeId, Connection connection) {
-        Employee existingEmployee = findEmployee(employeeId, connection);
+    public boolean deleteEmployee(int employeeId) {
+        Employee existingEmployee = findEmployee(employeeId);
         if (existingEmployee == null) {
             throw new IllegalArgumentException("No employee found with the given ID.");
         }
 
         // Implement the delete functionality in the DAO
-        // employeeDAO.deleteEmployee(employeeId, connection);
+        return adminDAO.deleteEmployee(employeeId);
     }
 
     // Method to get all employees
-    public List<Employee> getAllEmployees(Connection connection) {
+    public List<Employee> getAllEmployees() {
         // Implement the retrieval logic in the EmployeeDAO
         // List<Employee> employees = employeeDAO.getAllEmployees(connection);
         return null; // Replace this with actual retrieval from the DAO
     }
 
     // Method to search employees by role
-    public List<Employee> searchEmployeesByRole(String role, Connection connection) {
+    public List<Employee> searchEmployeesByRole(String role) {
         if (role == null || role.isEmpty()) {
             throw new IllegalArgumentException("Role cannot be null or empty.");
         }

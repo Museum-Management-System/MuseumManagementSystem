@@ -156,7 +156,7 @@ public class GuestUserGUI extends Application {
         objectCard.updateCard(object);
         root.setCenter(objectCard);
     }
-    public TableView getobjectTableView(){
+    public TableView getObjectTableView(){
         return objectTableView;
     }
 }

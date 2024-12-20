@@ -1,6 +1,7 @@
 package org.example.dao;
 
 import org.example.entity.Administrator;
+import org.example.entity.Employee;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -60,17 +61,20 @@ public class AdministratorDAO {
         }
     }
     //parameterless search for employees
-    public ArrayList<String> searchEmployees() {
-        ArrayList<String> employees = new ArrayList<>();
+    public ArrayList<Employee> searchEmployees() {
+        ArrayList<Employee> employees = new ArrayList<>();
         String query = "SELECT * FROM employees";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    employees.add(rs.getInt("employee_id") + "," +
-                            rs.getString("name") + "," + rs.getString("email") + "," +
-                            rs.getString("phone_num") + "," + rs.getString("job_title") + "," +
-                            rs.getString("section_name") + "," + rs.getString("role"));
+                    employees.add(new Employee(rs.getInt("employee_id"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("job_title"),
+                            rs.getString("phone_num"),
+                            rs.getString("section_name"),
+                            rs.getString("role")));
                 }
             }
         } catch (SQLException e) {
