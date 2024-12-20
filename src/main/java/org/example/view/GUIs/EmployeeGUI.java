@@ -1,21 +1,31 @@
 package org.example.view.GUIs;
 
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.sql.SQLException;
 
 public class EmployeeGUI extends GuestUserGUI {
 
     @Override
-    public void start(Stage primaryStage) {
-        super.start(primaryStage);
-        primaryStage.setTitle("Employee Interface");
-        initEmployeeInterface();
-    }
+    protected void openObjectsPage(Stage primaryStage) throws SQLException {
+        // Call the base method to reuse the base layout
+        super.openObjectsPage(primaryStage);
 
-    private void initEmployeeInterface() {
-        Label label = new Label("Welcome, Employee User!");
-        StackPane stackPane = new StackPane(label);
+        // Access the root and objects page
+        BorderPane root = (BorderPane) primaryStage.getScene().getRoot();
+        VBox objectsPage = (VBox) root.getCenter();
+
+        // Add a new "Add New Object" button for EmployeeGUI
+        Button addObjectButton = new Button("Add New Object");
+        addObjectButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white;");
+        addObjectButton.setOnAction(e -> System.out.println("Add New Object button clicked!"));
+
+        // Add this button to the objects page layout
+        HBox topBox = (HBox) objectsPage.getChildren().get(3); // The top box with title
+        topBox.getChildren().add(addObjectButton); // Add the button to the HBox
     }
 
     public static void main(String[] args) {
