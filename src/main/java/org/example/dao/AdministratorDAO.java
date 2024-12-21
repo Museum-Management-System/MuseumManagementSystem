@@ -83,29 +83,21 @@ public class AdministratorDAO {
         return employees;
     }
     //and parametered search for employees (same logic with artifacts)
-    public ArrayList<String> searchEmployees(String name, String email, String role, String jobTitle, String sectionName) {
-        ArrayList<String> employees = new ArrayList<>();
+    public ArrayList<Employee> searchEmployees(String name) {
+        ArrayList<Employee> employees = new ArrayList<>();
+        String query = "SELECT * FROM employees WHERE LOWER (name) LIKE LOWER(?)";
 
-        StringBuilder query = new StringBuilder("SELECT * FROM employees WHERE 1=1");
-        if (name != null && !name.isEmpty()) {query.append(" AND name ILIKE ?");}
-        if (email != null && !email.isEmpty()) {query.append(" AND email ILIKE ?");}
-        if (role != null && !role.isEmpty()) {query.append(" AND role = ?");}
-        if (jobTitle != null && !jobTitle.isEmpty()) {query.append(" AND job_title ILIKE ?");}
-        if (sectionName != null && !sectionName.isEmpty()) {query.append(" AND section_name ILIKE ?");}
-
-        try (PreparedStatement stmt = connection.prepareStatement(query.toString())) {
-            int index = 1;
-            if (name != null && !name.isEmpty()) {stmt.setString(index++, "%" + name + "%");}
-            if (email != null && !email.isEmpty()) {stmt.setString(index++, "%" + email + "%");}
-            if (role != null && !role.isEmpty()) {stmt.setString(index++, role);}
-            if (jobTitle != null && !jobTitle.isEmpty()) {stmt.setString(index++, "%" + jobTitle + "%");}
-            if (sectionName != null && !sectionName.isEmpty()) {stmt.setString(index++, "%" + sectionName + "%");}
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, "%" + name + "%");
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    employees.add(rs.getInt("employee_id") + "," +
-                            rs.getString("name") + "," + rs.getString("email") + "," +
-                            rs.getString("phone_num") + "," + rs.getString("job_title") + "," +
-                            rs.getString("section_name") + "," + rs.getString("role"));
+                    employees.add(new Employee(rs.getInt("employee_id"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("job_title"),
+                            rs.getString("phone_num"),
+                            rs.getString("section_name"),
+                            rs.getString("role")));
                 }
             }
         } catch (SQLException e) {
@@ -113,7 +105,6 @@ public class AdministratorDAO {
         }
         return employees;
     }
-
 
     public boolean updateEmployee(int employeeId, String name, String email, String jobTitle, String sectionName, String role) {
         String query = "UPDATE employees SET name = ?, email = ?, job_title = ?, section_name = ?, role = ? WHERE employee_id = ?";
@@ -143,99 +134,96 @@ public class AdministratorDAO {
             return false;
         }
     }
+    public ArrayList<Employee> filterEmployees(ArrayList<String> selectedJobTitles, ArrayList<String> selectedSections) {
+        ArrayList<Employee> filteredEmployees = new ArrayList<>();
 
-    //same with employeedao
-    public boolean addArtifact(String name, String category, String description, String acquisitionDate, String location) {
-        String query = "INSERT INTO museum_artifacts (name, category, description, acquisition_date, location) " +
-                "VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, name);
-            stmt.setString(2, category);
-            stmt.setString(3, description);
-            stmt.setDate(4, Date.valueOf(acquisitionDate)); // Format: YYYY-MM-DD
-            stmt.setString(5, location);
-            stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Error while adding artifact: " + e.getMessage());
-            return false;
-        }
-    }
-    //same with employeedao
-    public boolean updateArtifact(int artifactId, String name, String category, String description, String acquisitionDate, String location) {
-        String query = "UPDATE museum_artifacts SET name = ?, category = ?, description = ?, acquisition_date = ?, location = ? WHERE artifact_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, name);
-            stmt.setString(2, category);
-            stmt.setString(3, description);
-            stmt.setDate(4, Date.valueOf(acquisitionDate));
-            stmt.setString(5, location);
-            stmt.setInt(6, artifactId);
-            stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Error while updating artifact: " + e.getMessage());
-            return false;
-        }
-    }
-    //same with employeedao
-    public boolean deleteArtifact(int artifactId) {
-        String query = "DELETE FROM museum_artifacts WHERE artifact_id = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, artifactId);
-            stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Error while deleting artifact: " + e.getMessage());
-            return false;
-        }
-    }
-    //same with guestdao
-    public ArrayList<String> searchObjects() {
-        ArrayList<String> artifacts = new ArrayList<>();
-        String query = "SELECT * FROM museum_artifacts";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    artifacts.add(rs.getInt("artifact_id") + "," +rs.getString("name") + ", " +
-                            rs.getString("category") + "," + rs.getString("location") + ", " +
-                            rs.getDate("acquisition_date"));
-                }
+        StringBuilder query = new StringBuilder("SELECT * FROM employees WHERE 1=1");
+
+        if (!selectedJobTitles.isEmpty()) {
+            query.append(" AND job_title IN (");
+            for (int i = 0; i < selectedJobTitles.size(); i++) {
+                query.append("?");
+                if (i < selectedJobTitles.size() - 1) query.append(",");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            query.append(")");
         }
 
-        return artifacts;
-    }
-
-    //same with guestdao
-    public ArrayList<String> searchObjects(String name, String category, String location, Date acquisitionDate) {
-        ArrayList<String> artifacts = new ArrayList<>();
-
-        StringBuilder query = new StringBuilder("SELECT * FROM museum_artifacts WHERE 'mms'='mms' ");
-        if (name != null && !name.isEmpty()) {query.append(" AND name ILIKE ?");}
-        if (category != null && !category.isEmpty()) {query.append(" AND category ILIKE ?");}
-        if (location != null && !location.isEmpty()) {query.append(" AND location ILIKE ?");}
-        if (acquisitionDate != null) {query.append(" AND acquisition_date = ?");}
+        if (!selectedSections.isEmpty()) {
+            query.append(" AND section_name IN (");
+            for (int i = 0; i < selectedSections.size(); i++) {
+                query.append("?");
+                if (i < selectedSections.size() - 1) query.append(",");
+            }
+            query.append(")");
+        }
 
         try (PreparedStatement stmt = connection.prepareStatement(query.toString())) {
             int index = 1;
-            if (name != null && !name.isEmpty()) {stmt.setString(index++, "%" + name + "%");}
-            if (category != null && !category.isEmpty()) {stmt.setString(index++, "%" + category + "%");}
-            if (location != null && !location.isEmpty()) {stmt.setString(index++, "%" + location + "%");}
-            if (acquisitionDate != null) {stmt.setDate(index++, acquisitionDate);}
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    artifacts.add(rs.getInt("artifact_id") + "," + rs.getString("name") + ", " +
-                            rs.getString("category") + "," + rs.getString("location") + ", " +
-                            rs.getDate("acquisition_date"));
+            // Set job titles parameters
+            if (!selectedJobTitles.isEmpty()) {
+                for (String jobTitle : selectedJobTitles) {
+                    stmt.setString(index++, jobTitle);
                 }
+            }
+
+            // Set sections parameters
+            if (!selectedSections.isEmpty()) {
+                for (String section : selectedSections) {
+                    stmt.setString(index++, section);
+                }
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Employee employee = new Employee(
+                        rs.getInt("employee_id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("phone_num"),
+                        rs.getString("job_title"),
+                        rs.getString("section_name"),
+                        rs.getString("role")
+                );
+                filteredEmployees.add(employee);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return filteredEmployees;
+    }
+
+    public ArrayList<String> getAllJobTitles() {
+        ArrayList<String> jobTitles = new ArrayList<>();
+        String query = "SELECT DISTINCT job_title FROM employees";
+
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                jobTitles.add(rs.getString("job_title"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return artifacts;
+
+        return jobTitles;
+    }
+
+    public ArrayList<String> getAllSections() {
+        ArrayList<String> sections = new ArrayList<>();
+        String query = "SELECT DISTINCT section_name FROM employees";
+
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) {
+                sections.add(rs.getString("section_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return sections;
     }
 }

@@ -2,6 +2,8 @@ package org.example.controller;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import org.example.dao.AdministratorDAO;
 import org.example.dao.MuseumArtifactDAO;
 import org.example.entity.Employee;
@@ -9,10 +11,12 @@ import org.example.entity.MuseumArtifact;
 import org.example.service.DatabaseConnection;
 import org.example.service.EmployeeService;
 import org.example.view.GUIs.AdminGUI;
+import org.example.view.GUIComponents.FilterEmployee;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javafx.stage.Stage;
 
 public class AdminController extends EmployeeController{
 
@@ -20,6 +24,8 @@ public class AdminController extends EmployeeController{
     private EmployeeService employeeService;
     private AdminGUI adminGUI;
     private Connection connection;
+    protected Stage PrimaryStage;
+
     public AdminController(AdminGUI adminGUI) throws SQLException {
         super(adminGUI);
         this.adminGUI = adminGUI;
@@ -27,11 +33,56 @@ public class AdminController extends EmployeeController{
         this.administratorDAO = new AdministratorDAO(connection);
         this.employeeService = new EmployeeService(administratorDAO);
     }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
     public void populateEmployeeList() {
         ArrayList<Employee> allEmployees = administratorDAO.searchEmployees();
         adminGUI.getEmployeeTableView().getItems().clear();
         adminGUI.getEmployeeTableView().getItems().addAll(allEmployees);
     }
+    public void handleSearch() {
+        TextField searchField = (TextField) adminGUI.getEmployeeTableView().getScene().lookup("#searchField");
+        if (searchField != null) {
+            String searchText = searchField.getText().trim();
+            if (!searchText.isEmpty()) {
+                System.out.println("Searching for employee with name: " + searchText);
+                ArrayList<Employee> searchResults = administratorDAO.searchEmployees(searchText);
+                adminGUI.getEmployeeTableView().getItems().clear();
+                adminGUI.getEmployeeTableView().getItems().addAll(searchResults);
+            } else {
+                // If search field is empty, show all employees
+                System.out.println("Search field is empty. Displaying all employees.");
+                populateEmployeeList();
+            }
+        } else {
+            System.out.println("Search field not found.");
+        }
+    }
+
+    public void handleFilter() {
+        ArrayList<String> jobTitles = administratorDAO.getAllJobTitles();  // Fetch job titles
+        ArrayList<String> sections = administratorDAO.getAllSections();    // Fetch sections
+
+        FilterEmployee filter = new FilterEmployee(jobTitles, sections);
+
+        filter.show(primaryStage, () -> {
+            ArrayList<String> selectedJobTitles = filter.getSelectedJobTitles();
+            ArrayList<String> selectedSections = filter.getSelectedSections();
+
+            ArrayList<Employee> filteredEmployees = administratorDAO.filterEmployees(selectedJobTitles, selectedSections);
+
+            // Clear the table and add the filtered employees to it
+            adminGUI.getEmployeeTableView().getItems().clear();
+            adminGUI.getEmployeeTableView().getItems().addAll(filteredEmployees);
+        });
+    }
+
+
+
+
     public void handleDeleteEmployee(Employee selectedEmployee) {
         if (selectedEmployee != null) {
             Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);

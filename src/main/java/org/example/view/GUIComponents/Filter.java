@@ -71,9 +71,10 @@ public class Filter {
             locationGrid.add(checkBox, i % 4, i / 4); // Place checkbox in grid
         }
 
-        // Apply filter button
         applyFilterButton = new Button("FILTER");
-        applyFilterButton.setStyle("-fx-background-color: #ff4d4d; -fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;");
+        applyFilterButton.setStyle("-fx-background-color: #ff9999; -fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;");
+        applyFilterButton.setOnMouseEntered(event -> applyFilterButton.setStyle("-fx-background-color: #fb6767; -fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;"));
+        applyFilterButton.setOnMouseExited(event -> applyFilterButton.setStyle("-fx-background-color: #ff9999; -fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;"));
         applyFilterButton.setOnAction(e -> {
             stage.close();
             if (onApply != null) onApply.run();

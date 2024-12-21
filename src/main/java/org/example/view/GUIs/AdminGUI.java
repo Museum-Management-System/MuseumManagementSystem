@@ -9,13 +9,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.example.controller.AdminController;
 import org.example.entity.Employee;
-import org.example.entity.MuseumArtifact;
 import org.example.view.GUIComponents.EmployeeCard;
+import org.w3c.dom.Text;
 
 import java.sql.SQLException;
 
 public class AdminGUI extends EmployeeGUI {
-    private AdminController controller;
+    private AdminController admincontroller;
     private TableView<Employee> employeeTableView;
     private EmployeeCard employeeCard;
     @Override
@@ -23,10 +23,11 @@ public class AdminGUI extends EmployeeGUI {
         primaryStage.setTitle("Admin Interface");
         this.primaryStage = primaryStage;
         try {
-            controller = new AdminController(this);
+            admincontroller = new AdminController(this);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        admincontroller.setPrimaryStage(primaryStage);
 
         VBox sidebar = new VBox();
         Button objectsButton = new Button("  OBJECTS   ");
@@ -88,6 +89,7 @@ public class AdminGUI extends EmployeeGUI {
         titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
         TextField searchField = new TextField();
+        searchField.setId("searchField");
         searchField.setPromptText("Search...");
 
         Button searchButton = new Button("SEARCH");
@@ -141,12 +143,16 @@ public class AdminGUI extends EmployeeGUI {
             }
         });
 
+        searchButton.setOnAction(e -> admincontroller.handleSearch());
+        searchField.setOnKeyPressed(e -> admincontroller.handleSearch());
+        filterButton.setOnAction(e -> admincontroller.handleFilter());
+
         employeesPage.getChildren().addAll(titleLabel, searchField, buttonsBox, employeeTableView);
 
         BorderPane root = (BorderPane) primaryStage.getScene().getRoot();
         root.setCenter(employeesPage);
 
-        controller.populateEmployeeList();
+        admincontroller.populateEmployeeList();
     }
     protected void displayObjectCard(Employee employee, BorderPane root) {
         employeeCard.updateCard(employee);
