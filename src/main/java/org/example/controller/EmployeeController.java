@@ -27,21 +27,21 @@ public class EmployeeController extends GuestUserController{
     public void handleAddObject(MuseumArtifact addedObject) {
         try {
             if (artifactService.addArtifact(addedObject)) {
-                System.out.println("Artifact updated successfully: " + addedObject.getName());
+                System.out.println("Artifact added successfully: " + addedObject.getName());
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Update Successful");
+                alert.setTitle("Add Successful");
                 alert.setHeaderText(null);
-                alert.setContentText("Artifact updated successfully!");
+                alert.setContentText("Artifact added successfully!");
                 alert.showAndWait();
 
                 // Refresh the object table
                 populateObjectList();
             } else {
-                System.out.println("Failed to update artifact: " + addedObject.getName());
+                System.out.println("Failed to add artifact: " + addedObject.getName());
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Update Failed");
                 alert.setHeaderText(null);
-                alert.setContentText("Failed to update artifact. Please try again.");
+                alert.setContentText("Failed to add artifact. Please try again.");
                 alert.showAndWait();
             }
         } catch (IllegalArgumentException e) {

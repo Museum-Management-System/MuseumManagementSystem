@@ -5,6 +5,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import org.example.dao.AdministratorDAO;
 import org.example.entity.Employee;
+import org.example.entity.MuseumArtifact;
 import org.example.service.DatabaseConnection;
 import org.example.service.EmployeeService;
 import org.example.view.GUIs.AdminGUI;
@@ -77,9 +78,36 @@ public class AdminController extends EmployeeController{
         });
     }
 
-    public void handleAddEmployee() {
+    public void handleAddEmployee(Employee addedEmployee, String password) {
+        try {
+            if (employeeService.addEmployee(addedEmployee, password)) {
+                System.out.println("Employee added successfully: " + addedEmployee.getName());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Add Successful");
+                alert.setHeaderText(null);
+                alert.setContentText("Employee added successfully!");
+                alert.showAndWait();
 
+                populateEmployeeList();
+            } else {
+                System.out.println("Failed to add employee: " + addedEmployee.getName());
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Update Failed");
+                alert.setHeaderText(null);
+                alert.setContentText("Failed to add employee. Please try again.");
+                alert.showAndWait();
+            }
+        } catch (IllegalArgumentException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Validation Error");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
     public void handleUpdateEmployee(Employee updatedEmployee) {
         try {
             if (employeeService.updateEmployee(updatedEmployee)) {

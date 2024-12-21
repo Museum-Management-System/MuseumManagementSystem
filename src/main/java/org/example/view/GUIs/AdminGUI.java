@@ -92,8 +92,6 @@ public class AdminGUI extends EmployeeGUI {
         searchField.setPromptText("Search...");
 
         BorderPane root = (BorderPane) primaryStage.getScene().getRoot();
-        root.setCenter(employeesPage);
-
 
         Button searchButton = new Button("SEARCH");
         searchButton.setStyle("-fx-background-color: #ff9999; -fx-text-fill: white;");
@@ -110,7 +108,7 @@ public class AdminGUI extends EmployeeGUI {
         addEmployeeButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white;");
         addEmployeeButton.setOnMouseEntered(event -> addEmployeeButton.setStyle("-fx-background-color: #b75cd3; -fx-text-fill: white;"));
         addEmployeeButton.setOnMouseExited(event -> addEmployeeButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white;"));
-        addEmployeeButton.setOnAction(e -> displayEmptyEmployeeCard(root));
+        addEmployeeButton.setOnAction(e ->displayEmptyEmployeeCard(root));
 
 
         HBox buttonsBox = new HBox(searchButton, filterButton, addEmployeeButton); // Add the button to the HBox
@@ -149,12 +147,13 @@ public class AdminGUI extends EmployeeGUI {
         searchField.setOnKeyPressed(e -> admincontroller.handleSearch());
         filterButton.setOnAction(e -> admincontroller.handleFilter());
 
-        addEmployeeButton.setOnAction(e -> admincontroller.handleAddEmployee());
+        //addEmployeeButton.setOnAction(e -> admincontroller.handleAddEmployee());
 
         employeesPage.getChildren().addAll(titleLabel, searchField, buttonsBox, employeeTableView);
 
 
         admincontroller.populateEmployeeList();
+        root.setCenter(employeesPage);
     }
 
     protected void displayEmptyEmployeeCard(BorderPane root){

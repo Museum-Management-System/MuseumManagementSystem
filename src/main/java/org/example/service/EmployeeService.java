@@ -47,6 +47,25 @@ public class EmployeeService {
             return null;
         }
     }
+
+    public boolean addEmployee(Employee employee, String password) throws SQLException {
+        if (employee.getName() == null || employee.getName().isEmpty()
+                || employee.getEmail() == null || employee.getEmail().isEmpty()
+                || employee.getPhoneNum() == null || employee.getPhoneNum().isEmpty()
+                || employee.getSectionName() == null || employee.getSectionName().isEmpty()
+                || password == null || password.isEmpty()
+                || employee.getJobTitle() == null || employee.getJobTitle().isEmpty()) {
+            throw new IllegalArgumentException("All fields are required.");
+        }
+        if (AdministratorDAO.getEmployee(employee.getEmail()) != null) {
+            throw new IllegalArgumentException("An employee with this email already exists.");
+        }
+        if (AdministratorDAO.getEmployee(employee.getPhoneNum()) != null) {
+            throw new IllegalArgumentException("An employee with this phone number already exists.");
+        }
+        return AdministratorDAO.addEmployee(employee, password);
+    }
+
     public boolean updateEmployee(Employee employee) {
         Employee existingEmployee = AdministratorDAO.getEmployee(employee.getName());
         if (existingEmployee != null && existingEmployee.getEmployeeId() != employee.getEmployeeId()) {
