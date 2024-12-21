@@ -118,22 +118,7 @@ public class GuestUserGUI extends Application {
         BorderPane root = (BorderPane) primaryStage.getScene().getRoot();
 
         objectTableView = new TableView<>();
-
-        // Define columns
-        TableColumn<MuseumArtifact, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<MuseumArtifact, String> categoryColumn = new TableColumn<>("Category");
-        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
-
-        TableColumn<MuseumArtifact, String> yearColumn = new TableColumn<>("Acquisition Date");
-        yearColumn.setCellValueFactory(new PropertyValueFactory<>("acquisitionDate"));
-
-        TableColumn<MuseumArtifact, String> locationColumn = new TableColumn<>("Location in Museum");
-        locationColumn.setCellValueFactory(new PropertyValueFactory<>("locationInMuseum"));
-
-        objectTableView.getColumns().addAll(nameColumn, categoryColumn, yearColumn, locationColumn);
-        objectTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        setupTableView();
 
         // Populate with sample data
         ObservableList<MuseumArtifact> objectList = FXCollections.observableArrayList();
@@ -162,6 +147,23 @@ public class GuestUserGUI extends Application {
         objectCard.updateCard(object);
         root.setCenter(objectCard);
     }
+    private void setupTableView() { // Define columns
+        TableColumn<MuseumArtifact, String> nameColumn = new TableColumn<>("Name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<MuseumArtifact, String> categoryColumn = new TableColumn<>("Category");
+        categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+
+        TableColumn<MuseumArtifact, String> yearColumn = new TableColumn<>("Acquisition Date");
+        yearColumn.setCellValueFactory(new PropertyValueFactory<>("acquisitionDate"));
+
+        TableColumn<MuseumArtifact, String> locationColumn = new TableColumn<>("Location in Museum");
+        locationColumn.setCellValueFactory(new PropertyValueFactory<>("locationInMuseum"));
+
+        objectTableView.getColumns().setAll(nameColumn, categoryColumn, yearColumn, locationColumn);
+        objectTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    }
+    public void refreshTableView() { setupTableView(); }
     public TableView getObjectTableView(){
         return objectTableView;
     }
