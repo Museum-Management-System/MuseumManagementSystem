@@ -5,7 +5,7 @@ import javafx.scene.control.TextField;
 import org.example.dao.MuseumArtifactDAO;
 import org.example.entity.MuseumArtifact;
 import org.example.service.DatabaseConnection;
-import org.example.view.GUIComponents.Filter;
+import org.example.view.GUIComponents.FilterObject;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -49,7 +49,7 @@ public class GuestUserController {
         ArrayList<String> categories = museumArtifactDAO.getAllCategories();
         ArrayList<String> locations = museumArtifactDAO.getAllLocations();
 
-        Filter filter = new Filter(categories, locations);
+        FilterObject filter = new FilterObject(categories, locations);
         filter.show(primaryStage, () -> {
             ArrayList<String> selectedCategories = filter.getSelectedCategories();
             ArrayList<String> selectedLocations = filter.getSelectedLocations();

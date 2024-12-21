@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
-public class Filter {
+public class FilterObject {
     private CheckBox[] categoryCheckboxes;
     private CheckBox[] locationCheckboxes;
     private TextField minDateField;
@@ -19,7 +19,7 @@ public class Filter {
     private ArrayList<String> categories;
     private ArrayList<String> locations;
 
-    public Filter(ArrayList<String> categories, ArrayList<String> locations) {
+    public FilterObject(ArrayList<String> categories, ArrayList<String> locations) {
         this.categories = categories;
         this.locations = locations;
     }

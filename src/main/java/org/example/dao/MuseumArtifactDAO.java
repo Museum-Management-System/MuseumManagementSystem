@@ -15,7 +15,7 @@ public class MuseumArtifactDAO {
         this.connection = connection;
     }
 
-    public void addArtifact(MuseumArtifact artifact) {
+    public boolean addArtifact(MuseumArtifact artifact) {
         String sql = "INSERT INTO museum_artifacts (name, category, description, acquisition_date, location) " +
                 "VALUES (?, ?, ?, ?, ?) RETURNING artifact_id";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -29,11 +29,12 @@ public class MuseumArtifactDAO {
             if (rs.next()) {
                 int generatedId = rs.getInt("artifact_id");
                 artifact.setArtifactId(generatedId); // Set the generated artifact_id
+                return true; // Insertion was successful
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error adding artifact: " + e.getMessage());
         }
+        return false; // Insertion failed
     }
     public MuseumArtifact getArtifact(String artifactName) {
         String sql = "SELECT * FROM museum_artifacts WHERE name = ?";

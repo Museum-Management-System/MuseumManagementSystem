@@ -18,7 +18,7 @@ import java.sql.SQLException;
 
 public class GuestUserGUI extends Application {
     protected Stage primaryStage;
-    private ObjectCard objectCard;
+    protected ObjectCard objectCard;
     private TableView<MuseumArtifact> objectTableView;
     private GuestUserController controller;
     private TextField searchField;
@@ -160,7 +160,6 @@ public class GuestUserGUI extends Application {
 
         controller.populateObjectList(objectTableView);
     }
-
     protected void displayObjectCard(MuseumArtifact object, BorderPane root) {
         objectCard.updateCard(object);
         root.setCenter(objectCard);

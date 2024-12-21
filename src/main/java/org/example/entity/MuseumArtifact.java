@@ -11,7 +11,8 @@ public class MuseumArtifact {
     private Date acquisitionDate;
     private String locationInMuseum;
 
-
+    public MuseumArtifact() {
+    }
     public MuseumArtifact(String name, String category, String description, Date acquisitionDate, String locationInMuseum) {
         this.name = name;
         this.category = category;

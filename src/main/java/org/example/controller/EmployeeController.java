@@ -24,7 +24,34 @@ public class EmployeeController extends GuestUserController{
         this.artifactService = new MuseumArtifactService(museumArtifactDAO);
         this.empGUI = empGUI;
     }
+    public void handleAddObject(MuseumArtifact addedObject) {
+        try {
+            if (artifactService.addArtifact(addedObject)) {
+                System.out.println("Artifact updated successfully: " + addedObject.getName());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Update Successful");
+                alert.setHeaderText(null);
+                alert.setContentText("Artifact updated successfully!");
+                alert.showAndWait();
 
+                // Refresh the object table
+                populateObjectList();
+            } else {
+                System.out.println("Failed to update artifact: " + addedObject.getName());
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Update Failed");
+                alert.setHeaderText(null);
+                alert.setContentText("Failed to update artifact. Please try again.");
+                alert.showAndWait();
+            }
+        } catch (IllegalArgumentException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Validation Error");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
+    }
     public void handleUpdateObject(MuseumArtifact updatedObject) {
         try {
             if (artifactService.updateArtifact(updatedObject)) {

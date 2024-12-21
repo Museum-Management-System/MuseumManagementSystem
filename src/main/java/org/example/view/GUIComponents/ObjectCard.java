@@ -24,8 +24,8 @@ public class ObjectCard extends BorderPane {
     private ImageView objectImageView;
     private TextField nameField, dateField, categoryField, locationInMuseumField;
     private TextArea infoDump;
-    private Button updateSaveButton, deleteButton, backButton;
-    private boolean isEditing;
+    private Button updateSaveButton, deleteButton, backButton, addButton;
+    private boolean isEditing, newObject;
     private EmployeeController controller;
     private MuseumArtifact museumArtifact;
 
@@ -140,7 +140,11 @@ public class ObjectCard extends BorderPane {
                     System.out.println("Updated Category: " + categoryField.getText());
                     System.out.println("Updated Location in the Museum: " + locationInMuseumField.getText());
                     System.out.println("Updated Info: " + infoDump.getText());
-                    controller.handleUpdateObject(museumArtifact);
+                    if(newObject){
+                        controller.handleAddObject(museumArtifact);
+                        objectNameLabel.setText(museumArtifact.getName());
+                    }
+                    if(!newObject) controller.handleUpdateObject(museumArtifact);
                 }
             });
 
@@ -170,8 +174,12 @@ public class ObjectCard extends BorderPane {
         backButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;");
         backButton.setOnMouseEntered(e -> backButton.setStyle("-fx-background-color: #8b0000; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
         backButton.setOnMouseExited(e -> backButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 5 10;"));
-        backButton.setOnAction(event -> ((BorderPane)this.getParent()).setCenter(previousPage));
 
+        backButton.setOnAction(event -> {
+            ((BorderPane)this.getParent()).setCenter(previousPage);
+            if(!deleteButton.isVisible()) deleteButton.setVisible(true);
+            if(isEditing) isEditing = false;
+        });
         buttonBox.getChildren().addAll(updateSaveButton, deleteButton, backButton);
 
         // Add sections to layout
@@ -210,9 +218,30 @@ public class ObjectCard extends BorderPane {
         hBox.setAlignment(Pos.BASELINE_LEFT);
         return hBox;
     }
+    public void updateCard() {
+        this.museumArtifact = new MuseumArtifact();
+        this.newObject = true;
+        this.isEditing = true;
+        objectNameLabel.setText("");
+        //objectImageView.setImage(new Image(artifact.getImageUrl(), 150, 150, true, true)); // Adjust as needed
+        nameField.setText("");
+        dateField.setText("");
+        categoryField.setText("");
+        locationInMuseumField.setText("");
+        infoDump.setText("");
 
+        setEditable(nameField, true);
+        setEditable(dateField, true);
+        setEditable(categoryField, true);
+        setEditable(locationInMuseumField, true);
+        infoDump.setEditable(true);
+        infoDump.setStyle("-fx-control-inner-background: #ffffff;");
+
+        deleteButton.setVisible(false);
+    }
     public void updateCard(MuseumArtifact artifact) {
         this.museumArtifact = artifact;
+        this.newObject = false;
         objectNameLabel.setText(artifact.getName());
         //objectImageView.setImage(new Image(artifact.getImageUrl(), 150, 150, true, true)); // Adjust as needed
         nameField.setText(artifact.getName());
