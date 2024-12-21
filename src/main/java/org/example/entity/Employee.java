@@ -12,6 +12,8 @@ public class Employee /*extends User*/ {
     private String jobTitle;
     private String sectionName;
     private byte[] imageData;
+    public Employee() {
+    }
 
     public Employee(int employeeId, String name, String email, String jobTitle, String phoneNum, String  sectionName, byte[] imageData) {
         this.employeeId = employeeId;

@@ -11,7 +11,7 @@ public class AdministratorDAO {
         this.connection = connection;
     }
 
-    public boolean addEmployee(String name, String email, String jobTitle, String sectionName, String password, byte[] imageData) {
+    public static boolean addEmployee(String name, String email, String jobTitle, String sectionName, String password, byte[] imageData) {
         String userQuery = "INSERT INTO users (user_type, password) VALUES ('Employee', ?) RETURNING user_id;";
         String employeeQuery = "INSERT INTO employees (employee_id, name, email, job_title, section_name, image) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -35,6 +35,54 @@ public class AdministratorDAO {
             employeeStmt.setBytes(6, imageData);
 
             int rowsAffected = employeeStmt.executeUpdate();
+            if (rowsAffected > 0) {
+                connection.commit();
+                return true;
+            } else {
+                connection.rollback();
+                return false;
+            }
+        } catch (SQLException e) {
+            try {
+                connection.rollback(); // Rollback on error
+            } catch (SQLException rollbackEx) {
+                System.err.println("Rolling back transaction failed: " + rollbackEx.getMessage());
+            }
+            System.err.println("Error while adding employee: " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                System.err.println("Error resetting auto commit: " + e.getMessage());
+            }
+        }
+    }
+
+    public static boolean addEmployee(Employee employee, String password) {
+        String userQuery = "INSERT INTO users (user_type, password) VALUES ('Employee', ?) RETURNING user_id;";
+        String employeeQuery = "INSERT INTO employees (employee_id, name, email, phone_num, job_title, section_name, image) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement userStmt = connection.prepareStatement(userQuery);
+             PreparedStatement stmt = connection.prepareStatement(employeeQuery)) {
+            connection.setAutoCommit(false);
+            userStmt.setString(1, password);
+            ResultSet rs = userStmt.executeQuery();
+            int userId;
+            if (rs.next()) {
+                userId = rs.getInt("user_id");
+            } else {
+                connection.rollback();
+                return false;
+            }
+            stmt.setInt(1, userId);
+            stmt.setString(2, employee.getName());
+            stmt.setString(3, employee.getEmail());
+            stmt.setString(4, employee.getPhoneNum());
+            stmt.setString(5, employee.getJobTitle());
+            stmt.setString(6, employee.getSectionName());
+            stmt.setBytes(7, employee.getImageData());
+            int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
                 connection.commit();
                 return true;
