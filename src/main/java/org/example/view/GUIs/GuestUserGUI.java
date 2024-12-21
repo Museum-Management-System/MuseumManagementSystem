@@ -32,7 +32,7 @@ public class GuestUserGUI extends Application {
         VBox sidebar = new VBox();
         controller = new GuestUserController(searchField, objectTableView);
         controller.setPrimaryStage(primaryStage);
-        Button objectsButton = new Button("OBJECTS");
+        Button objectsButton = new Button("  OBJECTS   ");
         objectsButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
 
         Button employeesButton = new Button("EMPLOYEES");
@@ -56,6 +56,7 @@ public class GuestUserGUI extends Application {
 
         // Handle button clicks
         objectsButton.setOnAction(e -> {
+            objectsButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
             try {
                 openObjectsPage(primaryStage);
             } catch (SQLException ex) {
@@ -91,12 +92,20 @@ public class GuestUserGUI extends Application {
 
         Button searchButton = new Button("SEARCH");
         searchButton.setStyle("-fx-background-color: #ff9999; -fx-text-fill: white;");
+        searchButton.setOnMouseEntered(event -> searchButton.setStyle("-fx-background-color: #fb6767; -fx-text-fill: white;"));
+        searchButton.setOnMouseExited(event -> searchButton.setStyle("-fx-background-color: #ff9999; -fx-text-fill: white;"));
 
         Button filterButton = new Button("FILTER");
         filterButton.setStyle("-fx-background-color: #ff9999; -fx-text-fill: white;");
+        filterButton.setOnMouseEntered(event -> filterButton.setStyle("-fx-background-color: #fb6767; -fx-text-fill: white;"));
+        filterButton.setOnMouseExited(event -> filterButton.setStyle("-fx-background-color: #ff9999; -fx-text-fill: white;"));
+
 
         Button addObjectButton = new Button("Add New Object");
         addObjectButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white;");
+        addObjectButton.setOnMouseEntered(event -> addObjectButton.setStyle("-fx-background-color: #b75cd3; -fx-text-fill: white;"));
+        addObjectButton.setOnMouseExited(event -> addObjectButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white;"));
+
         addObjectButton.setVisible(false);
 
         HBox buttonsBox = new HBox(searchButton, filterButton);

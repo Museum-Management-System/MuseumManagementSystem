@@ -29,7 +29,7 @@ public class AdminGUI extends EmployeeGUI {
         }
 
         VBox sidebar = new VBox();
-        Button objectsButton = new Button("OBJECTS");
+        Button objectsButton = new Button("  OBJECTS   ");
         objectsButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
 
         Button employeesButton = new Button("EMPLOYEES");
@@ -51,6 +51,8 @@ public class AdminGUI extends EmployeeGUI {
 
         // Handle button clicks
         objectsButton.setOnAction(e -> {
+            objectsButton.setStyle("-fx-background-color: #ff0000; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+            employeesButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
             try {
                 openObjectsPage(primaryStage);
             } catch (Exception ex) {
@@ -59,6 +61,8 @@ public class AdminGUI extends EmployeeGUI {
         });
 
         employeesButton.setOnAction(e -> {
+            objectsButton.setStyle("-fx-background-color: #ff4d4d; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+            employeesButton.setStyle("-fx-background-color: #dd6dfd; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
             try {
                 openEmployeesPage(primaryStage);
             } catch (Exception ex) {
@@ -88,17 +92,23 @@ public class AdminGUI extends EmployeeGUI {
 
         Button searchButton = new Button("SEARCH");
         searchButton.setStyle("-fx-background-color: #ff9999; -fx-text-fill: white;");
+        searchButton.setOnMouseEntered(event -> searchButton.setStyle("-fx-background-color: #fb6767; -fx-text-fill: white;"));
+        searchButton.setOnMouseExited(event -> searchButton.setStyle("-fx-background-color: #ff9999; -fx-text-fill: white;"));
+
 
         Button filterButton = new Button("FILTER");
         filterButton.setStyle("-fx-background-color: #ff9999; -fx-text-fill: white;");
+        filterButton.setOnMouseEntered(event -> filterButton.setStyle("-fx-background-color: #fb6767; -fx-text-fill: white;"));
+        filterButton.setOnMouseExited(event -> filterButton.setStyle("-fx-background-color: #ff9999; -fx-text-fill: white;"));
 
-        // Add a new "Add New Object" button for EmployeeGUI
-        Button addObjectButton = new Button("Add New Employee");
-        addObjectButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white;");
-        addObjectButton.setOnAction(e -> System.out.println("Add New Employee button clicked!"));
+        Button addEmployeeButton = new Button("Add New Employee");
+        addEmployeeButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white;");
+        addEmployeeButton.setOnMouseEntered(event -> addEmployeeButton.setStyle("-fx-background-color: #b75cd3; -fx-text-fill: white;"));
+        addEmployeeButton.setOnMouseExited(event -> addEmployeeButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white;"));
+        addEmployeeButton.setOnAction(e -> System.out.println("Add New Employee button clicked!"));
 
 
-        HBox buttonsBox = new HBox(searchButton, filterButton, addObjectButton); // Add the button to the HBox
+        HBox buttonsBox = new HBox(searchButton, filterButton, addEmployeeButton); // Add the button to the HBox
         buttonsBox.setSpacing(10);
 
         employeeTableView = new TableView<>();

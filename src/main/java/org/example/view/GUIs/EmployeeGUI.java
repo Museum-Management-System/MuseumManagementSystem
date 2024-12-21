@@ -20,6 +20,8 @@ public class EmployeeGUI extends GuestUserGUI {
 
         Button addObjectButton = new Button("Add New Object");
         addObjectButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white;");
+        addObjectButton.setOnMouseEntered(event -> addObjectButton.setStyle("-fx-background-color: #b75cd3; -fx-text-fill: white;"));
+        addObjectButton.setOnMouseExited(event -> addObjectButton.setStyle("-fx-background-color: #c192cf; -fx-text-fill: white;"));
         addObjectButton.setOnAction(e -> System.out.println("Add New Object button clicked!"));
 
         // Add this button to the objects page layout

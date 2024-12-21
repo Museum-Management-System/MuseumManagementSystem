@@ -1,6 +1,7 @@
 package org.example.view.GUIComponents;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -28,46 +29,65 @@ public class Filter {
         stage.initOwner(owner);
         stage.setTitle("Filter Artifacts");
 
-        VBox root = new VBox(10);
-        root.setPadding(new Insets(10));
+        VBox root = new VBox(20);
+        root.setPadding(new Insets(20));
+        root.setStyle("-fx-background-color: #D6CCE1;");
 
         // Category section
         Label categoryLabel = new Label("Category:");
-        VBox categoryBox = new VBox(5);
+        categoryLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        GridPane categoryGrid = new GridPane();
+        categoryGrid.setHgap(10);
+        categoryGrid.setVgap(10);
+        categoryGrid.setAlignment(Pos.CENTER_LEFT);
         categoryCheckboxes = new CheckBox[categories.size()];
         for (int i = 0; i < categories.size(); i++) {
-            categoryCheckboxes[i] = new CheckBox(categories.get(i));
-            categoryBox.getChildren().add(categoryCheckboxes[i]);
+            CheckBox checkBox = new CheckBox(categories.get(i));
+            categoryCheckboxes[i] = checkBox;
+            categoryGrid.add(checkBox, i % 4, i / 4); // Place checkbox in grid
         }
 
         // Acquisition date section
         Label dateLabel = new Label("Acquisition Date:");
+        dateLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
         HBox dateBox = new HBox(10);
         minDateField = new TextField();
         minDateField.setPromptText("Min Date (YYYY-MM-DD)");
         maxDateField = new TextField();
         maxDateField.setPromptText("Max Date (YYYY-MM-DD)");
-        dateBox.getChildren().addAll(minDateField, maxDateField);
+        dateBox.getChildren().addAll(minDateField, new Label("-"), maxDateField);
 
         // Location section
         Label locationLabel = new Label("Location in Museum:");
-        VBox locationBox = new VBox(5);
+        locationLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+        GridPane locationGrid = new GridPane();
+        locationGrid.setHgap(10);
+        locationGrid.setVgap(10);
+        locationGrid.setAlignment(Pos.CENTER_LEFT);
         locationCheckboxes = new CheckBox[locations.size()];
         for (int i = 0; i < locations.size(); i++) {
-            locationCheckboxes[i] = new CheckBox(locations.get(i));
-            locationBox.getChildren().add(locationCheckboxes[i]);
+            CheckBox checkBox = new CheckBox(locations.get(i));
+            locationCheckboxes[i] = checkBox;
+            locationGrid.add(checkBox, i % 4, i / 4); // Place checkbox in grid
         }
 
         // Apply filter button
-        applyFilterButton = new Button("Apply Filter");
+        applyFilterButton = new Button("FILTER");
+        applyFilterButton.setStyle("-fx-background-color: #ff4d4d; -fx-font-size: 14px; -fx-text-fill: white; -fx-font-weight: bold;");
         applyFilterButton.setOnAction(e -> {
             stage.close();
             if (onApply != null) onApply.run();
         });
 
-        root.getChildren().addAll(categoryLabel, categoryBox, dateLabel, dateBox, locationLabel, locationBox, applyFilterButton);
+        // Assemble layout
+        root.getChildren().addAll(
+                categoryLabel, categoryGrid,
+                dateLabel, dateBox,
+                locationLabel, locationGrid,
+                applyFilterButton
+        );
 
-        Scene scene = new Scene(root, 400, 600);
+        Scene scene = new Scene(root, 500, 550);
         stage.setScene(scene);
         stage.show();
     }
