@@ -1,4 +1,4 @@
-package org.example.controller;
+/*package org.example.controller;
 
 import org.example.entity.MuseumArtifact;
 import org.example.service.MuseumArtifactService;
@@ -249,3 +249,4 @@ public class MuseumArtifactController {
 
 
 }
+*/

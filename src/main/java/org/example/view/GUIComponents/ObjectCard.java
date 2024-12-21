@@ -14,6 +14,7 @@ import org.example.controller.EmployeeController;
 import org.example.entity.MuseumArtifact;
 import org.example.view.GUIs.EmployeeGUI;
 
+import java.io.ByteArrayInputStream;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -249,7 +250,7 @@ public class ObjectCard extends BorderPane {
         this.museumArtifact = artifact;
         this.newObject = false;
         objectNameLabel.setText(artifact.getName());
-        //objectImageView.setImage(new Image(artifact.getImageUrl(), 150, 150, true, true)); // Adjust as needed
+        objectImageView.setImage(new Image(new ByteArrayInputStream(artifact.getImageData()), 150, 150, true, true)); // Adjust as needed
         nameField.setText(artifact.getName());
         dateField.setText(String.valueOf(artifact.getAcquisitionDate()));
         categoryField.setText(artifact.getCategory());

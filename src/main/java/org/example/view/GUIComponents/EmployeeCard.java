@@ -2,7 +2,8 @@ package org.example.view.GUIComponents;
 import javafx.application.Platform;
 import org.example.controller.AdminController;
 import org.example.entity.Employee;
-import org.example.service.DatabaseConnection;
+
+import java.io.ByteArrayInputStream;
 import java.sql.*;
 
 import javafx.geometry.Insets;
@@ -13,13 +14,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import org.example.view.GUIs.AdminGUI;
+import org.example.view.ImageUtils;
 
 //That's the interface when Admin clicks on an employee from List
 
 public class EmployeeCard extends BorderPane {
 
     private boolean isEditing = false;
-    private DatabaseConnection connection;
     private AdminController controller;
     private ImageView employeeImageView;
     private Employee employee;
@@ -48,7 +49,7 @@ public class EmployeeCard extends BorderPane {
         employeeImageView.setFitHeight(150);
         employeeImageView.setPreserveRatio(true);
         employeeImageView.setStyle("-fx-background-color: #ffffff; -fx-border-color: #c4c4c4; -fx-border-radius: 10; -fx-background-radius: 10;");
-        loadImageAsync("https://themeisle.com/blog/wp-content/uploads/2024/06/Online-Image-Optimizer-Test-Image-JPG-Version.jpeg");
+        //loadImageAsync("https://themeisle.com/blog/wp-content/uploads/2024/06/Online-Image-Optimizer-Test-Image-JPG-Version.jpeg");
 
         // Add Name and Image to Top Section
         topLeftSection.getChildren().addAll(employeeNameLabel, employeeImageView);
@@ -127,7 +128,7 @@ public class EmployeeCard extends BorderPane {
                 setEditable(nameField, true);
                 setEditable(jobField, true);
                 setEditable(sectionField, true);
-                setEditable(emailField, false);
+                setEditable(emailField, true);
                 setEditable(phoneField, true);
             } else {
                 // Save and exit editing mode
@@ -211,7 +212,7 @@ public class EmployeeCard extends BorderPane {
     public void updateCard(Employee employee) {
         this.employee = employee;
         employeeNameLabel.setText(employee.getName());
-        //objectImageView.setImage(new Image(artifact.getImageUrl(), 150, 150, true, true)); // Adjust as needed
+        employeeImageView.setImage(new Image(new ByteArrayInputStream(employee.getImageData()), 150, 150, true, true));
         nameField.setText(employee.getName());
         jobField.setText(employee.getJobTitle());
         sectionField.setText(employee.getSectionName());

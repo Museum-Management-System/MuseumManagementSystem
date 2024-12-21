@@ -10,15 +10,17 @@ public class MuseumArtifact {
     private String description;
     private Date acquisitionDate;
     private String locationInMuseum;
+    private byte[] imageData;
 
     public MuseumArtifact() {
     }
-    public MuseumArtifact(String name, String category, String description, Date acquisitionDate, String locationInMuseum) {
+    public MuseumArtifact(String name, String category, String description, Date acquisitionDate, String locationInMuseum, byte[] imageData) {
         this.name = name;
         this.category = category;
         this.description = description;
         this.acquisitionDate = acquisitionDate;
         this.locationInMuseum = locationInMuseum;
+        this.imageData = imageData;
     }
 
 
@@ -73,7 +75,8 @@ public class MuseumArtifact {
         return this.name;
     }
 
-    public String getImageUrl() {
-        return  null;
+    public byte[] getImageData() {
+        return  imageData;
     }
+    public void setImageData(byte[] imageData){this.imageData = imageData;}
 }

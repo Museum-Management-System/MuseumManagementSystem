@@ -38,7 +38,7 @@ public class EmployeeService {
                             resultSet.getString("phone_num"),
                             resultSet.getString("job_title"),
                             resultSet.getString("section_name"),
-                            resultSet.getString("role")
+                            resultSet.getBytes("image")
                     );
                 } else {return null;}
             }
@@ -47,41 +47,6 @@ public class EmployeeService {
             return null;
         }
     }
-
-
-
-
-    // Method to add a new employee
-    public void addEmployee(Employee employee) {
-        // Validate employee fields
-        if (employee.getName() == null || employee.getName().isEmpty()
-                || employee.getEmail() == null || employee.getEmail().isEmpty()
-                || employee.getPhoneNum() == null || employee.getPhoneNum().isEmpty()
-                || employee.getJobTitle() == null || employee.getJobTitle().isEmpty()
-                || employee.getSectionName() == null || employee.getSectionName().isEmpty()
-                || employee.getRole() == null || employee.getRole().isEmpty()) {
-            throw new IllegalArgumentException("All fields are required.");
-        }
-
-        // Check if the employee already exists
-        if (findEmployee(employee.getEmployeeId()) != null) {
-            throw new IllegalArgumentException("An employee with this ID already exists.");
-        }
-
-        // Add the employee
-        // Note: Add the actual saving functionality in the EmployeeDAO
-        // employeeDAO.addEmployee(employee, connection);
-    }
-
-    // Method to get an employee by ID
-    public Employee getEmployeeById(int employeeId) {
-        Employee employee = findEmployee(employeeId);
-        if (employee == null) {
-            throw new IllegalArgumentException("No employee found with the given ID.");
-        }
-        return employee;
-    }
-
     public boolean updateEmployee(Employee employee) {
         Employee existingEmployee = AdministratorDAO.getEmployee(employee.getName());
         if (existingEmployee != null && existingEmployee.getEmployeeId() != employee.getEmployeeId()) {
@@ -99,23 +64,5 @@ public class EmployeeService {
 
         // Implement the delete functionality in the DAO
         return adminDAO.deleteEmployee(employeeId);
-    }
-
-    // Method to get all employees
-    public List<Employee> getAllEmployees() {
-        // Implement the retrieval logic in the EmployeeDAO
-        // List<Employee> employees = employeeDAO.getAllEmployees(connection);
-        return null; // Replace this with actual retrieval from the DAO
-    }
-
-    // Method to search employees by role
-    public List<Employee> searchEmployeesByRole(String role) {
-        if (role == null || role.isEmpty()) {
-            throw new IllegalArgumentException("Role cannot be null or empty.");
-        }
-
-        // Implement the search logic in EmployeeDAO
-        // List<Employee> employees = employeeDAO.searchEmployeesByRole(role, connection);
-        return null; // Replace this with actual search functionality
     }
 }

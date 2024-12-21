@@ -11,16 +11,16 @@ public class Employee /*extends User*/ {
     private String phoneNum;
     private String jobTitle;
     private String sectionName;
-    private String role;
+    private byte[] imageData;
 
-    public Employee(int employeeId, String name, String email, String jobTitle, String phoneNum, String  sectionName, String role) {
+    public Employee(int employeeId, String name, String email, String jobTitle, String phoneNum, String  sectionName, byte[] imageData) {
         this.employeeId = employeeId;
         this.name = name;
         this.email = email;
         this.phoneNum = phoneNum;
         this.jobTitle = jobTitle;
         this.sectionName = sectionName;
-        this.role = role;
+        this.imageData = imageData;
     }
 
     public int getEmployeeId() {return employeeId;}
@@ -46,10 +46,6 @@ public class Employee /*extends User*/ {
     public String getSectionName() {return sectionName;}
 
     public void setSectionName(String sectionName) {this.sectionName = sectionName;}
-
-    public String getRole() {return role;}
-
-    public void setRole(String role) {this.role = role;}
-
-
+    public byte[] getImageData() {return imageData;}
+    public void setImageData(byte[] imageData){this.imageData = imageData;}
 }
