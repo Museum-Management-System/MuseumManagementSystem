@@ -2,7 +2,10 @@ package org.example.view.GUIComponents;
 import javafx.application.Platform;
 import org.example.controller.AdminController;
 import org.example.entity.Employee;
+import org.example.entity.MuseumArtifact;
 import org.example.service.DatabaseConnection;
+
+import java.io.ByteArrayInputStream;
 import java.sql.*;
 
 import javafx.geometry.Insets;
@@ -19,6 +22,8 @@ import org.example.view.GUIs.AdminGUI;
 public class EmployeeCard extends BorderPane {
 
     private boolean isEditing = false;
+    private boolean newObject;
+    private Button deleteButton;
     private DatabaseConnection connection;
     private AdminController controller;
     private ImageView employeeImageView;
@@ -127,7 +132,7 @@ public class EmployeeCard extends BorderPane {
                 setEditable(nameField, true);
                 setEditable(jobField, true);
                 setEditable(sectionField, true);
-                setEditable(emailField, false);
+                setEditable(emailField, true);
                 setEditable(phoneField, true);
             } else {
                 // Save and exit editing mode
@@ -208,10 +213,32 @@ public class EmployeeCard extends BorderPane {
             field.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
         }
     }
+
+    public void updateCard() {
+        this.employee = new Employee();
+        this.newObject = true;
+        this.isEditing = true;
+        employeeNameLabel.setText("");
+        //objectImageView.setImage(new Image(artifact.getImageUrl(), 150, 150, true, true)); // Adjust as needed
+        nameField.setText("");
+        jobField.setText("");
+        sectionField.setText("");
+        emailField.setText("");
+        phoneField.setText("");
+
+        setEditable(nameField, true);
+        setEditable(jobField, true);
+        setEditable(sectionField, true);
+        setEditable(emailField, true);
+        setEditable(phoneField, true);
+
+        deleteButton.setVisible(false);
+    }
+
     public void updateCard(Employee employee) {
         this.employee = employee;
         employeeNameLabel.setText(employee.getName());
-        //objectImageView.setImage(new Image(artifact.getImageUrl(), 150, 150, true, true)); // Adjust as needed
+        employeeImageView.setImage(new Image(new ByteArrayInputStream(employee.getImageData()), 150, true, true));
         nameField.setText(employee.getName());
         jobField.setText(employee.getJobTitle());
         sectionField.setText(employee.getSectionName());

@@ -13,6 +13,9 @@ public class Employee /*extends User*/ {
     private String sectionName;
     private String role;
 
+    public Employee(){
+    }
+
     public Employee(int employeeId, String name, String email, String jobTitle, String phoneNum, String  sectionName, String role) {
         this.employeeId = employeeId;
         this.name = name;
