@@ -179,6 +179,12 @@ public class ObjectCard extends BorderPane {
             ((BorderPane)this.getParent()).setCenter(previousPage);
             if(!deleteButton.isVisible()) deleteButton.setVisible(true);
             if(isEditing) isEditing = false;
+            setEditable(nameField, false);
+            setEditable(dateField, false);
+            setEditable(categoryField, false);
+            setEditable(locationInMuseumField, false);
+            infoDump.setEditable(false);
+            infoDump.setStyle("-fx-control-inner-background: #ffeaea;");
         });
         buttonBox.getChildren().addAll(updateSaveButton, deleteButton, backButton);
 
