@@ -14,7 +14,7 @@ public class MuseumArtifactService {
         this.artifactDAO = artifactDAO;
     }
 
-    public void addArtifact(MuseumArtifact artifact) {
+    public boolean addArtifact(MuseumArtifact artifact) {
         if (artifact.getName() == null || artifact.getName().isEmpty()
                 || artifact.getCategory() == null || artifact.getCategory().isEmpty()
                 || artifact.getDescription() == null || artifact.getDescription().isEmpty()
@@ -27,7 +27,7 @@ public class MuseumArtifactService {
             throw new IllegalArgumentException("An artifact with this name already exists.");
         }
 
-        artifactDAO.addArtifact(artifact);
+        return artifactDAO.addArtifact(artifact);
     }
 
     public MuseumArtifact getArtifact(String artifactName){

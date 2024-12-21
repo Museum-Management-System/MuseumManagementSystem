@@ -2,19 +2,25 @@ package org.example.dao;
 
 import org.example.entity.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+
 
 public class UserDAO {
-    private Connection connection;
+    private static Connection connection;
+
+    static {
+        try {
+            connection = DriverManager.getConnection("jdbc:postgresql://10.200.10.163:5444/museum", "postgres", "museum");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public UserDAO(Connection connection) {
         this.connection = connection;
     }
 
-    public String authenticateUser(int userId, String password) {
+    public static String authenticateUser(int userId, String password) {
         String sql = "SELECT user_type FROM users WHERE user_id = ? AND password = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
@@ -40,29 +46,5 @@ public class UserDAO {
         }
     }
 
-    public void assignRole(int userId, String password) {
-        String sql = "SELECT user_type FROM users WHERE user_id = ? AND password = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, userId);
-            pstmt.setString(2, password);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                String userType = rs.getString("user_type");
-                if ("Admin".equals(userType)) {
-                    // Set role to admin_role (Admin privileges)
-                    try (PreparedStatement stmt = connection.prepareStatement("SET ROLE admin_role")) {
-                        stmt.executeUpdate();
-                    }
-                } else if ("Employee".equals(userType)) {
-                    // Set role to employee_role (Employee privileges)
-                    try (PreparedStatement stmt = connection.prepareStatement("SET ROLE employee_role")) {
-                        stmt.executeUpdate();
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }
 

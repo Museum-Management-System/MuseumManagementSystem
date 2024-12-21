@@ -1,4 +1,4 @@
-package org.example.controller;
+/*package org.example.controller;
 
 import org.example.entity.MuseumArtifact;
 import org.example.service.MuseumArtifactService;
@@ -77,12 +77,7 @@ public class MuseumArtifactController {
                 handleSearchByCategory();
             }
         });
-
-
-
         // Action listeners
-
-
     }
 
 
@@ -131,9 +126,6 @@ public class MuseumArtifactController {
             ex.printStackTrace();
         }
     }
-
-
-
 
     private void handleSearchArtifact() {
         // Get the name of the artifact from the search field
@@ -257,3 +249,4 @@ public class MuseumArtifactController {
 
 
 }
+*/
