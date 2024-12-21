@@ -105,23 +105,49 @@ public class AdministratorDAO {
         }
         return employees;
     }
+    public boolean updateEmployee(Employee employee) {
+        String query = "UPDATE employees SET name = ?, email = ?, phone_num = ?, job_title = ?, section_name = ? WHERE employee_id = ?";
 
-    public boolean updateEmployee(int employeeId, String name, String email, String jobTitle, String sectionName, String role) {
-        String query = "UPDATE employees SET name = ?, email = ?, job_title = ?, section_name = ?, role = ? WHERE employee_id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, name);
-            stmt.setString(2, email);
-            stmt.setString(3, jobTitle);
-            stmt.setString(4, sectionName);
-            stmt.setString(5, role);
-            stmt.setInt(6, employeeId);
-            stmt.executeUpdate();
-            return true;
+            stmt.setString(1, employee.getName());
+            stmt.setString(2, employee.getEmail());
+            stmt.setString(3, employee.getPhoneNum());
+            stmt.setString(4, employee.getJobTitle());
+            stmt.setString(5, employee.getSectionName());
+            stmt.setInt(6, employee.getEmployeeId());
+
+            int rowsAffected = stmt.executeUpdate();
+
+            return rowsAffected > 0;
         } catch (SQLException e) {
-            System.err.println("Error while updating employee: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
+
+
+    public Employee getEmployeeByEmail(String email) {
+        String query = "SELECT * FROM employees WHERE email = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Employee(
+                        rs.getInt("employee_id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("phone_num"),
+                        rs.getString("job_title"),
+                        rs.getString("section_name"),
+                        rs.getString("role")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public boolean deleteEmployee(int employeeId) {
         String query = "DELETE FROM employees WHERE employee_id = ?";

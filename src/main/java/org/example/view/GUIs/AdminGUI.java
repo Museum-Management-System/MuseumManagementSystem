@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import org.example.controller.AdminController;
 import org.example.entity.Employee;
 import org.example.view.GUIComponents.EmployeeCard;
-import org.w3c.dom.Text;
 
 import java.sql.SQLException;
 
@@ -138,14 +137,15 @@ public class AdminGUI extends EmployeeGUI {
         employeeTableView.setOnMouseClicked(event -> {
             Employee selectedEmployee = employeeTableView.getSelectionModel().getSelectedItem();
             if (selectedEmployee != null) {
-                System.out.println("Employee " + selectedEmployee.getName() + " clicked!");
-                displayObjectCard(selectedEmployee, (BorderPane) primaryStage.getScene().getRoot());
+                displayEmployeeCard(selectedEmployee, (BorderPane) primaryStage.getScene().getRoot());
             }
         });
 
         searchButton.setOnAction(e -> admincontroller.handleSearch());
         searchField.setOnKeyPressed(e -> admincontroller.handleSearch());
         filterButton.setOnAction(e -> admincontroller.handleFilter());
+
+        addEmployeeButton.setOnAction(e -> admincontroller.handleAddEmployee());
 
         employeesPage.getChildren().addAll(titleLabel, searchField, buttonsBox, employeeTableView);
 
@@ -154,7 +154,7 @@ public class AdminGUI extends EmployeeGUI {
 
         admincontroller.populateEmployeeList();
     }
-    protected void displayObjectCard(Employee employee, BorderPane root) {
+    protected void displayEmployeeCard(Employee employee, BorderPane root) {
         employeeCard.updateCard(employee);
         root.setCenter(employeeCard);
     }

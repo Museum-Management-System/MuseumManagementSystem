@@ -127,7 +127,7 @@ public class EmployeeCard extends BorderPane {
                 setEditable(nameField, true);
                 setEditable(roleField, true);
                 setEditable(sectionField, true);
-                setEditable(emailField, true);
+                setEditable(emailField, false);
                 setEditable(phoneField, true);
             } else {
                 // Save and exit editing mode
@@ -141,13 +141,8 @@ public class EmployeeCard extends BorderPane {
                 setEditable(emailField, false);
                 setEditable(phoneField, false);
 
-                // Save the updated details (Print to console for now)
-                System.out.println("ID: " + employee.getEmployeeId());
-                System.out.println("Updated Name: " + nameField.getText());
-                System.out.println("Updated Role: " + roleField.getText());
-                System.out.println("Updated Department: " + sectionField.getText());
-                System.out.println("Updated Email: " + emailField.getText());
-                System.out.println("Updated Phone Number: " + phoneField.getText());
+                controller.handleEditEmployee(nameField.getText(), roleField.getText(),
+                        sectionField.getText(), emailField.getText(),phoneField.getText());
             }
         });
 

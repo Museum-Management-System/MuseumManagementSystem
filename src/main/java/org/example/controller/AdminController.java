@@ -80,8 +80,31 @@ public class AdminController extends EmployeeController{
         });
     }
 
+    public void handleAddEmployee() {
 
-
+    }
+    public void handleEditEmployee(String nameField, String roleField, String sectionField, String emailField, String phoneField) {
+        if (emailField.isEmpty() || nameField.isEmpty() || phoneField.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "All fields are required!");
+            return;
+        }
+        Employee employee = administratorDAO.getEmployeeByEmail(emailField);
+        if (employee == null) {
+            showAlert(Alert.AlertType.ERROR, "Employee Not Found", "No employee found with this email.");
+            return;
+        }
+        employee.setName(nameField);
+        employee.setRole(roleField);
+        employee.setSectionName(sectionField);
+        employee.setPhoneNum(phoneField);
+        boolean updateSuccess = administratorDAO.updateEmployee(employee);
+        if (updateSuccess) {
+            showAlert(Alert.AlertType.INFORMATION, "Update Successful", "Employee details have been updated successfully.");
+            populateEmployeeList();
+        } else {
+            showAlert(Alert.AlertType.ERROR, "Update Failed", "Failed to update employee details. Please try again.");
+        }
+    }
 
     public void handleDeleteEmployee(Employee selectedEmployee) {
         if (selectedEmployee != null) {
