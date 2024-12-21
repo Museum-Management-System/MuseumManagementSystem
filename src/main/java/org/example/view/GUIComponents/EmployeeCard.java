@@ -23,7 +23,7 @@ public class EmployeeCard extends BorderPane {
     private AdminController controller;
     private ImageView employeeImageView;
     private Employee employee;
-    private TextField nameField, roleField, sectionField, emailField, phoneField;
+    private TextField nameField, jobField, sectionField, emailField, phoneField;
     private Label employeeNameLabel;
 
     public EmployeeCard(VBox previousPage, AdminGUI adminGUI) throws SQLException {
@@ -61,8 +61,8 @@ public class EmployeeCard extends BorderPane {
         Label nameLabel = new Label("Name: ");
         nameField = createEditableField("John Doe");
 
-        Label roleLabel = new Label("Job Title: ");
-        roleField = createEditableField("Software Engineer");
+        Label jobLabel = new Label("Job Title: ");
+        jobField = createEditableField("Software Engineer");
 
         Label sectionLabel = new Label("Section: ");
         sectionField = createEditableField("IT Department");
@@ -75,24 +75,24 @@ public class EmployeeCard extends BorderPane {
 
         // Arrange Labels and TextFields Horizontally
         HBox nameBox = new HBox(nameLabel, nameField);
-        HBox roleBox = new HBox(roleLabel, roleField);
+        HBox jobBox = new HBox(jobLabel, jobField);
         HBox departmentBox = new HBox(sectionLabel, sectionField);
         HBox emailBox = new HBox(emailLabel, emailField);
         HBox phoneBox = new HBox(phoneLabel, phoneField);
 
         nameBox.setAlignment(Pos.BASELINE_LEFT);
-        roleBox.setAlignment(Pos.BASELINE_LEFT);
+        jobBox.setAlignment(Pos.BASELINE_LEFT);
         departmentBox.setAlignment(Pos.BASELINE_LEFT);
         emailBox.setAlignment(Pos.BASELINE_LEFT);
         phoneField.setAlignment(Pos.BASELINE_LEFT);
 
         nameBox.setTranslateY(-2);  // Moves up by 2 pixels
-        roleBox.setTranslateY(-2);  // Moves up by 2 pixels
+        jobBox.setTranslateY(-2);  // Moves up by 2 pixels
         departmentBox.setTranslateY(-2);  // Moves up by 2 pixels
         emailBox.setTranslateY(-2);  // Moves up by 2 pixels
         phoneLabel.setTranslateY(4);  // Moves down by 4 pixels
 
-        detailsBox.getChildren().addAll(nameBox, roleBox, departmentBox, emailBox, phoneBox);
+        detailsBox.getChildren().addAll(nameBox, jobBox, departmentBox, emailBox, phoneBox);
         detailsBox.setTranslateY(40); // Adjust the value (positive to lower)
 
         // Bottom Section: Buttons
@@ -125,7 +125,7 @@ public class EmployeeCard extends BorderPane {
 
                 // Enable editing for all fields
                 setEditable(nameField, true);
-                setEditable(roleField, true);
+                setEditable(jobField, true);
                 setEditable(sectionField, true);
                 setEditable(emailField, false);
                 setEditable(phoneField, true);
@@ -136,13 +136,23 @@ public class EmployeeCard extends BorderPane {
 
                 // Disable editing for all fields
                 setEditable(nameField, false);
-                setEditable(roleField, false);
+                setEditable(jobField, false);
                 setEditable(sectionField, false);
                 setEditable(emailField, false);
                 setEditable(phoneField, false);
 
-                controller.handleEditEmployee(nameField.getText(), emailField.getText(),
-                        phoneField.getText(), roleField.getText(),sectionField.getText());
+                employee.setName(nameField.getText());
+                employee.setEmail(emailField.getText());
+                employee.setPhoneNum(phoneField.getText());
+                employee.setJobTitle(jobField.getText());
+                employee.setSectionName(sectionField.getText());
+                System.out.println(employee.getEmployeeId());
+                System.out.println("Updated Name: " + nameField.getText());
+                System.out.println("Updated Email: " + emailField.getText());
+                System.out.println("Updated Phone Number: " + phoneField.getText());
+                System.out.println("Updated Job Title " + jobField.getText());
+                System.out.println("Updated Section: " + sectionField.getText());
+                controller.handleUpdateEmployee(employee);
             }
         });
 
@@ -203,6 +213,7 @@ public class EmployeeCard extends BorderPane {
         employeeNameLabel.setText(employee.getName());
         //objectImageView.setImage(new Image(artifact.getImageUrl(), 150, 150, true, true)); // Adjust as needed
         nameField.setText(employee.getName());
+        jobField.setText(employee.getJobTitle());
         sectionField.setText(employee.getSectionName());
         emailField.setText(employee.getEmail());
         phoneField.setText(employee.getPhoneNum());

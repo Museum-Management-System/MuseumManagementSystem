@@ -3,6 +3,7 @@ package org.example.service;
 import org.example.dao.AdministratorDAO;
 import org.example.dao.EmployeeDAO;
 import org.example.entity.Employee;
+import org.example.entity.MuseumArtifact;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -81,15 +82,12 @@ public class EmployeeService {
         return employee;
     }
 
-    // Method to update an employee
-    public void updateEmployee(Employee employee) {
-        Employee existingEmployee = findEmployee(employee.getEmployeeId());
-        if (existingEmployee == null) {
-            throw new IllegalArgumentException("No employee found with the given ID.");
+    public boolean updateEmployee(Employee employee) {
+        Employee existingEmployee = AdministratorDAO.getEmployee(employee.getName());
+        if (existingEmployee != null && existingEmployee.getEmployeeId() != employee.getEmployeeId()) {
+            throw new IllegalArgumentException("An employee with this name already exists.");
         }
-
-        // Implement the update functionality in the DAO
-        // employeeDAO.updateEmployee(employee, connection);
+        return AdministratorDAO.updateEmployee(employee);
     }
 
     // Method to delete an employee

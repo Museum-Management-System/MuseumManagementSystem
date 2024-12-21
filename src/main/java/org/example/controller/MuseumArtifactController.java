@@ -127,9 +127,6 @@ public class MuseumArtifactController {
         }
     }
 
-
-
-
     private void handleSearchArtifact() {
         // Get the name of the artifact from the search field
         String artifactName = artifactView.getSearchFieldInput();

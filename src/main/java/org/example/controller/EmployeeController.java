@@ -25,9 +25,6 @@ public class EmployeeController extends GuestUserController{
         this.empGUI = empGUI;
     }
 
-    /*
-     * Handle updating an object's details.
-     */
     public void handleUpdateObject(MuseumArtifact updatedObject) {
         try {
             if (artifactService.updateArtifact(updatedObject)) {

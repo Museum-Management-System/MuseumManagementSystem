@@ -2,10 +2,8 @@ package org.example.controller;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.example.dao.AdministratorDAO;
-import org.example.dao.MuseumArtifactDAO;
 import org.example.entity.Employee;
 import org.example.entity.MuseumArtifact;
 import org.example.service.DatabaseConnection;
@@ -83,28 +81,31 @@ public class AdminController extends EmployeeController{
     public void handleAddEmployee() {
 
     }
-    public void handleEditEmployee(String nameField, String emailField, String phoneField, String roleField, String sectionField) {
-        if (emailField.isEmpty() || nameField.isEmpty() || phoneField.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Validation Error", "All fields are required!");
-            return;
-        }
-        Employee employee = administratorDAO.getEmployeeByEmail(emailField);
-        if (employee == null) {
-            showAlert(Alert.AlertType.ERROR, "Employee Not Found", "No employee found with this email.");
-            return;
-        }
-        employee.setName(nameField);
-        employee.setEmail(emailField);
-        employee.setPhoneNum(phoneField);
-        employee.setRole(roleField);
-        employee.setSectionName(sectionField);
+    public void handleUpdateEmployee(Employee updatedEmployee) {
+        try {
+            if (employeeService.updateEmployee(updatedEmployee)) {
+                System.out.println("Employee updated successfully: " + updatedEmployee.getName());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Update Successful");
+                alert.setHeaderText(null);
+                alert.setContentText("Employee updated successfully!");
+                alert.showAndWait();
 
-        boolean updateSuccess = administratorDAO.updateEmployee(employee);
-        if (updateSuccess) {
-            showAlert(Alert.AlertType.INFORMATION, "Update Successful", "Employee details have been updated successfully.");
-            populateEmployeeList();
-        } else {
-            showAlert(Alert.AlertType.ERROR, "Update Failed", "Failed to update employee details. Please try again.");
+                populateEmployeeList();
+            } else {
+                System.out.println("Failed to update employee: " + updatedEmployee.getName());
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Update Failed");
+                alert.setHeaderText(null);
+                alert.setContentText("Failed to update employee. Please try again.");
+                alert.showAndWait();
+            }
+        } catch (IllegalArgumentException e) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Validation Error");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
     }
 

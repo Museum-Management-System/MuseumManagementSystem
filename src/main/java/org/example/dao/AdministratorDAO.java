@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdministratorDAO {
-    private Connection connection;
+    private static Connection connection;
     public AdministratorDAO(Connection connection) {
         this.connection = connection;
     }
@@ -105,8 +105,9 @@ public class AdministratorDAO {
         }
         return employees;
     }
-    public boolean updateEmployee(Employee employee) {
-        String query = "UPDATE employees SET name = ?, email = ?, phone_num = ?, job_title = ?, section_name = ? WHERE employee_id = ?";
+    public static boolean updateEmployee(Employee employee) {
+        String query = "UPDATE employees SET name = ?, email = ?, phone_num = ?, job_title = ?, section_name = ?" +
+                " WHERE employee_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, employee.getName());
@@ -121,15 +122,15 @@ public class AdministratorDAO {
             return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
+        return false;
     }
 
 
-    public Employee getEmployeeByEmail(String email) {
-        String query = "SELECT * FROM employees WHERE email = ?";
+    public static Employee getEmployee(String name) {
+        String query = "SELECT * FROM employees WHERE name = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, email);
+            stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new Employee(

@@ -69,9 +69,8 @@ public class MuseumArtifactDAO {
     }
 
     public boolean updateArtifact(MuseumArtifact artifact) {
-        String sql = "UPDATE museum_artifacts SET name = ?, category = ?, description = ?, acquisition_date = ?, location = ? WHERE artifact_id = ?";
-        // Assuming ps is your PreparedStatement and you need to set the acquisitionDate
-
+        String sql = "UPDATE museum_artifacts SET name = ?, category = ?, description = ?, acquisition_date = ?, location = ?" +
+                " WHERE artifact_id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, artifact.getName());
