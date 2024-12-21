@@ -30,7 +30,8 @@ public class ArtifactDuplicationTest {
                 "Sculpture",
                 "An ancient Greek sculpture",
                 Date.valueOf("100-01-01"),
-                "Louvre Museum"
+                "Louvre Museum",
+                null
         );
         artifactDAO.addArtifact(artifact);
 

@@ -36,11 +36,12 @@ public class EmployeeCard extends BorderPane {
     private TextField nameField, jobField, sectionField, emailField, phoneField, passwordField;
     private Label employeeNameLabel , passwordLabel;
     private byte[] updatedImageData;
+    private AdminGUI adminGUI;
 
     public EmployeeCard(VBox previousPage, AdminGUI adminGUI) throws SQLException {
         // Root Pane
         controller = new AdminController(adminGUI);
-
+        this.adminGUI = adminGUI;
         // Top Section: Employee Name and Image
         VBox topLeftSection = new VBox();
         topLeftSection.setSpacing(10);
@@ -213,7 +214,20 @@ public class EmployeeCard extends BorderPane {
                 }
             });
         });
-
+        backButton.setOnAction(event -> {
+            ((BorderPane)this.getParent()).setCenter(previousPage);
+            if(!deleteButton.isVisible()) deleteButton.setVisible(true);
+            if(isEditing) isEditing = false;
+            setEditable(nameField, false);
+            setEditable(jobField, false);
+            setEditable(sectionField, false);
+            setEditable(emailField, false);
+            setEditable(passwordField, false);
+            setEditable(phoneField, false);
+            if(updateSaveButton.getText().equals("Save Employee")) updateSaveButton.setText("Update Employee");
+            uploadImageButton.setVisible(false);
+            if (adminGUI != null) { adminGUI.refreshEmployeeTableView(); }
+        });
         // Add buttons to bottom section
         buttonBox.getChildren().addAll(updateSaveButton, deleteButton, backButton);
         buttonBox.setTranslateY(-300);

@@ -34,7 +34,8 @@ public class ValidationTest {
                 "Painting",
                 "A painting with invalid data",
                 Date.valueOf("1503-01-01"),
-                "Louvre Museum"
+                "Louvre Museum",
+                null
         );
 
         Exception exception = assertThrows(SQLException.class, () -> artifactDAO.addArtifact(invalidArtifact));
@@ -60,7 +61,8 @@ public class ValidationTest {
                 "Painting",
                 "Description",
                 Date.valueOf("1503-01-01"),
-                "Louvre Museum"
+                "Louvre Museum",
+                null
         );
 
         Exception exception = assertThrows(SQLException.class, () -> artifactDAO.addArtifact(invalidArtifact));

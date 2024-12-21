@@ -115,25 +115,7 @@ public class AdminGUI extends EmployeeGUI {
         buttonsBox.setSpacing(10);
 
         employeeTableView = new TableView<>();
-
-        // Define columns
-        TableColumn<Employee, String> nameColumn = new TableColumn<>("Name");
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<Employee, String> emailColumn = new TableColumn<>("Email");
-        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-
-        TableColumn<Employee, String> phoneColumn = new TableColumn<>("Phone Number");
-        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNum"));
-
-        TableColumn<Employee, String> titleColumn = new TableColumn<>("Job Title");
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
-
-        TableColumn<Employee, String> sectionColumn = new TableColumn<>("Section");
-        sectionColumn.setCellValueFactory(new PropertyValueFactory<>("sectionName"));
-
-        employeeTableView.getColumns().addAll(nameColumn, emailColumn, phoneColumn, titleColumn, sectionColumn);
-        employeeTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        setUpEmployeeTableView();
 
         // Set up event handlers
         employeeTableView.setOnMouseClicked(event -> {
@@ -146,8 +128,6 @@ public class AdminGUI extends EmployeeGUI {
         searchButton.setOnAction(e -> admincontroller.handleSearch());
         searchField.setOnKeyPressed(e -> admincontroller.handleSearch());
         filterButton.setOnAction(e -> admincontroller.handleFilter());
-
-        //addEmployeeButton.setOnAction(e -> admincontroller.handleAddEmployee());
 
         employeesPage.getChildren().addAll(titleLabel, searchField, buttonsBox, employeeTableView);
 
@@ -169,5 +149,30 @@ public class AdminGUI extends EmployeeGUI {
     protected String getUserType() { return "Admin";}
     public TableView getEmployeeTableView(){
         return employeeTableView;
+    }
+    private void setUpEmployeeTableView(){
+        TableColumn<Employee, String> nameColumn = new TableColumn<>("Name");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<Employee, String> emailColumn = new TableColumn<>("Email");
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+
+        TableColumn<Employee, String> phoneColumn = new TableColumn<>("Phone Number");
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNum"));
+
+        TableColumn<Employee, String> titleColumn = new TableColumn<>("Job Title");
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("jobTitle"));
+
+        TableColumn<Employee, String> sectionColumn = new TableColumn<>("Section");
+        sectionColumn.setCellValueFactory(new PropertyValueFactory<>("sectionName"));
+
+        employeeTableView.getColumns().addAll(nameColumn, emailColumn, phoneColumn, titleColumn, sectionColumn);
+        employeeTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    }
+    public void refreshEmployeeTableView(){
+        if (!employeeTableView.getColumns().isEmpty()) {
+            employeeTableView.getColumns().clear();  // Clear existing columns
+        }
+        setUpEmployeeTableView();
     }
 }

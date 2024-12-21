@@ -53,7 +53,8 @@ public class ConcurrencyTest {
                     "Category",
                     "Description",
                     Date.valueOf("2023-01-01"),
-                    "Test Location"
+                    "Test Location",
+                    null
             );
             artifactDAO.addArtifact(artifact);
         };
