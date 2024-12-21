@@ -301,10 +301,12 @@ public class EmployeeCard extends BorderPane {
         setEditable(sectionField, true);
         setEditable(emailField, true);
         setEditable(phoneField, true);
+        uploadImageButton.setVisible(true);
 
         passwordLabel.setVisible(true);
         passwordField.setVisible(true);
         setEditable(passwordField, true);
+        updateSaveButton.setText("Add Employee");
 
         deleteButton.setVisible(false);
     }
