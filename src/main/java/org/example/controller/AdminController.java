@@ -83,7 +83,7 @@ public class AdminController extends EmployeeController{
     public void handleAddEmployee() {
 
     }
-    public void handleEditEmployee(String nameField, String roleField, String sectionField, String emailField, String phoneField) {
+    public void handleEditEmployee(String nameField, String emailField, String phoneField, String roleField, String sectionField) {
         if (emailField.isEmpty() || nameField.isEmpty() || phoneField.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Validation Error", "All fields are required!");
             return;
@@ -94,9 +94,11 @@ public class AdminController extends EmployeeController{
             return;
         }
         employee.setName(nameField);
+        employee.setEmail(emailField);
+        employee.setPhoneNum(phoneField);
         employee.setRole(roleField);
         employee.setSectionName(sectionField);
-        employee.setPhoneNum(phoneField);
+
         boolean updateSuccess = administratorDAO.updateEmployee(employee);
         if (updateSuccess) {
             showAlert(Alert.AlertType.INFORMATION, "Update Successful", "Employee details have been updated successfully.");

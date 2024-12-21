@@ -61,7 +61,7 @@ public class EmployeeCard extends BorderPane {
         Label nameLabel = new Label("Name: ");
         nameField = createEditableField("John Doe");
 
-        Label roleLabel = new Label("Role: ");
+        Label roleLabel = new Label("Job Title: ");
         roleField = createEditableField("Software Engineer");
 
         Label sectionLabel = new Label("Section: ");
@@ -141,8 +141,8 @@ public class EmployeeCard extends BorderPane {
                 setEditable(emailField, false);
                 setEditable(phoneField, false);
 
-                controller.handleEditEmployee(nameField.getText(), roleField.getText(),
-                        sectionField.getText(), emailField.getText(),phoneField.getText());
+                controller.handleEditEmployee(nameField.getText(), emailField.getText(),
+                        phoneField.getText(), roleField.getText(),sectionField.getText());
             }
         });
 

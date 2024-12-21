@@ -279,6 +279,13 @@ public class MuseumArtifactDAO {
                 pstmt.setDate(index++, minSqlDate);
                 pstmt.setDate(index++, maxSqlDate);
             }
+            else if (minDate != null && !minDate.isEmpty()) {
+                Date minSqlDate = new Date(new SimpleDateFormat("yyyy-MM-dd").parse(minDate).getTime());
+                pstmt.setDate(index++, minSqlDate);
+            } else if (maxDate != null && !maxDate.isEmpty()) {
+                Date maxSqlDate = new Date(new SimpleDateFormat("yyyy-MM-dd").parse(maxDate).getTime());
+                pstmt.setDate(index++, maxSqlDate);
+            }
 
             if (!locations.isEmpty()) {
                 for (String location : locations) {
