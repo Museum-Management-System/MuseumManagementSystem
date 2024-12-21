@@ -57,7 +57,8 @@ public class MuseumDAOTest {
                 "Painting",
                 "A portrait by Leonardo da Vinci",
                 Date.valueOf("1503-01-01"),
-                "Louvre Museum"
+                "Louvre Museum",
+                null
         );
 
 
@@ -86,7 +87,8 @@ public class MuseumDAOTest {
                 "Painting",
                 "A portrait by Leonardo da Vinci",
                 Date.valueOf("1503-01-01"),
-                "Louvre Museum"
+                "Louvre Museum",
+                null
         );
         artifactDAO.addArtifact(artifact);
 
@@ -110,7 +112,8 @@ public class MuseumDAOTest {
                 "Painting",
                 "A portrait by Leonardo da Vinci",
                 Date.valueOf("1503-01-01"),
-                "Louvre Museum"
+                "Louvre Museum",
+                null
         );
 
         artifactDAO.addArtifact(artifact);
@@ -131,7 +134,8 @@ public class MuseumDAOTest {
                 "Painting",
                 "A portrait by Leonardo da Vinci",
                 Date.valueOf("1503-01-01"),
-                "Louvre Museum"
+                "Louvre Museum",
+                null
         );
 
         artifactDAO.addArtifact(artifact);
@@ -153,21 +157,24 @@ public class MuseumDAOTest {
                 "Painting",
                 "A portrait by Leonardo da Vinci",
                 Date.valueOf("1503-01-01"),
-                "Louvre Museum"
+                "Louvre Museum",
+                null
         );
         MuseumArtifact artifact2 = new MuseumArtifact(
                 "The Starry Night",
                 "Painting",
                 "A famous painting by Vincent van Gogh",
                 Date.valueOf("1889-06-01"),
-                "Museum of Modern Art"
+                "Museum of Modern Art",
+                null
         );
         MuseumArtifact artifact3 = new MuseumArtifact(
                 "The Thinker",
                 "Sculpture",
                 "A famous sculpture by Auguste Rodin",
                 Date.valueOf("1904-01-01"),
-                "Rodin Museum"
+                "Rodin Museum",
+                null
         );
 
         artifactDAO.addArtifact(artifact1);
@@ -204,21 +211,24 @@ public class MuseumDAOTest {
                 "Painting",
                 "A portrait by Leonardo da Vinci",
                 Date.valueOf("1503-01-01"),
-                "Renaissance Section"
+                "Renaissance Section",
+                null
         );
         MuseumArtifact artifact2 = new MuseumArtifact(
                 "The Starry Night",
                 "Painting",
                 "A famous painting by Vincent van Gogh",
                 Date.valueOf("1889-06-01"),
-                "Museum of Modern Art"
+                "Museum of Modern Art",
+                null
         );
         MuseumArtifact artifact3 = new MuseumArtifact(
                 "The Thinker",
                 "Sculpture",
                 "A famous sculpture by Auguste Rodin",
                 Date.valueOf("1904-01-01"),
-                "Rodin Museum"
+                "Rodin Museum",
+                null
         );
         //we temporarily add these to our database
         artifactDAO.addArtifact(artifact1);
@@ -233,9 +243,9 @@ public class MuseumDAOTest {
     }
     @Test
     public void testOrderByDescending() throws SQLException {
-            artifactDAO.addArtifact(new MuseumArtifact("Mona Lisa", "Painting", "A portrait by Leonardo da Vinci", Date.valueOf("1503-01-01"), "Renaissance Section"));
-            artifactDAO.addArtifact(new MuseumArtifact("The Starry Night", "Painting", "A famous painting by Vincent van Gogh", Date.valueOf("1889-06-01"), "Museum of Modern Art"));
-            artifactDAO.addArtifact(new MuseumArtifact("The Thinker", "Sculpture", "A famous sculpture by Auguste Rodin", Date.valueOf("1904-01-01"), "Rodin Museum"));
+            artifactDAO.addArtifact(new MuseumArtifact("Mona Lisa", "Painting", "A portrait by Leonardo da Vinci", Date.valueOf("1503-01-01"), "Renaissance Section", null));
+            artifactDAO.addArtifact(new MuseumArtifact("The Starry Night", "Painting", "A famous painting by Vincent van Gogh", Date.valueOf("1889-06-01"), "Museum of Modern Art", null));
+            artifactDAO.addArtifact(new MuseumArtifact("The Thinker", "Sculpture", "A famous sculpture by Auguste Rodin", Date.valueOf("1904-01-01"), "Rodin Museum", null));
 
             ArrayList<MuseumArtifact> orderedByDate = artifactDAO.orderArtifactsByDescending("acquisition_date");
 
@@ -247,9 +257,9 @@ public class MuseumDAOTest {
 
     @Test
     public void testAcquisitionDateFiltering() throws SQLException {
-    artifactDAO.addArtifact(new MuseumArtifact("Mona Lisa", "Painting", "A portrait by Leonardo da Vinci", Date.valueOf("1503-01-01"), "Renaissance Section"));
-    artifactDAO.addArtifact(new MuseumArtifact("The Starry Night", "Painting", "A famous painting by Vincent van Gogh", Date.valueOf("1889-06-01"), "Museum of Modern Art"));
-    artifactDAO.addArtifact(new MuseumArtifact("The Thinker", "Sculpture", "A famous sculpture by Auguste Rodin", Date.valueOf("1904-01-01"), "Rodin Museum"));
+    artifactDAO.addArtifact(new MuseumArtifact("Mona Lisa", "Painting", "A portrait by Leonardo da Vinci", Date.valueOf("1503-01-01"), "Renaissance Section", null));
+    artifactDAO.addArtifact(new MuseumArtifact("The Starry Night", "Painting", "A famous painting by Vincent van Gogh", Date.valueOf("1889-06-01"), "Museum of Modern Art", null));
+    artifactDAO.addArtifact(new MuseumArtifact("The Thinker", "Sculpture", "A famous sculpture by Auguste Rodin", Date.valueOf("1904-01-01"), "Rodin Museum", null));
      ArrayList<MuseumArtifact> filteredArtifacts = artifactDAO.acquisitionDateFiltering("1800-01-01");
      assertEquals(2, filteredArtifacts.size(), "There should be 2 artifacts acquired after 1800.");
      assertTrue(filteredArtifacts.stream().anyMatch(a -> a.getName().equals("The Starry Night")), "The list should include 'The Starry Night'.");

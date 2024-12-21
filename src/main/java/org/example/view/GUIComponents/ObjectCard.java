@@ -202,7 +202,8 @@ public class ObjectCard extends BorderPane {
             infoDump.setEditable(false);
             infoDump.setStyle("-fx-control-inner-background: #ffeaea;");
             uploadImageButton.setVisible(false);
-            if (EmpGUI != null) { EmpGUI.refreshTableView(); }
+            if(updateSaveButton.getText().equals("Save Object")) updateSaveButton.setText("Update Object");
+            if (EmpGUI != null) { EmpGUI.refreshObjectTableView(); }
         });
         buttonBox.getChildren().addAll(updateSaveButton, deleteButton, backButton);
 

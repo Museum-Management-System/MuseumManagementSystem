@@ -48,7 +48,8 @@ public class InitializationTest {
                 "Painting",
                 "A famous painting by Leonardo da Vinci",
                 Date.valueOf("1503-01-01"),
-                "Louvre Museum");
+                "Louvre Museum",
+                null);
 
         // Insert initial data into the employees table
         //userDAO.insertEmployee(1, "John Doe", "john.doe@example.com", "Curator", "Art Section", "Curator");

@@ -118,7 +118,7 @@ public class GuestUserGUI extends Application {
         BorderPane root = (BorderPane) primaryStage.getScene().getRoot();
 
         objectTableView = new TableView<>();
-        setupTableView();
+        setupObjectTableView();
 
         // Populate with sample data
         ObservableList<MuseumArtifact> objectList = FXCollections.observableArrayList();
@@ -147,7 +147,7 @@ public class GuestUserGUI extends Application {
         objectCard.updateCard(object);
         root.setCenter(objectCard);
     }
-    private void setupTableView() { // Define columns
+    private void setupObjectTableView() { // Define columns
         TableColumn<MuseumArtifact, String> nameColumn = new TableColumn<>("Name");
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
@@ -163,7 +163,7 @@ public class GuestUserGUI extends Application {
         objectTableView.getColumns().setAll(nameColumn, categoryColumn, yearColumn, locationColumn);
         objectTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
-    public void refreshTableView() { setupTableView(); }
+    public void refreshObjectTableView() { setupObjectTableView(); }
     public TableView getObjectTableView(){
         return objectTableView;
     }
