@@ -82,8 +82,8 @@ public class MuseumArtifactDAO {
             //pstmt.setDate(3, (Date) artifact.getAcquisitionDate());
             pstmt.setDate(4, new java.sql.Date(artifact.getAcquisitionDate().getTime()));
             pstmt.setString(5, artifact.getLocationInMuseum());
-            pstmt.setInt(6, artifact.getArtifactId());
-            pstmt.setBytes(7, artifact.getImageData());
+            pstmt.setBytes(6,artifact.getImageData());
+            pstmt.setInt( 7, artifact.getArtifactId());
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0; // Returns true if the artifact was updated
         } catch (SQLException e) {
