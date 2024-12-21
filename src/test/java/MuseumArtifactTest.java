@@ -8,11 +8,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MuseumDAOTest {
+public class MuseumArtifactTest {
     private static Connection connection;
     private static MuseumArtifactDAO artifactDAO;
     //private EmployeeController employeeController;
     private static MuseumArtifactService artifactService;
+
 
     @BeforeAll
     public static void setupDatabase() throws SQLException {
