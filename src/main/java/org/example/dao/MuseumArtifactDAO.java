@@ -16,14 +16,15 @@ public class MuseumArtifactDAO {
     }
 
     public boolean addArtifact(MuseumArtifact artifact) {
-        String sql = "INSERT INTO museum_artifacts (name, category, description, acquisition_date, location) " +
-                "VALUES (?, ?, ?, ?, ?) RETURNING artifact_id";
+        String sql = "INSERT INTO museum_artifacts (name, category, description, acquisition_date, location, image) " +
+                "VALUES (?, ?, ?, ?, ?, ?) RETURNING artifact_id";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, artifact.getName());
             pstmt.setString(2, artifact.getCategory());
             pstmt.setString(3, artifact.getDescription());
             pstmt.setDate(4, new java.sql.Date(artifact.getAcquisitionDate().getTime()));  // Use correct SQL date type
             pstmt.setString(5, artifact.getLocationInMuseum());
+            pstmt.setBytes(6, artifact.getImageData());
 
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -47,7 +48,8 @@ public class MuseumArtifactDAO {
                         rs.getString("category"),
                         rs.getString("description"),
                         rs.getDate("acquisition_date"),
-                        rs.getString("location"));
+                        rs.getString("location"),
+                        rs.getBytes("image"));
                 artifact.setArtifactId(rs.getInt("artifact_id"));
                 return artifact;
             }
@@ -70,7 +72,7 @@ public class MuseumArtifactDAO {
     }
 
     public boolean updateArtifact(MuseumArtifact artifact) {
-        String sql = "UPDATE museum_artifacts SET name = ?, category = ?, description = ?, acquisition_date = ?, location = ?" +
+        String sql = "UPDATE museum_artifacts SET name = ?, category = ?, description = ?, acquisition_date = ?, location = ?, image = ?" +
                 " WHERE artifact_id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -81,6 +83,7 @@ public class MuseumArtifactDAO {
             pstmt.setDate(4, new java.sql.Date(artifact.getAcquisitionDate().getTime()));
             pstmt.setString(5, artifact.getLocationInMuseum());
             pstmt.setInt(6, artifact.getArtifactId());
+            pstmt.setBytes(7, artifact.getImageData());
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0; // Returns true if the artifact was updated
         } catch (SQLException e) {
@@ -101,7 +104,8 @@ public class MuseumArtifactDAO {
                         rs.getString("category"),
                         rs.getString("description"),
                         rs.getDate("acquisition_date"),
-                        rs.getString("location"));
+                        rs.getString("location"),
+                        rs.getBytes("image"));
                 artifact.setArtifactId(rs.getInt("artifact_id"));
                 artifacts.add(artifact);
             }
@@ -122,7 +126,8 @@ public class MuseumArtifactDAO {
                         rs.getString("category"),
                         rs.getString("description"),
                         rs.getDate("acquisition_date"),
-                        rs.getString("location"));
+                        rs.getString("location"),
+                        rs.getBytes("image"));
                 artifact.setArtifactId(rs.getInt("artifact_id"));
                 artifacts.add(artifact);
             }
@@ -146,7 +151,8 @@ public class MuseumArtifactDAO {
                         rs.getString("category"),
                         rs.getString("description"),
                         rs.getDate("acquisition_date"),
-                        rs.getString("location")
+                        rs.getString("location"),
+                        rs.getBytes("image")
                 ));
             }
         } catch (SQLException e) {
@@ -168,7 +174,8 @@ public class MuseumArtifactDAO {
                         rs.getString("category"),
                         rs.getString("description"),
                         rs.getDate("acquisition_date"),
-                        rs.getString("location")
+                        rs.getString("location"),
+                        rs.getBytes("image")
                 ));
             }
         }catch (SQLException e) {
@@ -189,7 +196,8 @@ public class MuseumArtifactDAO {
                         rs.getString("category"),
                         rs.getString("description"),
                         rs.getDate("acquisition_date"),
-                        rs.getString("location")
+                        rs.getString("location"),
+                        rs.getBytes("image")
                 ));
             }
         } catch (SQLException e) {
@@ -300,7 +308,8 @@ public class MuseumArtifactDAO {
                         rs.getString("category"),
                         rs.getString("description"),
                         rs.getDate("acquisition_date"),
-                        rs.getString("location")
+                        rs.getString("location"),
+                        rs.getBytes("image")
                 );
                 artifacts.add(artifact);
             }

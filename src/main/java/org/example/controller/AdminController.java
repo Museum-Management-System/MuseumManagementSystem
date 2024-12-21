@@ -5,7 +5,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import org.example.dao.AdministratorDAO;
 import org.example.entity.Employee;
-import org.example.entity.MuseumArtifact;
 import org.example.service.DatabaseConnection;
 import org.example.service.EmployeeService;
 import org.example.view.GUIs.AdminGUI;

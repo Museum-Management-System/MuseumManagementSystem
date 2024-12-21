@@ -62,15 +62,6 @@ public class GuestUserController {
         });
     }
 
-    public void handleAddObject() {
-        System.out.println("Add New Object button clicked");
-        // Implement add object logic here
-    }
-
-    public void handleObjectSelection(MuseumArtifact selectedObject) {
-        System.out.println("Selected object: " + selectedObject);
-        // Implement object selection logic here
-    }
     public void populateObjectList(TableView<MuseumArtifact> tableViewView) {
         // Fetch data from DAO
         ArrayList<MuseumArtifact> objects = museumArtifactDAO.getAllArtifacts();

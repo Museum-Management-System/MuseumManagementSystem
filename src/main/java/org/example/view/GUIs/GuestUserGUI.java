@@ -146,11 +146,9 @@ public class GuestUserGUI extends Application {
         searchField.setOnKeyPressed(e -> controller.handleSearch());
         filterButton.setOnAction(e -> controller.handleFilter());
 
-        addObjectButton.setOnAction(e -> controller.handleAddObject());
         objectTableView.setOnMouseClicked(event -> {
             MuseumArtifact selectedObject = objectTableView.getSelectionModel().getSelectedItem();
             if (selectedObject != null) {
-                controller.handleObjectSelection(selectedObject);
                 displayObjectCard(selectedObject, root);
             }
         });

@@ -1,11 +1,9 @@
 package org.example.dao;
 
-import org.example.entity.Administrator;
 import org.example.entity.Employee;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AdministratorDAO {
     private static Connection connection;
@@ -13,9 +11,9 @@ public class AdministratorDAO {
         this.connection = connection;
     }
 
-    public boolean addEmployee(String name, String email, String jobTitle, String sectionName, String role, String password) {
+    public boolean addEmployee(String name, String email, String jobTitle, String sectionName, String password, byte[] imageData) {
         String userQuery = "INSERT INTO users (user_type, password) VALUES ('Employee', ?) RETURNING user_id;";
-        String employeeQuery = "INSERT INTO employees (employee_id, name, email, job_title, section_name, role) VALUES (?, ?, ?, ?, ?, ?)";
+        String employeeQuery = "INSERT INTO employees (employee_id, name, email, job_title, section_name, image) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement userStmt = connection.prepareStatement(userQuery);
              PreparedStatement employeeStmt = connection.prepareStatement(employeeQuery)) {
@@ -34,7 +32,7 @@ public class AdministratorDAO {
             employeeStmt.setString(3, email);
             employeeStmt.setString(4, jobTitle);
             employeeStmt.setString(5, sectionName);
-            employeeStmt.setString(6, role);
+            employeeStmt.setBytes(6, imageData);
 
             int rowsAffected = employeeStmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -74,7 +72,7 @@ public class AdministratorDAO {
                             rs.getString("job_title"),
                             rs.getString("phone_num"),
                             rs.getString("section_name"),
-                            rs.getString("role")));
+                            rs.getBytes("image")));
                 }
             }
         } catch (SQLException e) {
@@ -97,7 +95,7 @@ public class AdministratorDAO {
                             rs.getString("job_title"),
                             rs.getString("phone_num"),
                             rs.getString("section_name"),
-                            rs.getString("role")));
+                            rs.getBytes("image")));
                 }
             }
         } catch (SQLException e) {
@@ -106,7 +104,7 @@ public class AdministratorDAO {
         return employees;
     }
     public static boolean updateEmployee(Employee employee) {
-        String query = "UPDATE employees SET name = ?, email = ?, phone_num = ?, job_title = ?, section_name = ?" +
+        String query = "UPDATE employees SET name = ?, email = ?, phone_num = ?, job_title = ?, section_name = ?, image = ?" +
                 " WHERE employee_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -115,7 +113,8 @@ public class AdministratorDAO {
             stmt.setString(3, employee.getPhoneNum());
             stmt.setString(4, employee.getJobTitle());
             stmt.setString(5, employee.getSectionName());
-            stmt.setInt(6, employee.getEmployeeId());
+            stmt.setBytes(6, employee.getImageData());
+            stmt.setInt(7, employee.getEmployeeId());
 
             int rowsAffected = stmt.executeUpdate();
 
@@ -140,7 +139,7 @@ public class AdministratorDAO {
                         rs.getString("phone_num"),
                         rs.getString("job_title"),
                         rs.getString("section_name"),
-                        rs.getString("role")
+                        rs.getBytes("image")
                 );
             }
         } catch (SQLException e) {
@@ -210,7 +209,7 @@ public class AdministratorDAO {
                         rs.getString("phone_num"),
                         rs.getString("job_title"),
                         rs.getString("section_name"),
-                        rs.getString("role")
+                        rs.getBytes("image")
                 );
                 filteredEmployees.add(employee);
             }
