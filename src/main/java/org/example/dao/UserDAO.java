@@ -10,7 +10,8 @@ public class UserDAO {
 
     static {
         try {
-            connection = DriverManager.getConnection("jdbc:postgresql://10.200.10.163:5444/museum", "postgres", "museum");
+
+             connection = DriverManager.getConnection("jdbc:postgresql://10.200.10.163:5444/museum", "postgres", "museum");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

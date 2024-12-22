@@ -23,6 +23,17 @@ public class MuseumArtifact {
         this.imageData = imageData;
     }
 
+    public MuseumArtifact(String name, String category, String description, Date acquisitionDate, String locationInMuseum) {
+        this.name = name;
+        this.category = category;
+        this.description = description;
+        this.acquisitionDate = acquisitionDate;
+        this.locationInMuseum = locationInMuseum;
+    }
+
+    /*public MuseumArtifact(String mona_lisa, String painting, String s, java.sql.Date valueOf, String renaissance_section) {
+    }*/
+
 
     public int getArtifactId() {
         return artifactId;

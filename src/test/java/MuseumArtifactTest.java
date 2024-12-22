@@ -21,20 +21,6 @@ public class MuseumArtifactTest {
         connection = DriverManager.getConnection("jdbc:postgresql://10.200.10.163:5444/museum", "postgres", "museum");
         artifactDAO = new MuseumArtifactDAO(connection);
 
-    /*    // Create the MuseumArtifact table if it doesn't exist
-        String createTableSQL = """
-            CREATE TABLE IF NOT EXISTS museum_artifacts (
-                artifact_id SERIAL PRIMARY KEY,
-                name VARCHAR(100) NOT NULL,
-                category VARCHAR(100) NOT NULL,
-                description TEXT,
-                acquisition_date DATE,
-                location VARCHAR(100)
-            )
-        """;
-        try (Statement stmt = connection.createStatement()) {
-            stmt.execute(createTableSQL);
-        }*/
     }
 
     @BeforeEach
@@ -111,7 +97,7 @@ public class MuseumArtifactTest {
         assertEquals("Louvre Museum", retrievedArtifact.getLocationInMuseum());
     }
 
-    @Test
+ /*   @Test
     public void testDeleteArtifact() throws SQLException {
 
         MuseumArtifact artifact = new MuseumArtifact(
@@ -131,7 +117,7 @@ public class MuseumArtifactTest {
         // verify that the artifact no longer exists
         MuseumArtifact deletedArtifact = artifactService.getArtifact("Mona Lisa");
         assertNull(deletedArtifact);
-    }
+    }*/
 
     @Test
     public void testUpdateArtifact(){
@@ -527,6 +513,35 @@ public class MuseumArtifactTest {
         assertEquals("An artifact with this name already exists.", exception.getMessage(),
                 "The exception message should indicate that the artifact name must be unique during an update.");
     }
+
+    @Test
+    public void testDeleteArtifactSuccessfully() {
+        MuseumArtifact artifact = new MuseumArtifact();
+        artifact.setName("Ancient Vase");
+        artifact.setCategory("Artifacts");
+        artifact.setDescription("An ancient vase from Greece.");
+        artifact.setAcquisitionDate(java.sql.Date.valueOf("2020-01-01"));
+        artifact.setLocationInMuseum("Section A");
+
+        artifactService.addArtifact(artifact);
+
+        boolean result = artifactService.deleteArtifact("Ancient Vase");
+
+        // Assert
+        assertTrue(result, "Artifact should be deleted successfully.");
+        assertNull(artifactService.getArtifact("Ancient Vase"), "Artifact should no longer exist in the DAO.");
+    }
+
+    @Test
+    public void testDeleteArtifactNotFound() {
+        // Act and Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            artifactService.deleteArtifact("Non-Existent Artifact");
+        });
+
+        assertEquals("The artifact with the specified name does not exist.", exception.getMessage());
+    }
+
 
 
 

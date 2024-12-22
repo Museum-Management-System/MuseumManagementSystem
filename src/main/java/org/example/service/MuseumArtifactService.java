@@ -15,14 +15,27 @@ public class MuseumArtifactService {
     }
 
     public boolean addArtifact(MuseumArtifact artifact) {
-        if (artifact.getName() == null || artifact.getName().isEmpty()
-                || artifact.getCategory() == null || artifact.getCategory().isEmpty()
-                || artifact.getDescription() == null || artifact.getDescription().isEmpty()
-                || artifact.getAcquisitionDate() == null
-                || artifact.getLocationInMuseum() == null || artifact.getLocationInMuseum().isEmpty()) {
-            throw new IllegalArgumentException("All fields are required.");
+        if (artifact.getName() == null || artifact.getName().isEmpty()) {
+            throw new IllegalArgumentException("Name is required.");
         }
 
+        if (artifact.getCategory() == null || artifact.getCategory().isEmpty()) {
+            throw new IllegalArgumentException("Category is required.");
+        }
+
+        if (artifact.getDescription() == null || artifact.getDescription().isEmpty()) {
+            throw new IllegalArgumentException("Description is required.");
+        }
+
+        if (artifact.getAcquisitionDate() == null) {
+            throw new IllegalArgumentException("Acquisition Date is required.");
+        }
+
+        if (artifact.getLocationInMuseum() == null || artifact.getLocationInMuseum().isEmpty()) {
+            throw new IllegalArgumentException("Location in Museum is required.");
+        }
+
+        // Check if an artifact with the same name already exists
         if (artifactDAO.getArtifact(artifact.getName()) != null) {
             throw new IllegalArgumentException("An artifact with this name already exists.");
         }
@@ -30,11 +43,23 @@ public class MuseumArtifactService {
         return artifactDAO.addArtifact(artifact);
     }
 
+
     public MuseumArtifact getArtifact(String artifactName){
         return artifactDAO.getArtifact(artifactName);
     }
 
     public boolean deleteArtifact(String artifactName) {
+
+        if (artifactName == null || artifactName.isEmpty()) {
+            throw new IllegalArgumentException("Artifact name must not be null or empty.");
+        }
+
+        // Check if the artifact exists
+        MuseumArtifact existingArtifact = artifactDAO.getArtifact(artifactName);
+        if (existingArtifact == null) {
+            throw new IllegalArgumentException("The artifact with the specified name does not exist.");
+        }
+
         return artifactDAO.deleteArtifact(artifactName);
     }
 
