@@ -114,6 +114,28 @@ public class MuseumArtifactDAO {
         }
         return artifacts;
     }
+    public ArrayList<MuseumArtifact> searchArtifactsByCategory(String category) {
+        ArrayList<MuseumArtifact> artifacts = new ArrayList<>();
+        String sql = "SELECT * FROM museum_artifacts WHERE LOWER(category) LIKE LOWER(?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1,"%" + category + "%");
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                MuseumArtifact artifact = new MuseumArtifact(
+                        rs.getString("name"),
+                        rs.getString("category"),
+                        rs.getString("description"),
+                        rs.getDate("acquisition_date"),
+                        rs.getString("location"),
+                        rs.getBytes("image"));
+                artifact.setArtifactId(rs.getInt("artifact_id"));
+                artifacts.add(artifact);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return artifacts;
+    }
 
     public ArrayList<MuseumArtifact> getAllArtifacts() {
         ArrayList<MuseumArtifact> artifacts = new ArrayList<>();

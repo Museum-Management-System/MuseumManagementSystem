@@ -71,8 +71,11 @@ public class MuseumArtifactService {
         return artifactDAO.updateArtifact(artifact);
     }
 
-    public List<MuseumArtifact> searchArtifacts(String category) {
-        return artifactDAO.searchArtifacts(category);
+    public List<MuseumArtifact> searchArtifacts(String name) {
+        return artifactDAO.searchArtifacts(name);
+    }
+    public List<MuseumArtifact> searchArtifactsByCategory(String category) {
+        return artifactDAO.searchArtifactsByCategory(category);
     }
     public List<MuseumArtifact> getAllArtifacts(){
         return artifactDAO.getAllArtifacts();

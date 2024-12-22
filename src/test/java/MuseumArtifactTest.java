@@ -170,7 +170,7 @@ public class MuseumArtifactTest {
         artifactService.addArtifact(artifact3);
 
         // Test searching by category "Painting"
-        List<MuseumArtifact> paintings = artifactService.searchArtifacts("Painting");
+        List<MuseumArtifact> paintings = artifactService.searchArtifactsByCategory("Painting");
 
         // Verify that the list contains the correct number of artifacts and correct data
         assertEquals(2, paintings.size(), "There should be 2 paintings in the search results.");
@@ -179,14 +179,14 @@ public class MuseumArtifactTest {
         assertTrue(paintings.stream().anyMatch(artifact -> artifact.getName().equals("The Starry Night")));
 
         // Test searching by category "Sculpture"
-        List<MuseumArtifact> sculptures = artifactService.searchArtifacts("Sculpture");
+        List<MuseumArtifact> sculptures = artifactService.searchArtifactsByCategory("Sculpture");
 
         // Verify that the list contains the correct number of artifacts and correct data
         assertEquals(1, sculptures.size(), "There should be 1 sculpture in the search results.");
         assertTrue(sculptures.stream().anyMatch(artifact -> artifact.getName().equals("The Thinker")));
 
         // Test searching with a category that doesn't exist
-        List<MuseumArtifact> nonExistingCategory = artifactService.searchArtifacts("Non-Existent Category");
+        List<MuseumArtifact> nonExistingCategory = artifactService.searchArtifactsByCategory("Non-Existent Category");
 
         // Verify that no artifacts are returned
         assertTrue(nonExistingCategory.isEmpty(), "Search should return no results for a non-existent category.");
