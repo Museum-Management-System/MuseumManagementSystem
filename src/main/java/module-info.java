@@ -11,6 +11,7 @@ module com.example.gui {
     requires java.sql;
     requires java.desktop;
 
+    exports org.example.service;
     exports org.example.entity;
     exports org.example.dao;
     opens org.example.entity to javafx.base;
