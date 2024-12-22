@@ -22,30 +22,29 @@ public class AdministratorDAOTest {
     @BeforeAll
     public static void setupDatabase() throws SQLException {
         // Initialize a connection to the PostgreSQL database
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://10.200.10.163:5444/museum", "postgres", "museum")) {
-            administratorDAO = new AdministratorDAO(connection);
+        connection = DriverManager.getConnection("jdbc:postgresql://10.200.10.163:5444/museum", "postgres", "museum");
+        administratorDAO = new AdministratorDAO(connection);
 
-            // Check if the table already exists
-            String checkTableExistsSQL = "SELECT to_regclass('public.employees')";
-            try (Statement checkStmt = connection.createStatement();
-                 ResultSet rs = checkStmt.executeQuery(checkTableExistsSQL)) {
+        // Check if the table already exists
+        String checkTableExistsSQL = "SELECT to_regclass('public.employees')";
+        try (Statement checkStmt = connection.createStatement();
+             ResultSet rs = checkStmt.executeQuery(checkTableExistsSQL)) {
 
-                if (rs.next() && rs.getString(1) == null) {
-                    // Create the MuseumArtifact table if it doesn't exist
-                    String createTableSQL = """
-                    CREATE TABLE employees (
-                    employee_id INT PRIMARY KEY NOT NULL UNIQUE REFERENCES users(user_id) ON DELETE CASCADE,
-                    name VARCHAR(100) NOT NULL,
-                    email VARCHAR(100) NOT NULL UNIQUE,
-                    phone_num VARCHAR(20) NOT NULL UNIQUE,
-                    job_title VARCHAR(100),
-                    section_name VARCHAR(100),
-                    image BYTEA
-                    );
-                """;
-                    try (Statement stmt = connection.createStatement()) {
-                        stmt.execute(createTableSQL);
-                    }
+            if (rs.next() && rs.getString(1) == null) {
+                // Create the MuseumArtifact table if it doesn't exist
+                String createTableSQL = """
+                CREATE TABLE employees (
+                employee_id INT PRIMARY KEY NOT NULL UNIQUE REFERENCES users(user_id) ON DELETE CASCADE,
+                name VARCHAR(100) NOT NULL,
+                email VARCHAR(100) NOT NULL UNIQUE,
+                phone_num VARCHAR(20) NOT NULL UNIQUE,
+                job_title VARCHAR(100),
+                section_name VARCHAR(100),
+                image BYTEA
+                );
+            """;
+                try (Statement stmt = connection.createStatement()) {
+                    stmt.execute(createTableSQL);
                 }
             }
         }
