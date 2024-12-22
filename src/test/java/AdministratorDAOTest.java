@@ -49,7 +49,6 @@ public class AdministratorDAOTest {
             }
         }
     }
-
     @AfterAll
     public static void tearDownDatabase() throws SQLException {
         if (connection != null && !connection.isClosed()) {
@@ -64,7 +63,7 @@ public class AdministratorDAOTest {
                 "Suna Ari",
                 "sunaari@gmail.com",
                 "History Guide",
-                "+123456",
+                "+12345678",
                 "Guides",
                 null
         );
@@ -72,18 +71,19 @@ public class AdministratorDAOTest {
         administratorDAO.addEmployee(employee, "password123");
 
 
-        String querySQL = "SELECT * FROM employee WHERE emp_id = ?";
+        String querySQL = "SELECT * FROM employees WHERE email = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(querySQL)) {
-            pstmt.setInt(1, employee.getEmployeeId());
+            pstmt.setString(1, employee.getEmail());
             ResultSet rs = pstmt.executeQuery();
 
             assertTrue(rs.next(), "Employee should exist in the database");
             assertEquals("Suna Ari", rs.getString("name"));
             assertEquals("sunaari@gmail.com", rs.getString("email"));
             assertEquals("History Guide", rs.getString("job_title"));
-            assertEquals("+123456", rs.getString("phone_num"));
+            assertEquals("+12345678", rs.getString("phone_num"));
             assertEquals("Guides", rs.getString("section_name"));
             assertEquals(null, rs.getBytes("image"));
+            administratorDAO.deleteEmployee(rs.getInt("employee_id"));
         }
     }
 
@@ -91,10 +91,10 @@ public class AdministratorDAOTest {
     public void testGetEmployee() throws SQLException {
         Employee employee = new Employee(
                 100,
-                "Suna",
-                "suna@gmail.com",
+                "Sinem Ari",
+                "sinem@gmail.com",
                 "History Guide",
-                "+123456",
+                "+623456",
                 "Guides",
                 null
         );
@@ -102,9 +102,9 @@ public class AdministratorDAOTest {
         administratorDAO.addEmployee(employee, "password123");
 
 
-        ArrayList<Employee> retrievedEmployees = administratorDAO.searchEmployees("Suna Ari");
+        ArrayList<Employee> retrievedEmployees = administratorDAO.searchEmployees("Sinem Ari");
 
-        String querySQL = "SELECT * FROM employee WHERE name = ?";
+        String querySQL = "SELECT * FROM employees WHERE name = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(querySQL)) {
             pstmt.setString(1, employee.getName());
             ResultSet rs = pstmt.executeQuery();
@@ -113,13 +113,14 @@ public class AdministratorDAOTest {
 
             boolean employeeFound = false;
             for(Employee emp : retrievedEmployees) {
-                if(emp.getEmail().equals("suna@gmail.com")) { //emails are unique
+                if(emp.getEmail().equals("sinem@gmail.com")) { //emails are unique
                     employeeFound = true;
-                    assertEquals("Suna Ari", emp.getName());
+                    assertEquals("Sinem Ari", emp.getName());
                     assertEquals("History Guide", emp.getJobTitle());
-                    assertEquals("+123456", emp.getPhoneNum());
+                    assertEquals("+623456", emp.getPhoneNum());
                     assertEquals("Guides", emp.getSectionName());
                     assertNull(emp.getImageData());
+                    administratorDAO.deleteEmployee(employee.getEmployeeId());
                     break;
                 }
             }
@@ -178,6 +179,7 @@ public class AdministratorDAOTest {
             while (rs.next()) {
                 int employeeId = rs.getInt("employee_id");
                 assertTrue(employeeIds.add(employeeId), "Employee ID should be unique");
+                administratorDAO.deleteEmployee(rs.getInt("employee_id"));
             }
         }
     }
@@ -210,6 +212,16 @@ public class AdministratorDAOTest {
         boolean addResult = administratorDAO.addEmployee(initialEmployee, "password123");
         assertTrue(addResult, "Initial employee should be added successfully");
 
+        String query = "SELECT employee_id FROM employees WHERE email = ?";
+        int emp_id = 0;
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, initialEmployee.getEmail()); //email is unique
+            ResultSet rs = stmt.executeQuery();
+            assertTrue(rs.next(), "Added employee should be found in the database");
+            emp_id = rs.getInt("employee_id");
+            initialEmployee.setEmployeeId(emp_id);
+        }
+
         // Step 2: Update Employee Details
         initialEmployee.setName("Jane Smith");
         initialEmployee.setEmail("janesmith@example.com");
@@ -223,9 +235,9 @@ public class AdministratorDAOTest {
         assertTrue(updateResult, "Employee should be updated successfully");
 
         // Step 4: Verify Update
-        String querySQL = "SELECT * FROM employees WHERE email = ?";
+        String querySQL = "SELECT * FROM employees WHERE employee_id = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(querySQL)) {
-            pstmt.setString(1, initialEmployee.getEmail()); //email is unique
+            pstmt.setInt(1, emp_id);
             ResultSet rs = pstmt.executeQuery();
 
             assertTrue(rs.next(), "Updated employee should be found in the database");
@@ -235,18 +247,19 @@ public class AdministratorDAOTest {
             assertEquals("Senior Guide", rs.getString("job_title"));
             assertEquals("Exhibits", rs.getString("section_name"));
             assertNull(rs.getBytes("image"));
+            administratorDAO.deleteEmployee(rs.getInt("employee_id"));
         }
     }
     @Test
     public void testDeleteEmployee() throws SQLException {
         // Step 1: Add the employee to the database
         Employee employee = new Employee(
-                0, // ID will be assigned by the database
-                "Mark Johnson",
-                "markjohnson@gmail.com",
-                "Art Curator",
-                "+9876543210",
-                "Curators",
+                100,
+                "Suna",
+                "suna@gmail.com",
+                "History Guide",
+                "+123456",
+                "Guides",
                 null
         );
 
